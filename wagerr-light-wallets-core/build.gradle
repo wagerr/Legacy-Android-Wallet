@@ -1,5 +1,10 @@
 apply plugin: 'java'
 
+repositories {
+    maven {
+        url  "https://dl.bintray.com/furszy/pivx/"
+    }
+}
 
 sourceSets{
     test {
@@ -8,22 +13,22 @@ sourceSets{
 }
 
 dependencies {
-    compile fileTree(dir: 'libs', include: ['*.jar'])
+    //implementation (':pivx-core-0.14.3-12.1')
+    compile files('lib/pivxj-core-0.14.3-12.1.jar')
     compile 'org.slf4j:slf4j-api:1.7.20'
-    compile group: 'com.google.protobuf', name: 'protobuf-java', version: '2.6.1'
-    compile group: 'com.google.guava', name: 'guava', version: '20.0'
-    compile group: 'com.squareup.okhttp', name: 'okhttp', version: '2.7.5'
-    compile group: 'commons-codec', name: 'commons-codec', version: '1.10'
+    compile 'com.google.protobuf:protobuf-java:2.6.1'
+    compile 'com.google.guava:guava:20.0'
+    compile 'com.squareup.okhttp:okhttp:2.7.5'
+    compile 'commons-codec:commons-codec:1.10'
     compile 'com.madgag.spongycastle:core:1.54.0.0'
-    compile project(':pivx-core-0.14.3-12.1')
     compile files('lib/furszy-non-blocking-client-0.0.1.jar')
-    compile group: 'commons-validator', name: 'commons-validator', version: '1.6'
-    compile group: 'org.json', name: 'json', version: '20170516'
+    compile 'commons-validator:commons-validator:1.6'
+    compile 'org.json:json:20170516'
     compile 'com.lambdaworks:scrypt:1.4.0'
     testCompile 'org.slf4j:slf4j-api:1.7.20'
     testCompile 'junit:junit:4.12'
     testCompile 'org.slf4j:slf4j-simple:1.7.5'
-
+    //implementation project(':pivx-core-0.14.3-12.1')
 }
 
 sourceCompatibility = "1.7"
