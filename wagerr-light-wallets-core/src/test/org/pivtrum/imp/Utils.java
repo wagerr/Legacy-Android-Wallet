@@ -1,12 +1,12 @@
 package org.pivtrum.imp;
 
-import org.pivxj.core.ECKey;
-import org.pivxj.params.TestNet3Params;
+import org.wagerrj.core.ECKey;
+import org.wagerrj.params.TestNet3Params;
 import org.junit.Test;
 import org.spongycastle.math.ec.ECPoint;
 import org.spongycastle.util.encoders.Hex;
 
-import static org.pivxj.core.ECKey.CURVE;
+import static org.wagerrj.core.ECKey.CURVE;
 
 /**
  * Created by furszy on 8/13/17.

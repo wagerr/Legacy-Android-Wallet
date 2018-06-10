@@ -1,8 +1,15 @@
 apply plugin: 'java'
 
+buildscript {
+    repositories {
+        jcenter()
+    }
+}
+
 repositories {
+        jcenter()
     maven {
-        url  "https://dl.bintray.com/furszy/pivx/"
+        url  "https://dl.bintray.com/looortor/wagerr/"
     }
 }
 
@@ -13,8 +20,7 @@ sourceSets{
 }
 
 dependencies {
-    //implementation (':pivx-core-0.14.3-12.1')
-    compile files('lib/pivxj-core-0.14.3-12.1.jar')
+    compile files('lib/wagerrj-core-0.14.3-12.1.jar')
     compile 'org.slf4j:slf4j-api:1.7.20'
     compile 'com.google.protobuf:protobuf-java:2.6.1'
     compile 'com.google.guava:guava:20.0'
@@ -28,7 +34,6 @@ dependencies {
     testCompile 'org.slf4j:slf4j-api:1.7.20'
     testCompile 'junit:junit:4.12'
     testCompile 'org.slf4j:slf4j-simple:1.7.5'
-    //implementation project(':pivx-core-0.14.3-12.1')
 }
 
 sourceCompatibility = "1.7"

@@ -1,17 +1,17 @@
 package global;
 
-import org.pivxj.core.Address;
-import org.pivxj.core.Coin;
-import org.pivxj.core.InsufficientMoneyException;
-import org.pivxj.core.Peer;
-import org.pivxj.core.Sha256Hash;
-import org.pivxj.core.Transaction;
-import org.pivxj.core.TransactionInput;
-import org.pivxj.core.TransactionOutput;
-import org.pivxj.crypto.DeterministicKey;
-import org.pivxj.crypto.MnemonicException;
-import org.pivxj.wallet.DeterministicKeyChain;
-import org.pivxj.wallet.Wallet;
+import org.wagerrj.core.Address;
+import org.wagerrj.core.Coin;
+import org.wagerrj.core.InsufficientMoneyException;
+import org.wagerrj.core.Peer;
+import org.wagerrj.core.Sha256Hash;
+import org.wagerrj.core.Transaction;
+import org.wagerrj.core.TransactionInput;
+import org.wagerrj.core.TransactionOutput;
+import org.wagerrj.crypto.DeterministicKey;
+import org.wagerrj.crypto.MnemonicException;
+import org.wagerrj.wallet.DeterministicKeyChain;
+import org.wagerrj.wallet.Wallet;
 
 import java.io.File;
 import java.io.IOException;
@@ -33,7 +33,7 @@ import wallet.exceptions.CantRestoreEncryptedWallet;
  * Created by mati on 18/04/17.
  */
 
-public interface PivxModule {
+public interface WagerrModule {
 
     /**
      * Initialize the module
@@ -116,7 +116,7 @@ public interface PivxModule {
 
     int getChainHeight();
 
-    PivxRate getRate(String selectedRateCoin);
+    WagerrRate getRate(String selectedRateCoin);
 
     /**
      * Don't use this..
@@ -167,7 +167,7 @@ public interface PivxModule {
 
     boolean upgradeWallet(String upgradeCode) throws UpgradeException;
 
-    List<PivxRate> listRates();
+    List<WagerrRate> listRates();
 
     List<String> getAvailableMnemonicWordsList();
 

@@ -72,7 +72,7 @@ public enum Method {
 
     /**
      *
-     * Return an ordered list of UTXOs sent to a pivx address.
+     * Return an ordered list of UTXOs sent to a wagerr address.
      *
      * blockchain.address.listunspent(**address**)
      *
@@ -88,7 +88,7 @@ public enum Method {
      * transaction was confirmed in, *tx_hash* the transaction hash in
      * hexadecimal, *tx_pos* the zero-based index of the output in the
      * transaction's list of outputs, and *value* its integer value in
-     * minimum coin units (satoshis in the case of Pivx).
+     * minimum coin units (satoshis in the case of Wagerr).
      *
      */
 

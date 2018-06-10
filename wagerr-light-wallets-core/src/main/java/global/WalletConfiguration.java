@@ -1,7 +1,7 @@
 package global;
 
-import org.pivxj.core.Context;
-import org.pivxj.core.NetworkParameters;
+import org.wagerrj.core.Context;
+import org.wagerrj.core.NetworkParameters;
 
 /**
  * Created by furszy on 6/4/17.

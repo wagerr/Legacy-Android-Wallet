@@ -1,8 +1,8 @@
 package global.wrappers;
 
-import org.pivxj.core.NetworkParameters;
-import org.pivxj.core.Sha256Hash;
-import org.pivxj.core.TransactionOutput;
+import org.wagerrj.core.NetworkParameters;
+import org.wagerrj.core.Sha256Hash;
+import org.wagerrj.core.TransactionOutput;
 
 import java.io.Serializable;
 

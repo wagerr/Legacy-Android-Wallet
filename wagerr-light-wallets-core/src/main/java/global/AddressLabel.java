@@ -1,6 +1,6 @@
 package global;
 
-import org.pivxj.core.Sha256Hash;
+import org.wagerrj.core.Sha256Hash;
 
 import java.io.Serializable;
 import java.util.ArrayList;

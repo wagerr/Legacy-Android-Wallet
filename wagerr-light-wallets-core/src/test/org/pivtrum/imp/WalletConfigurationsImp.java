@@ -1,8 +1,8 @@
 package org.pivtrum.imp;
 
-import org.pivxj.core.Context;
-import org.pivxj.core.NetworkParameters;
-import org.pivxj.params.TestNet3Params;
+import org.wagerrj.core.Context;
+import org.wagerrj.core.NetworkParameters;
+import org.wagerrj.params.TestNet3Params;
 
 import global.WalletConfiguration;
 

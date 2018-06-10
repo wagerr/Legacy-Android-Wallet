@@ -1,8 +1,8 @@
 package global.wrappers;
 
-import org.pivxj.core.Coin;
-import org.pivxj.core.Sha256Hash;
-import org.pivxj.core.Transaction;
+import org.wagerrj.core.Coin;
+import org.wagerrj.core.Sha256Hash;
+import org.wagerrj.core.Transaction;
 
 import java.io.Serializable;
 import java.util.Map;

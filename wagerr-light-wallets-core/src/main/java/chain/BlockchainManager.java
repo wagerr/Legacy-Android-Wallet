@@ -3,27 +3,27 @@ package chain;
 import com.google.common.base.Stopwatch;
 import com.google.common.util.concurrent.ListenableFuture;
 
-import org.pivxj.core.BlockChain;
-import org.pivxj.core.CheckpointManager;
-import org.pivxj.core.Peer;
-import org.pivxj.core.PeerGroup;
-import org.pivxj.core.Sha256Hash;
-import org.pivxj.core.StoredBlock;
-import org.pivxj.core.Transaction;
-import org.pivxj.core.TransactionBroadcast;
-import org.pivxj.core.listeners.PeerConnectedEventListener;
-import org.pivxj.core.listeners.PeerDataEventListener;
-import org.pivxj.core.listeners.PeerDisconnectedEventListener;
-import org.pivxj.net.discovery.MultiplexingDiscovery;
-import org.pivxj.net.discovery.PeerDiscovery;
-import org.pivxj.net.discovery.PeerDiscoveryException;
-import org.pivxj.params.MainNetParams;
-import org.pivxj.params.RegTestParams;
-import org.pivxj.params.TestNet3Params;
-import org.pivxj.store.BlockStore;
-import org.pivxj.store.BlockStoreException;
-import org.pivxj.store.LevelDBBlockStore;
-import org.pivxj.store.SPVBlockStore;
+import org.wagerrj.core.BlockChain;
+import org.wagerrj.core.CheckpointManager;
+import org.wagerrj.core.Peer;
+import org.wagerrj.core.PeerGroup;
+import org.wagerrj.core.Sha256Hash;
+import org.wagerrj.core.StoredBlock;
+import org.wagerrj.core.Transaction;
+import org.wagerrj.core.TransactionBroadcast;
+import org.wagerrj.core.listeners.PeerConnectedEventListener;
+import org.wagerrj.core.listeners.PeerDataEventListener;
+import org.wagerrj.core.listeners.PeerDisconnectedEventListener;
+import org.wagerrj.net.discovery.MultiplexingDiscovery;
+import org.wagerrj.net.discovery.PeerDiscovery;
+import org.wagerrj.net.discovery.PeerDiscoveryException;
+import org.wagerrj.params.MainNetParams;
+import org.wagerrj.params.RegTestParams;
+import org.wagerrj.params.TestNet3Params;
+import org.wagerrj.store.BlockStore;
+import org.wagerrj.store.BlockStoreException;
+import org.wagerrj.store.LevelDBBlockStore;
+import org.wagerrj.store.SPVBlockStore;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -263,7 +263,7 @@ public class BlockchainManager {
                     peerGroup.addPeerDiscovery(new PeerDiscovery() {
                         @Override
                         public InetSocketAddress[] getPeers(long services, long timeoutValue, TimeUnit timeUnit) throws PeerDiscoveryException {
-                            // No regtest in pivx yet..
+                            // No regtest in wagerr yet..
                             return null; //RegtestUtil.getPeersToConnect(conf.getNetworkParams(),conf.getNode());
                         }
 

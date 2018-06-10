@@ -1,13 +1,13 @@
-package global.pivx;
+package global.wagerr;
 
-import org.pivxj.core.Coin;
-import org.pivxj.core.NetworkParameters;
-import org.pivxj.core.Sha256Hash;
-import org.pivxj.core.Transaction;
-import org.pivxj.core.TransactionConfidence;
-import org.pivxj.core.TransactionOutput;
-import org.pivxj.wallet.CoinSelection;
-import org.pivxj.wallet.CoinSelector;
+import org.wagerrj.core.Coin;
+import org.wagerrj.core.NetworkParameters;
+import org.wagerrj.core.Sha256Hash;
+import org.wagerrj.core.Transaction;
+import org.wagerrj.core.TransactionConfidence;
+import org.wagerrj.core.TransactionOutput;
+import org.wagerrj.wallet.CoinSelection;
+import org.wagerrj.wallet.CoinSelector;
 
 import java.math.BigInteger;
 import java.util.ArrayList;

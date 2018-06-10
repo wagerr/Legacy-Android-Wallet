@@ -1,6 +1,6 @@
 package chain;
 
-import org.pivxj.core.PeerGroup;
+import org.wagerrj.core.PeerGroup;
 
 import java.util.Set;
 

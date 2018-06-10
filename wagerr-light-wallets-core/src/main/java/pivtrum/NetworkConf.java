@@ -13,7 +13,7 @@ import java.util.List;
 
 public class NetworkConf {
 
-    private static final String CLIENT_NAME = "pivx_mobile";
+    private static final String CLIENT_NAME = "wagerr_mobile";
     private static final String MAX_PROTOCOL_VERSION = "2.9.5";
     private static final String MIN_PROTOCOL_VERSION = "1.0";
     /** Trusted server selected on the first screen of the app */

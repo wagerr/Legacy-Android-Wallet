@@ -2,30 +2,30 @@ package wallet;
 
 import com.google.common.base.Charsets;
 
-import org.pivxj.core.Address;
-import org.pivxj.core.BlockChain;
-import org.pivxj.core.Coin;
-import org.pivxj.core.InsufficientMoneyException;
-import org.pivxj.core.PeerGroup;
-import org.pivxj.core.Sha256Hash;
-import org.pivxj.core.Transaction;
-import org.pivxj.core.TransactionInput;
-import org.pivxj.core.TransactionOutput;
-import org.pivxj.core.Utils;
-import org.pivxj.core.listeners.TransactionConfidenceEventListener;
-import org.pivxj.crypto.DeterministicKey;
-import org.pivxj.crypto.LinuxSecureRandom;
-import org.pivxj.crypto.MnemonicCode;
-import org.pivxj.crypto.MnemonicException;
-import org.pivxj.wallet.DeterministicKeyChain;
-import org.pivxj.wallet.DeterministicSeed;
-import org.pivxj.wallet.Protos;
-import org.pivxj.wallet.SendRequest;
-import org.pivxj.wallet.UnreadableWalletException;
-import org.pivxj.wallet.Wallet;
-import org.pivxj.wallet.WalletFiles;
-import org.pivxj.wallet.WalletProtobufSerializer;
-import org.pivxj.wallet.listeners.WalletCoinsReceivedEventListener;
+import org.wagerrj.core.Address;
+import org.wagerrj.core.BlockChain;
+import org.wagerrj.core.Coin;
+import org.wagerrj.core.InsufficientMoneyException;
+import org.wagerrj.core.PeerGroup;
+import org.wagerrj.core.Sha256Hash;
+import org.wagerrj.core.Transaction;
+import org.wagerrj.core.TransactionInput;
+import org.wagerrj.core.TransactionOutput;
+import org.wagerrj.core.Utils;
+import org.wagerrj.core.listeners.TransactionConfidenceEventListener;
+import org.wagerrj.crypto.DeterministicKey;
+import org.wagerrj.crypto.LinuxSecureRandom;
+import org.wagerrj.crypto.MnemonicCode;
+import org.wagerrj.crypto.MnemonicException;
+import org.wagerrj.wallet.DeterministicKeyChain;
+import org.wagerrj.wallet.DeterministicSeed;
+import org.wagerrj.wallet.Protos;
+import org.wagerrj.wallet.SendRequest;
+import org.wagerrj.wallet.UnreadableWalletException;
+import org.wagerrj.wallet.Wallet;
+import org.wagerrj.wallet.WalletFiles;
+import org.wagerrj.wallet.WalletProtobufSerializer;
+import org.wagerrj.wallet.listeners.WalletCoinsReceivedEventListener;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -188,7 +188,7 @@ public class WalletManager {
         wallet.addCoinsReceivedEventListener(new WalletCoinsReceivedEventListener() {
             @Override
             public void onCoinsReceived(Wallet wallet, Transaction transaction, Coin coin, Coin coin1) {
-                org.pivxj.core.Context.propagate(conf.getWalletContext());
+                org.wagerrj.core.Context.propagate(conf.getWalletContext());
                 saveWallet();
             }
         });
@@ -200,7 +200,7 @@ public class WalletManager {
         }
         List<String> words = generateMnemonic(SEED_ENTROPY_EXTRA);
         DeterministicSeed seed = new DeterministicSeed(words, null, "", System.currentTimeMillis());
-        return Wallet.fromSeed(conf.getNetworkParams(), seed, DeterministicKeyChain.KeyChainType.BIP44_PIVX_ONLY);
+        return Wallet.fromSeed(conf.getNetworkParams(), seed, DeterministicKeyChain.KeyChainType.BIP44_WAGERR_ONLY);
     }
 
     public static List<String> generateMnemonic(int entropyBitsSize){
@@ -280,7 +280,7 @@ public class WalletManager {
         wallet = Wallet.fromSeed(
                 conf.getNetworkParams(),
                 new DeterministicSeed(mnemonic,null,"",timestamp),
-                bip44? DeterministicKeyChain.KeyChainType.BIP44_PIVX_ONLY: DeterministicKeyChain.KeyChainType.BIP32
+                bip44? DeterministicKeyChain.KeyChainType.BIP44_WAGERR_ONLY: DeterministicKeyChain.KeyChainType.BIP32
         );
         restoreWallet(wallet);
     }

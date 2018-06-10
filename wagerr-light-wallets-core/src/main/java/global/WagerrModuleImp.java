@@ -2,24 +2,24 @@ package global;
 
 import com.google.common.util.concurrent.ListenableFuture;
 
-import org.pivxj.core.Address;
-import org.pivxj.core.Coin;
-import org.pivxj.core.InsufficientMoneyException;
-import org.pivxj.core.Peer;
-import org.pivxj.core.ScriptException;
-import org.pivxj.core.Sha256Hash;
-import org.pivxj.core.Transaction;
-import org.pivxj.core.TransactionConfidence;
-import org.pivxj.core.TransactionInput;
-import org.pivxj.core.TransactionOutput;
-import org.pivxj.core.listeners.TransactionConfidenceEventListener;
-import org.pivxj.crypto.DeterministicKey;
-import org.pivxj.crypto.MnemonicException;
-import org.pivxj.script.Script;
-import org.pivxj.wallet.DeterministicKeyChain;
-import org.pivxj.wallet.SendRequest;
-import org.pivxj.wallet.Wallet;
-import org.pivxj.wallet.listeners.WalletCoinsReceivedEventListener;
+import org.wagerrj.core.Address;
+import org.wagerrj.core.Coin;
+import org.wagerrj.core.InsufficientMoneyException;
+import org.wagerrj.core.Peer;
+import org.wagerrj.core.ScriptException;
+import org.wagerrj.core.Sha256Hash;
+import org.wagerrj.core.Transaction;
+import org.wagerrj.core.TransactionConfidence;
+import org.wagerrj.core.TransactionInput;
+import org.wagerrj.core.TransactionOutput;
+import org.wagerrj.core.listeners.TransactionConfidenceEventListener;
+import org.wagerrj.crypto.DeterministicKey;
+import org.wagerrj.crypto.MnemonicException;
+import org.wagerrj.script.Script;
+import org.wagerrj.wallet.DeterministicKeyChain;
+import org.wagerrj.wallet.SendRequest;
+import org.wagerrj.wallet.Wallet;
+import org.wagerrj.wallet.listeners.WalletCoinsReceivedEventListener;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -40,7 +40,7 @@ import chain.BlockchainManager;
 import global.exceptions.UpgradeException;
 import global.store.ContactsStoreDao;
 import global.store.RateDbDao;
-import global.pivx.DefaultCoinSelector;
+import global.wagerr.DefaultCoinSelector;
 import global.wrappers.InputWrapper;
 import global.wrappers.TransactionWrapper;
 import global.exceptions.CantSweepBalanceException;
@@ -54,9 +54,9 @@ import wallet.WalletManager;
  * Created by mati on 18/04/17.
  */
 
-public class PivxModuleImp implements PivxModule {
+public class WagerrModuleImp implements WagerrModule {
 
-    private static final Logger logger = LoggerFactory.getLogger(PivxModuleImp.class);
+    private static final Logger logger = LoggerFactory.getLogger(WagerrModuleImp.class);
 
     private ContextWrapper context;
     private WalletConfiguration walletConfiguration;
@@ -72,7 +72,7 @@ public class PivxModuleImp implements PivxModule {
     // OS dependent helper.
     private BackupHelper backupHelper;
 
-    public PivxModuleImp(ContextWrapper contextWrapper, WalletConfiguration walletConfiguration,ContactsStoreDao contactsStore,RateDbDao rateDb,BackupHelper backupHelper) {
+    public WagerrModuleImp(ContextWrapper contextWrapper, WalletConfiguration walletConfiguration, ContactsStoreDao contactsStore, RateDbDao rateDb, BackupHelper backupHelper) {
         this.context = contextWrapper;
         this.walletConfiguration = walletConfiguration;
         this.contactsStore = contactsStore;
@@ -269,7 +269,7 @@ public class PivxModuleImp implements PivxModule {
         sendRequest.feePerKb = fee;
         sendRequest.changeAddress = walletManager.newFreshReceiveAddress();
         walletManager.completeSend(sendRequest);
-        // if the fee is different to the custom fee and the tx size is lower than 1kb (1000 bytes in pivx core)
+        // if the fee is different to the custom fee and the tx size is lower than 1kb (1000 bytes in wagerr core)
         /*if(!sendRequest.tx.getFee().equals(fee) && sendRequest.tx.unsafeBitcoinSerialize().length<1000){
             // re acomodate outputs to include the selected fee
             List<TransactionOutput> oldOutputs = sendRequest.tx.getOutputs();
@@ -470,7 +470,7 @@ public class PivxModuleImp implements PivxModule {
         walletManager.removeTransactionConfidenceChange(transactionConfidenceEventListener);
     }
 
-    public PivxRate getRate(String coin) {
+    public WagerrRate getRate(String coin) {
         return rateDb.getRate(coin);
     }
 
@@ -642,7 +642,7 @@ public class PivxModuleImp implements PivxModule {
     }
 
     @Override
-    public List<PivxRate> listRates() {
+    public List<WagerrRate> listRates() {
         return rateDb.list();
     }
 
@@ -652,7 +652,7 @@ public class PivxModuleImp implements PivxModule {
     }
 
 
-    public void saveRate(PivxRate pivxRate){
-        rateDb.insertOrUpdateIfExist(pivxRate);
+    public void saveRate(WagerrRate wagerrRate){
+        rateDb.insertOrUpdateIfExist(wagerrRate);
     }
 }

@@ -6,7 +6,7 @@ import java.math.BigDecimal;
  * Created by furszy on 7/5/17.
  */
 
-public class PivxRate {
+public class WagerrRate {
 
     /** Coin letters (USD,EUR,etc..) */
     private final String code;
@@ -15,7 +15,7 @@ public class PivxRate {
     /** Last update time */
     private final long timestamp;
 
-    public PivxRate(String code, BigDecimal rate, long timestamp) {
+    public WagerrRate(String code, BigDecimal rate, long timestamp) {
         this.code = code;
         this.rate = rate;
         this.timestamp = timestamp;
