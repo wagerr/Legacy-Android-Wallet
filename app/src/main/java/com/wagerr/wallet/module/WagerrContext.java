@@ -24,7 +24,7 @@ public class WagerrContext {
     public static final String DEFAULT_RATE_COIN = "USD";
     public static final long RATE_UPDATE_TIME = 72000000;
 
-    public static final String ENABLE_BIP44_APP_VERSION = "1.03";
+    public static final String ENABLE_BIP44_APP_VERSION = "1.0.0";
 
     /** Wagerr android wallet repo first commit by LooorTor time */
     public static final long WAGERR_ANDROID_REPO_FIRST_COMMIT_BY_LOOOR_TOR_TIME = 1528762933;
@@ -33,12 +33,12 @@ public class WagerrContext {
     public static final String URL_FIAT_CURRENCIES_RATE = "https://bitpay.com/rates";
 
     // report mail
-    public static final String REPORT_EMAIL = "matiasfurszyfer@gmail.com";
+    public static final String REPORT_EMAIL = "LooorTor@gmail.com";
     /** Subject line for manually reported issues. */
     public static final String REPORT_SUBJECT_ISSUE = "Reported issue";
 
     /** Donation address */
-    public static final String DONATE_ADDRESS = "DLwFC1qQbUzFZJg1vnvdAXBunRPh6anceK";
+    public static final String DONATE_ADDRESS = "WZk3UecHPz48WJXM79oFX85PTme3EsbsJZ";
 
     public static final class Files{
 

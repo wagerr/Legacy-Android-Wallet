@@ -8,8 +8,8 @@ android {
         applicationId "com.wagerr.wallet"
         minSdkVersion 21
         targetSdkVersion 25
-        versionCode 20
-        versionName "2.1.3"
+        versionCode 1
+        versionName "1.0.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         multiDexEnabled true
 
