@@ -107,9 +107,9 @@ public class SendActivity extends BaseActivity implements View.OnClickListener {
     private static final int CUSTOM_CHANGE_ADDRESS = 127;
 
     private View root;
-    private Button buttonSend, addAllPiv;
+    private Button buttonSend, addAllWgr;
     private AutoCompleteTextView edit_address;
-    private TextView txt_local_currency , txt_coin_selection, txt_custom_fee, txt_change_address, txtShowPiv;
+    private TextView txt_local_currency , txt_coin_selection, txt_custom_fee, txt_change_address, txtShowWgr;
     private TextView txt_multiple_outputs, txt_currency_amount;
     private View container_address;
     private EditText edit_amount, editCurrency;
@@ -121,7 +121,7 @@ public class SendActivity extends BaseActivity implements View.OnClickListener {
     private ImageButton btnSwap;
     private ViewFlipper amountSwap;
 
-    private boolean inPivs = true;
+    private boolean inWgr = true;
     private Transaction transaction;
     /** Several outputs */
     private List<OutputWrapper> outputWrappers;
@@ -173,11 +173,11 @@ public class SendActivity extends BaseActivity implements View.OnClickListener {
         //Sending amount currency
         editCurrency = (EditText) findViewById(R.id.edit_amount_currency);
         txt_currency_amount = (TextView) root.findViewById(R.id.txt_currency_amount);
-        txtShowPiv = (TextView) findViewById(R.id.txt_show_piv) ;
+        txtShowWgr = (TextView) findViewById(R.id.txt_show_wgr) ;
 
-        //Sending amount piv
-        addAllPiv =  (Button) findViewById(R.id.btn_add_all);
-        addAllPiv.setOnClickListener(this);
+        //Sending amount wgr
+        addAllWgr =  (Button) findViewById(R.id.btn_add_all);
+        addAllWgr.setOnClickListener(this);
         wagerrRate = wagerrModule.getRate(wagerrApplication.getAppConf().getSelectedRateCoin());
 
         txt_local_currency.setText("0 " + wagerrRate.getCode());
@@ -202,12 +202,12 @@ public class SendActivity extends BaseActivity implements View.OnClickListener {
                             valueStr = "0" + valueStr;
                         }
                         BigDecimal result = new BigDecimal(valueStr).divide(wagerrRate.getRate(), 6, BigDecimal.ROUND_DOWN);
-                        txtShowPiv.setText(result.toPlainString() + " PIV");
+                        txtShowWgr.setText(result.toPlainString() + " WGR");
                     } else {
-                        txtShowPiv.setText("0 " + wagerrRate.getCode());
+                        txtShowWgr.setText("0 " + wagerrRate.getCode());
                     }
                 }else {
-                    txtShowPiv.setText(R.string.no_rate);
+                    txtShowWgr.setText(R.string.no_rate);
                 }
                 cleanWallet = false;
             }
@@ -401,7 +401,7 @@ public class SendActivity extends BaseActivity implements View.OnClickListener {
             if (!isMultiSend) {
                 cleanWallet = true;
                 Coin coin = wagerrModule.getAvailableBalanceCoin();
-                if (inPivs) {
+                if (inWgr) {
                     edit_amount.setText(coin.toPlainString());
                     txt_local_currency.setText(
                             wagerrApplication.getCentralFormats().format(
@@ -415,14 +415,14 @@ public class SendActivity extends BaseActivity implements View.OnClickListener {
                                     new BigDecimal(coin.getValue() * wagerrRate.getRate().doubleValue()).movePointLeft(8)
                             )
                     );
-                    txtShowPiv.setText(coin.toFriendlyString());
+                    txtShowWgr.setText(coin.toFriendlyString());
                 }
             }else {
                 Toast.makeText(this,R.string.validate_multi_send_enabled,Toast.LENGTH_SHORT).show();
             }
         }else if(id == R.id.btn_swap){
             if (!isMultiSend){
-                inPivs = !inPivs;
+                inWgr = !inWgr;
                 amountSwap.showNext();
             }else {
                 Toast.makeText(this,R.string.validate_multi_send_enabled,Toast.LENGTH_LONG).show();
@@ -613,12 +613,12 @@ public class SendActivity extends BaseActivity implements View.OnClickListener {
 
     private String getAmountStr(){
         String amountStr = "0";
-        if (inPivs) {
+        if (inWgr) {
             amountStr = edit_amount.getText().toString();
         }else {
             // the value is already converted
-            String valueStr = txtShowPiv.getText().toString();
-            amountStr = valueStr.replace(" PIV","");
+            String valueStr = txtShowWgr.getText().toString();
+            amountStr = valueStr.replace(" WGR","");
             if(valueStr.length() > 0) {
                 if (valueStr.charAt(0) == '.') {
                     amountStr = "0" + valueStr;
@@ -629,7 +629,7 @@ public class SendActivity extends BaseActivity implements View.OnClickListener {
     }
 
     public void setAmountAndBlock(Coin amount) {
-        if (inPivs) {
+        if (inWgr) {
             edit_amount.setText(amount.toPlainString());
             edit_amount.setEnabled(false);
         }else {
@@ -640,7 +640,7 @@ public class SendActivity extends BaseActivity implements View.OnClickListener {
     }
 
     public void unBlockAmount(){
-        if (inPivs) {
+        if (inWgr) {
             edit_amount.setEnabled(true);
         }else {
             edit_amount.setEnabled(true);

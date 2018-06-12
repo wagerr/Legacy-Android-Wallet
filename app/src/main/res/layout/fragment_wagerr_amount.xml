@@ -27,16 +27,16 @@
         >
 
         <TextView
-            android:id = "@+id/pivValue"
+            android:id = "@+id/wgrValue"
             android:layout_width = "wrap_content"
             android:layout_height = "wrap_content"
             android:layout_centerHorizontal="true"
             android:paddingBottom="10dp"
-            android:text = "13.135 PIV"
+            android:text = "13.135 WGR"
             android:textColor = "@color/textColorWhite"
             android:textSize = "24sp" />
         <TextView
-            android:layout_below="@+id/pivValue"
+            android:layout_below="@+id/wgrValue"
             android:layout_centerHorizontal="true"
             android:id = "@+id/txt_local_currency"
             android:layout_width = "wrap_content"

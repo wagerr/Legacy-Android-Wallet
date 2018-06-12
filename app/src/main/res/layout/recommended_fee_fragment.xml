@@ -7,7 +7,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/txt_amount_per_kb"
-        android:text="0.000000 Piv/kB"
+        android:text="0.000000 WGR/kB"
         android:paddingTop="16dp"
         android:textColor="@color/mainText"
         android:textSize="20sp"

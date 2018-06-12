@@ -30,11 +30,11 @@ public class AmountInputFragment extends BaseFragment implements View.OnClickLis
     private View root;
 
     private EditText edit_amount, editCurrency;
-    private TextView txt_currency_amount, txtShowPiv,txt_local_currency;
+    private TextView txt_currency_amount, txtShowWgr,txt_local_currency;
     private ImageButton btnSwap;
     private ViewFlipper amountSwap;
     private WagerrRate wagerrRate;
-    private boolean inPivs = true;
+    private boolean inWgr = true;
 
     @Nullable
     @Override
@@ -45,7 +45,7 @@ public class AmountInputFragment extends BaseFragment implements View.OnClickLis
         editCurrency = (EditText) root.findViewById(R.id.edit_amount_currency);
         txt_currency_amount = (TextView) root.findViewById(R.id.txt_currency_amount);
         txt_local_currency = (TextView) root.findViewById(R.id.txt_local_currency);
-        txtShowPiv = (TextView) root.findViewById(R.id.txt_show_piv) ;
+        txtShowWgr = (TextView) root.findViewById(R.id.txt_show_wgr) ;
         //Swap type of ammounts
         amountSwap = (ViewFlipper) root.findViewById( R.id.viewFlipper );
         amountSwap.setInAnimation(AnimationUtils.loadAnimation(getActivity(),
@@ -82,12 +82,12 @@ public class AmountInputFragment extends BaseFragment implements View.OnClickLis
                             valueStr = "0" + valueStr;
                         }
                         BigDecimal result = new BigDecimal(valueStr).divide(wagerrRate.getRate(), 6, BigDecimal.ROUND_DOWN);
-                        txtShowPiv.setText(result.toPlainString() + " PIV");
+                        txtShowWgr.setText(result.toPlainString() + " WGR");
                     } else {
-                        txtShowPiv.setText("0 " + wagerrRate.getCode());
+                        txtShowWgr.setText("0 " + wagerrRate.getCode());
                     }
                 }else {
-                    txtShowPiv.setText(R.string.no_rate);
+                    txtShowWgr.setText(R.string.no_rate);
                 }
             }
         });
@@ -139,12 +139,12 @@ public class AmountInputFragment extends BaseFragment implements View.OnClickLis
             throw new Exception("Fragment is not attached");
         }
         String amountStr = "0";
-        if (inPivs) {
+        if (inWgr) {
             amountStr = edit_amount.getText().toString();
         }else {
             // the value is already converted
-            String valueStr = txtShowPiv.getText().toString();
-            amountStr = valueStr.replace(" PIV","");
+            String valueStr = txtShowWgr.getText().toString();
+            amountStr = valueStr.replace(" WGR","");
             if(valueStr.length() > 0) {
                 if (valueStr.charAt(0) == '.') {
                     amountStr = "0" + valueStr;
@@ -158,7 +158,7 @@ public class AmountInputFragment extends BaseFragment implements View.OnClickLis
     public void onClick(View v) {
         int id = v.getId();
         if(id == R.id.btn_swap) {
-            inPivs = !inPivs;
+            inWgr = !inWgr;
             amountSwap.showNext();
         }
     }

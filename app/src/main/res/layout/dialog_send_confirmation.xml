@@ -16,7 +16,7 @@
         <TextView
             android:layout_width = "wrap_content"
             android:layout_height = "match_parent"
-            android:text = "@string/title_pivx_send"
+            android:text = "@string/title_wagerr_send"
             android:layout_marginBottom="4dp"
             android:textColor = "@color/subtitle"
             android:textSize = "14sp" />
@@ -24,7 +24,7 @@
             android:id = "@+id/txt_amount"
             android:layout_width = "match_parent"
             android:layout_height = "wrap_content"
-            android:text = "3.13532 PIV"
+            android:text = "3.13532 WGR"
             android:padding="8dp"
             android:background="@drawable/transaction_inputs"
             android:layout_marginBottom="14dp"
@@ -66,7 +66,7 @@
             android:layout_width = "match_parent"
             android:layout_height = "wrap_content"
             android:layout_marginBottom="14dp"
-            android:text = "0.13532 PIV"
+            android:text = "0.13532 WGR"
             android:textColor = "@color/mainText"
             android:padding="8dp"
             android:background="@drawable/transaction_inputs"

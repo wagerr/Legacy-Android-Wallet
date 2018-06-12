@@ -109,9 +109,9 @@ public class WalletActivity extends BaseDrawerActivity {
     protected void onCreateView(Bundle savedInstanceState, ViewGroup container) {
         setTitle(R.string.my_wallet);
         root = getLayoutInflater().inflate(R.layout.fragment_wallet, container);
-        View containerHeader = getLayoutInflater().inflate(R.layout.fragment_pivx_amount,header_container);
+        View containerHeader = getLayoutInflater().inflate(R.layout.fragment_wagerr_amount,header_container);
         header_container.setVisibility(View.VISIBLE);
-        txt_value = (TextView) containerHeader.findViewById(R.id.pivValue);
+        txt_value = (TextView) containerHeader.findViewById(R.id.wgrValue);
         txt_unnavailable = (TextView) containerHeader.findViewById(R.id.txt_unnavailable);
         container_txs = root.findViewById(R.id.container_txs);
         txt_local_currency = (TextView) containerHeader.findViewById(R.id.txt_local_currency);
@@ -348,9 +348,9 @@ public class WalletActivity extends BaseDrawerActivity {
 
     private void updateBalance() {
         Coin availableBalance = wagerrModule.getAvailableBalanceCoin();
-        txt_value.setText(!availableBalance.isZero()?availableBalance.toFriendlyString():"0 Pivs");
+        txt_value.setText(!availableBalance.isZero()?availableBalance.toFriendlyString():"0 WGR");
         Coin unnavailableBalance = wagerrModule.getUnnavailableBalanceCoin();
-        txt_unnavailable.setText(!unnavailableBalance.isZero()?unnavailableBalance.toFriendlyString():"0 Pivs");
+        txt_unnavailable.setText(!unnavailableBalance.isZero()?unnavailableBalance.toFriendlyString():"0 WGR");
         if (wagerrRate == null)
             wagerrRate = wagerrModule.getRate(wagerrApplication.getAppConf().getSelectedRateCoin());
         if (wagerrRate !=null) {
