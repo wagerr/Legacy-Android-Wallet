@@ -145,7 +145,7 @@ public class TransactionsFragmentBase extends BaseRecyclerFragment<TransactionWr
                 if (BetActionKt.isValidBetActionSource(betActionString)){
                     BetAction betAction = BetActionKt.toBetAction(betActionString);
                     if (betAction.getBetChoose().equals("D")) {
-                        holder.description.setText("Bet DRAW at event"+betAction.getEventId());
+                        holder.description.setText("Bet DRAW at event "+betAction.getEventId());
                     } else {
                         holder.description.setText("Bet "+betAction.getBetChoose() +" WIN at event "+betAction.getEventId());
                     }
