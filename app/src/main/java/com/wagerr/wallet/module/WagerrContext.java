@@ -3,6 +3,8 @@ package com.wagerr.wallet.module;
 import android.os.Environment;
 import android.text.format.DateUtils;
 
+import com.wagerr.wallet.BuildConfig;
+
 import org.wagerrj.core.Context;
 import org.wagerrj.core.NetworkParameters;
 import org.wagerrj.params.MainNetParams;
@@ -16,7 +18,7 @@ import java.io.File;
 
 public class WagerrContext {
 
-    public static final boolean IS_TEST = false;
+    public static final boolean IS_TEST = BuildConfig.FLAVOR=="wgrtest";
     public static final NetworkParameters NETWORK_PARAMETERS = IS_TEST? TestNet3Params.get():MainNetParams.get();
     /** Wagerrj global context. */
     public static final Context CONTEXT = new Context(NETWORK_PARAMETERS);
