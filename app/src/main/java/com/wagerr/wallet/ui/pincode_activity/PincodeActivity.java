@@ -14,6 +14,7 @@ import java.util.Random;
 import global.PivtrumGlobalData;
 import pivtrum.PivtrumPeerData;
 import com.wagerr.wallet.R;
+import com.wagerr.wallet.module.WagerrContext;
 import com.wagerr.wallet.ui.backup_mnemonic_activity.MnemonicActivity;
 import com.wagerr.wallet.ui.base.BaseActivity;
 import com.wagerr.wallet.ui.settings_pincode_activity.KeyboardFragment;
@@ -66,7 +67,13 @@ public class PincodeActivity extends BaseActivity implements KeyboardFragment.on
     private void goNext() {
         if (wagerrApplication.getAppConf().getTrustedNode()==null){
             // select random trusted node
-            List<PivtrumPeerData> nodes = PivtrumGlobalData.listTrustedHosts();
+            List<PivtrumPeerData> nodes;
+            if (WagerrContext.IS_TEST) {
+                nodes = PivtrumGlobalData.listTrustedTestHosts();
+            } else {
+                nodes = PivtrumGlobalData.listTrustedHosts();
+
+            }
             Random random = new Random();
             wagerrApplication.setTrustedServer(nodes.get(random.nextInt(nodes.size())));
             wagerrApplication.stopBlockchain();

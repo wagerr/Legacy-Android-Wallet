@@ -21,13 +21,14 @@ import java.util.concurrent.TimeUnit;
 import global.PivtrumGlobalData;
 import pivtrum.PivtrumPeerData;
 import com.wagerr.wallet.R;
+import com.wagerr.wallet.module.WagerrContext;
 import com.wagerr.wallet.ui.base.BaseActivity;
 import com.wagerr.wallet.ui.pincode_activity.PincodeActivity;
 import com.wagerr.wallet.ui.wallet_activity.WalletActivity;
 import com.wagerr.wallet.utils.DialogBuilder;
 import com.wagerr.wallet.utils.DialogsUtil;
 
-import static global.PivtrumGlobalData.FURSZY_TESTNET_SERVER;
+import static global.PivtrumGlobalData.listTrustedHosts;
 
 /**
  * Created by Neoperol on 6/27/17.
@@ -41,7 +42,7 @@ public class StartNodeActivity extends BaseActivity {
     private ArrayAdapter<String> adapter;
     private List<String> hosts = new ArrayList<>();
 
-    private static final List<PivtrumPeerData> trustedNodes = PivtrumGlobalData.listTrustedHosts();
+    private static final List<PivtrumPeerData> trustedNodes = WagerrContext.IS_TEST?PivtrumGlobalData.listTrustedTestHosts():listTrustedHosts();
 
     @Override
     protected void onCreateView(Bundle savedInstanceState, ViewGroup container) {
@@ -64,9 +65,6 @@ public class StartNodeActivity extends BaseActivity {
                             hosts = new ArrayList<String>();
                             trustedNodes.add(pivtrumPeerData);
                             for (PivtrumPeerData trustedNode : trustedNodes) {
-                                if (trustedNode.getHost().equals(FURSZY_TESTNET_SERVER)) {
-                                    hosts.add("pivt.furszy.tech");
-                                } else
                                     hosts.add(trustedNode.getHost());
                             }
                             adapter.addAll(hosts);
@@ -137,10 +135,7 @@ public class StartNodeActivity extends BaseActivity {
             if (pivtrumPeer!=null && pivtrumPeer.getHost().equals(trustedNode.getHost())){
                 selectionPos = i;
             }
-            if (trustedNode.getHost().equals(FURSZY_TESTNET_SERVER)){
-                hosts.add("pivt.furszy.tech");
-            }else
-                hosts.add(trustedNode.getHost());
+            hosts.add(trustedNode.getHost());
         }
         adapter = new ArrayAdapter<String>(this, R.layout.simple_spinner_dropdown_item,hosts){
             @Override
