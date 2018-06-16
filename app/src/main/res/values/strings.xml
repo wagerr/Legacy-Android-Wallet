@@ -234,6 +234,7 @@
     <string name="no_coin_selected">No coins selected</string>
     <string name="multi_send_activity_title">Multi Send</string>
     <string name="address_book_screen_title">Address Book</string>
+    <string name="bet_screen_title">Bet</string>
     <string name="my_wallet">My Wallet</string>
     <string name="settings_screen_title">Settings</string>
     <string name="options_menu">Options Menu</string>

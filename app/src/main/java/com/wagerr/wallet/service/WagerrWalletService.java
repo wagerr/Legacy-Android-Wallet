@@ -235,6 +235,10 @@ public class WagerrWalletService extends Service{
 
         @Override
         public void onCoinsReceived(Wallet wallet, Transaction transaction, Coin coin, Coin coin1) {
+            //Don't need to handle oracle transaction
+            if (module.isTransactionRelatedToWatchedAddress(transaction)) {
+                return;
+            }
             //todo: acá falta una validación para saber si la transaccion es mia.
             org.wagerrj.core.Context.propagate(CONTEXT);
 

@@ -54,4 +54,9 @@
     <color name="dot_inactive">#cccccc</color>
     <color name="white">#ffffff</color>
 
+
+    <!--Wagerr-->
+    <color name="wagerr_red">#d91b1b</color>
+
+
 </resources>

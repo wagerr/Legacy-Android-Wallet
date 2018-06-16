@@ -43,6 +43,11 @@ public class WalletConfImp extends Configurations implements WalletConfiguration
     }
 
     @Override
+    public String getOracleAddress() {
+        return WagerrContext.ORACLE_ADDRESS;
+    }
+
+    @Override
     public void saveScheduleBlockchainService(long time){
         save(PREFS_KEY_SCHEDULE_BLOCKCHAIN_SERVICE,time);
     }

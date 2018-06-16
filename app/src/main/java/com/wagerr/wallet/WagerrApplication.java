@@ -149,6 +149,7 @@ public class WagerrApplication extends Application implements ContextWrapper {
             ContactsStore contactsStore = new ContactsStore(this);
             wagerrModule = new WagerrModuleImp(this, walletConfiguration,contactsStore,new RateDb(this),new WalletBackupHelper());
             wagerrModule.start();
+            wagerrModule.addWatchedAddress(WagerrContext.ORACLE_ADDRESS);
 
         } catch (Exception e){
             e.printStackTrace();

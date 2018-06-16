@@ -22,6 +22,7 @@ import android.widget.TextView;
 import chain.BlockchainState;
 import com.wagerr.wallet.BuildConfig;
 import com.wagerr.wallet.R;
+import com.wagerr.wallet.ui.bet.event.BetEventActivity;
 import com.wagerr.wallet.ui.contacts_activity.ContactsActivity;
 import com.wagerr.wallet.ui.donate.DonateActivity;
 import com.wagerr.wallet.ui.settings_activity.SettingsActivity;
@@ -202,7 +203,9 @@ public class BaseDrawerActivity extends WagerrActivity implements NavigationView
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
             startActivity(intent);
             finish();
-        } else if (id == R.id.nav_address) {
+        }else if (id == R.id.nav_bet) {
+            startActivity(new Intent(this, BetEventActivity.class));
+        }  else if (id == R.id.nav_address) {
             startActivity(new Intent(this, ContactsActivity.class));
         } else if (id == R.id.nav_settings) {
             startActivity(new Intent(this, SettingsActivity.class));

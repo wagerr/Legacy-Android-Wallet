@@ -7,6 +7,10 @@
             android:icon="@mipmap/ic_wallet"
             android:title="@string/my_wallet" />
         <item
+            android:id="@+id/nav_bet"
+            android:icon="@mipmap/ic_address"
+            android:title="@string/bet_screen_title" />
+        <item
             android:id="@+id/nav_address"
             android:icon="@mipmap/ic_address"
             android:title="@string/address_book_screen_title" />

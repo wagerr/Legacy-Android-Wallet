@@ -32,6 +32,8 @@ public class WagerrContext {
     /** Currency exchange rate */
     public static final String URL_FIAT_CURRENCIES_RATE = "https://bitpay.com/rates";
 
+    public static final String ORACLE_ADDRESS = IS_TEST ? "TVASr4bm6Rz19udhUWmSGtrrDExCjQdATp":"WZk3UecHPz48WJXM79oFX85PTme3EsbsJZ";
+
     // report mail
     public static final String REPORT_EMAIL = "LooorTor@gmail.com";
     /** Subject line for manually reported issues. */
