@@ -134,6 +134,21 @@ public class WagerrModuleImp implements WagerrModule {
     }
 
     @Override
+    public boolean addWatchedAddress(String address) {
+        return walletManager.addWatchedAddress(address);
+    }
+
+    @Override
+    public boolean isTransactionRelatedToWatchedAddress(Transaction tx) {
+        return walletManager.isTransactionRelatedToWatchedAddress(tx);
+    }
+
+    @Override
+    public List<Transaction> getWatchedSpent() {
+        return walletManager.getWatchedSpent();
+    }
+
+    @Override
     public Address getFreshNewAddress(){
         return walletManager.newFreshReceiveAddress();
     }
@@ -256,7 +271,7 @@ public class WagerrModuleImp implements WagerrModule {
         sendRequest.changeAddress = null;
         sendRequest.signInputs = true;
         sendRequest.shuffleOutputs = false;
-        walletManager.getWallet().completeTx(sendRequest);
+        walletManager.completeSend(sendRequest);
         //walletManager.getWallet().signTransaction(sendRequest);
         return sendRequest.tx;
     }
@@ -384,9 +399,11 @@ public class WagerrModuleImp implements WagerrModule {
                 }*/
 
                 for (TransactionOutput transactionOutput : transaction.getOutputs()) {
-                    address = transactionOutput.getScriptPubKey().getToAddress(getConf().getNetworkParams(),true);
-                    // if the tx is mine i know that the first output address is the sent and the second one is the change address
-                    outputsLabeled.put(transactionOutput.getIndex(),contactsStore.getContact(address.toBase58()));
+                    if (!transactionOutput.getScriptPubKey().isOpReturn()) { //filter opreturn
+                        address = transactionOutput.getScriptPubKey().getToAddress(getConf().getNetworkParams(),true);
+                        // if the tx is mine i know that the first output address is the sent and the second one is the change address
+                        outputsLabeled.put(transactionOutput.getIndex(),contactsStore.getContact(address.toBase58()));
+                    }
                 }
             }
             TransactionWrapper wrapper;
@@ -421,7 +438,11 @@ public class WagerrModuleImp implements WagerrModule {
                         TransactionWrapper.TransactionUse.STAKE
                 );
             }
-            list.add(wrapper);
+
+            //no need to add oracle transations
+            if (!walletManager.isTransactionRelatedToWatchedAddress(transaction)) {
+                list.add(wrapper);
+            }
         }
         return list;
     }

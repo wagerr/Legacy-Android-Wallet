@@ -83,6 +83,12 @@ public interface WagerrModule {
 
     BigDecimal getAvailableBalanceLocale();
 
+    boolean addWatchedAddress(String address);
+
+    boolean isTransactionRelatedToWatchedAddress(Transaction tx);
+
+    List<Transaction> getWatchedSpent();
+
     /******    Address Label          ******/
 
     List<AddressLabel> getContacts();

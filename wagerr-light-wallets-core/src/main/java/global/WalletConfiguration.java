@@ -14,6 +14,8 @@ public interface WalletConfiguration {
 
     String getTrustedNodeHost();
 
+    String getOracleAddress();
+
     void saveTrustedNode(String host,int port);
 
     void saveScheduleBlockchainService(long time);

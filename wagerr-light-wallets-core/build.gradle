@@ -20,7 +20,7 @@ sourceSets{
 }
 
 dependencies {
-    compile files('lib/wagerrj-core-0.14.3-12.1.jar')
+    compile files('lib/wagerrj-core-0.14.4.jar')
     compile 'org.slf4j:slf4j-api:1.7.20'
     compile 'com.google.protobuf:protobuf-java:2.6.1'
     compile 'com.google.guava:guava:20.0'

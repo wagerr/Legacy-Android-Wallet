@@ -107,7 +107,7 @@ public class WalletManager {
         return false;
     }
 
-    public boolean isWatchingAddress(Address address){
+    public boolean isWatchingAddress(Address address) {
         return wallet.isAddressWatched(address);
     }
 
@@ -124,7 +124,7 @@ public class WalletManager {
         restoreOrCreateWallet();
     }
 
-    private void initMnemonicCode(){
+    private void initMnemonicCode() {
         try {
             MnemonicCode.INSTANCE = new MnemonicCode(contextWrapper.openAssestsStream(conf.getMnemonicFilename()), null);
         } catch (IOException e) {
@@ -194,7 +194,7 @@ public class WalletManager {
         });
     }
 
-    public Wallet generateRandomWallet(){
+    public Wallet generateRandomWallet() {
         if (Utils.isAndroidRuntime()) {
             new LinuxSecureRandom();
         }
@@ -203,11 +203,11 @@ public class WalletManager {
         return Wallet.fromSeed(conf.getNetworkParams(), seed, DeterministicKeyChain.KeyChainType.BIP44_WAGERR_ONLY);
     }
 
-    public static List<String> generateMnemonic(int entropyBitsSize){
+    public static List<String> generateMnemonic(int entropyBitsSize) {
         byte[] entropy;
-        if (ENTROPY_SIZE_DEBUG > 0){
+        if (ENTROPY_SIZE_DEBUG > 0) {
             entropy = new byte[ENTROPY_SIZE_DEBUG];
-        }else {
+        } else {
             entropy = new byte[entropyBitsSize / 8];
         }
         SecureRandom secureRandom = new SecureRandom();
@@ -215,9 +215,9 @@ public class WalletManager {
         return bytesToMnemonic(entropy);
     }
 
-    public static List<String> bytesToMnemonic(byte[] bytes){
+    public static List<String> bytesToMnemonic(byte[] bytes) {
         List<String> mnemonic;
-        try{
+        try {
             mnemonic = MnemonicCode.INSTANCE.toMnemonic(bytes);
         } catch (MnemonicException.MnemonicLengthException e) {
             throw new RuntimeException(e); // should not happen, we have 16 bytes of entropy
@@ -279,8 +279,8 @@ public class WalletManager {
         MnemonicCode.INSTANCE.check(mnemonic);
         wallet = Wallet.fromSeed(
                 conf.getNetworkParams(),
-                new DeterministicSeed(mnemonic,null,"",timestamp),
-                bip44? DeterministicKeyChain.KeyChainType.BIP44_WAGERR_ONLY: DeterministicKeyChain.KeyChainType.BIP32
+                new DeterministicSeed(mnemonic, null, "", timestamp),
+                bip44 ? DeterministicKeyChain.KeyChainType.BIP44_WAGERR_ONLY : DeterministicKeyChain.KeyChainType.BIP32
         );
         restoreWallet(wallet);
     }
@@ -356,7 +356,7 @@ public class WalletManager {
      */
 
     public boolean backupWallet(File file, final String password) throws IOException {
-        return backupWallet(wallet,file,password);
+        return backupWallet(wallet, file, password);
     }
 
     /**
@@ -366,7 +366,7 @@ public class WalletManager {
      * @param password
      * @throws IOException
      */
-    public boolean backupWallet(Wallet wallet,File file, final String password) throws IOException {
+    public boolean backupWallet(Wallet wallet, File file, final String password) throws IOException {
 
         final Protos.Wallet walletProto = new WalletProtobufSerializer().walletToProto(wallet);
 
@@ -515,10 +515,11 @@ public class WalletManager {
 
     /**
      * Restart the wallet and re create it in a watch only mode.
+     *
      * @param xpub
      */
     public void watchOnlyMode(String xpub, DeterministicKeyChain.KeyChainType keyChainType) throws IOException {
-        Wallet wallet = Wallet.fromWatchingKeyB58(conf.getNetworkParams(),xpub,0,keyChainType);
+        Wallet wallet = Wallet.fromWatchingKeyB58(conf.getNetworkParams(), xpub, 0, keyChainType);
         restoreWallet(wallet);
     }
 
@@ -575,34 +576,36 @@ public class WalletManager {
 
     public DeterministicKey getKeyPairForAddress(Address address) {
         DeterministicKey deterministicKey = wallet.getActiveKeyChain().findKeyFromPubHash(address.getHash160());
-        logger.info("Key pub: "+deterministicKey.getPublicKeyAsHex());
+        logger.info("Key pub: " + deterministicKey.getPublicKeyAsHex());
         return deterministicKey;
     }
 
     /**
      * If the wallet doesn't contain any private key.
+     *
      * @return
      */
-    public boolean isWatchOnly(){
+    public boolean isWatchOnly() {
         return wallet.isWatching();
     }
 
     public TransactionOutput getUnspent(Sha256Hash parentTxHash, int index) throws TxNotFoundException {
         Transaction tx = wallet.getTransaction(parentTxHash);
-        if (tx==null) throw new TxNotFoundException("tx "+parentTxHash.toString()+" not found");
+        if (tx == null)
+            throw new TxNotFoundException("tx " + parentTxHash.toString() + " not found");
         return tx.getOutput(index);
     }
 
-    public List<TransactionOutput> getRandomListUnspentNotInListToFullCoins(List<TransactionInput> inputs,Coin amount) throws InsufficientInputsException {
+    public List<TransactionOutput> getRandomListUnspentNotInListToFullCoins(List<TransactionInput> inputs, Coin amount) throws InsufficientInputsException {
         List<TransactionOutput> list = new ArrayList<>();
         Coin total = Coin.ZERO;
         for (TransactionOutput transactionOutput : wallet.getUnspents()) {
             boolean found = false;
-            if (inputs!=null) {
+            if (inputs != null) {
                 for (TransactionInput input : inputs) {
                     if (input.getConnectedOutput().getParentTransactionHash().equals(transactionOutput.getParentTransactionHash())
                             &&
-                        input.getConnectedOutput().getIndex() == transactionOutput.getIndex()) {
+                            input.getConnectedOutput().getIndex() == transactionOutput.getIndex()) {
                         found = true;
                     }
                 }
@@ -612,17 +615,17 @@ public class WalletManager {
                     list.add(transactionOutput);
                     total = total.add(transactionOutput.getValue());
                 }
-                if (total.isGreaterThan(amount)){
+                if (total.isGreaterThan(amount)) {
                     return list;
                 }
             }
         }
-        throw new InsufficientInputsException("No unspent available",amount.minus(total));
+        throw new InsufficientInputsException("No unspent available", amount.minus(total));
     }
 
     public Coin getUnspentValue(Sha256Hash parentTransactionHash, int index) {
         Transaction tx = wallet.getTransaction(parentTransactionHash);
-        if (tx==null)return null;
+        if (tx == null) return null;
         return tx.getOutput(index).getValue();
     }
 
@@ -642,8 +645,21 @@ public class WalletManager {
         return wallet.getActiveKeyChain().getKeyChainType() == DeterministicKeyChain.KeyChainType.BIP32;
     }
 
+    public boolean addWatchedAddress(String address) {
+        return wallet.addWatchedAddress(Address.fromBase58(conf.getNetworkParams(), address));
+    }
+
+    public List<Transaction> getWatchedSpent() {
+        return wallet.getWatchedSpentTransactions(true);
+    }
+
+    public boolean isTransactionRelatedToWatchedAddress(Transaction tx){
+        return wallet.isTransactionRelatedToWatchedAddress(tx);
+    }
+
     /**
      * Create a clean transaction from the wallet balance to the sweep address
+     *
      * @param sweepAddress
      * @return
      */
