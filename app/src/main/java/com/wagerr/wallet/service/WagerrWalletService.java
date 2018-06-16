@@ -270,7 +270,7 @@ public class WagerrWalletService extends Service{
                             .setContentTitle("WGR received!")
                             .setContentText("Coins received for a value of " + notificationAccumulatedAmount.toFriendlyString())
                             .setAutoCancel(true)
-                            .setSmallIcon(R.mipmap.ic_launcher)
+                            .setSmallIcon(R.drawable.ic_wagerr_launcher)
                             .setColor(
                                     (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) ?
                                             getResources().getColor(R.color.bgPurple, null)
@@ -569,7 +569,7 @@ public class WagerrWalletService extends Service{
             if(showNotif) {
                 android.support.v4.app.NotificationCompat.Builder mBuilder =
                         new NotificationCompat.Builder(getApplicationContext())
-                                .setSmallIcon(R.mipmap.ic_launcher)
+                                .setSmallIcon(R.drawable.ic_wagerr_launcher)
                                 .setContentTitle("Alert")
                                 .setContentText(stringBuilder.toString())
                                 .setAutoCancel(true)
