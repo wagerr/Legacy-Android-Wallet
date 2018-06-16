@@ -1,7 +1,7 @@
-### Pivx wallet protocol
+### Wagerr wallet protocol
 
 
-Pivx server is based on electrum server. Tiene el mismo flujo.
+Wagerr server is based on electrum server. Tiene el mismo flujo.
 
 Cada request tiene su propia respuesta del lado del servidor, incluyendo los request de suscripciones.
 
