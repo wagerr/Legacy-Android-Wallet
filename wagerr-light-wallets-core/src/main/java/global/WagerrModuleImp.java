@@ -134,11 +134,6 @@ public class WagerrModuleImp implements WagerrModule {
     }
 
     @Override
-    public boolean addWatchedAddress(String address) {
-        return walletManager.addWatchedAddress(address);
-    }
-
-    @Override
     public boolean isTransactionRelatedToWatchedAddress(Transaction tx) {
         return walletManager.isTransactionRelatedToWatchedAddress(tx);
     }

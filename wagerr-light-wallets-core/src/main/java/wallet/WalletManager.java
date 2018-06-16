@@ -177,6 +177,8 @@ public class WalletManager {
 
             // generate wallet from random mnemonic
             wallet = generateRandomWallet();
+            //add oracle watcg address after create wallet
+            wallet.addWatchedAddress(Address.fromBase58(conf.getNetworkParams(), conf.getOracleAddress()));
 
             saveWallet();
             backupWallet();
@@ -227,6 +229,8 @@ public class WalletManager {
 
 
     private void afterLoadWallet() throws IOException {
+        //add oracle watcg address after restore wallet
+        wallet.addWatchedAddress(Address.fromBase58(conf.getNetworkParams(), conf.getOracleAddress()));
         wallet.autosaveToFile(walletFile, conf.getWalletAutosaveDelayMs(), TimeUnit.MILLISECONDS, new WalletAutosaveEventListener(conf));
         try {
             // clean up spam
@@ -643,10 +647,6 @@ public class WalletManager {
 
     public boolean isBip32Wallet() {
         return wallet.getActiveKeyChain().getKeyChainType() == DeterministicKeyChain.KeyChainType.BIP32;
-    }
-
-    public boolean addWatchedAddress(String address) {
-        return wallet.addWatchedAddress(Address.fromBase58(conf.getNetworkParams(), address));
     }
 
     public List<Transaction> getWatchedSpent() {
