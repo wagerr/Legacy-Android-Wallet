@@ -3,6 +3,7 @@ apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-kapt'
+def isCi = "true".equals(System.getenv("CI"))
 
 android {
     compileSdkVersion 27
@@ -15,8 +16,8 @@ android {
         versionCode 1
         versionName "1.0.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        archivesBaseName = "WagerrWallet_v-$versionName-${releaseTime()}"
         multiDexEnabled true
-
     }
 
     lintOptions {
@@ -26,12 +27,20 @@ android {
     dexOptions {
         javaMaxHeapSize "4g"
     }
-
+    signingConfigs {
+        release
+    }
     buildTypes {
         release {
             minifyEnabled false
+            signingConfig signingConfigs.release
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
+    }
+    flavorDimensions "env"
+    productFlavors {
+        wgrprod {dimension "env" }
+        wgrtest {dimension "env" }
     }
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
@@ -66,6 +75,41 @@ configurations.all {
 
 }
 
+
+def releaseTime() {
+    return new Date().format("yyyy-MM-dd", TimeZone.getTimeZone("UTC"))
+}
+
+//使用独立的signing.propreties保存签名信息
+def File propFile = file('signing.properties');
+if (isCi) {
+    android.signingConfigs.release.storeFile = file('../key.jks')
+    android.signingConfigs.release.storePassword = System.getenv("STORE_PASSWORD")
+    android.signingConfigs.release.keyAlias = System.getenv('KEY_ALIAS')
+    android.signingConfigs.release.keyPassword = System.getenv('KEY_PASSWORD')
+} else if (propFile.exists()) {
+    def Properties props = new Properties()
+    props.load(new FileInputStream(propFile))
+    if (props != null && props.containsKey('STORE_FILE') && props.containsKey('STORE_PASSWORD') &&
+            props.containsKey('KEY_ALIAS') && props.containsKey('KEY_PASSWORD')) {
+        def keystoreFile = file(props["STORE_FILE"])
+        if (keystoreFile.canRead()) {
+            android.signingConfigs.release.storeFile = file(props['STORE_FILE'])
+            android.signingConfigs.release.storePassword = props['STORE_PASSWORD']
+            android.signingConfigs.release.keyAlias = props['KEY_ALIAS']
+            android.signingConfigs.release.keyPassword = props['KEY_PASSWORD']
+        } else {
+            println("keystore file not found: " + props["KEYSTORE_FILE"])
+            android.buildTypes.release.signingConfig = null
+        }
+    } else {
+        println("signing.properties found but some entries missing")
+        android.buildTypes.release.signingConfig = null
+    }
+} else {
+    println("signing.properties not found: ")
+    android.buildTypes.release.signingConfig = null
+}
 
 dependencies {
     //compile fileTree(dir: 'libs', include: ['*.jar'])
