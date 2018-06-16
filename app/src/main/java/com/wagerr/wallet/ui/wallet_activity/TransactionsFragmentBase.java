@@ -4,11 +4,13 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import org.wagerrj.core.Coin;
+import org.wagerrj.core.TransactionOutput;
 import org.wagerrj.utils.MonetaryFormat;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -20,6 +22,9 @@ import java.util.List;
 
 import com.wagerr.wallet.R;
 import global.WagerrRate;
+
+import com.wagerr.wallet.data.bet.BetAction;
+import com.wagerr.wallet.data.bet.BetActionKt;
 import com.wagerr.wallet.ui.base.BaseRecyclerFragment;
 import com.wagerr.wallet.ui.base.tools.adapter.BaseRecyclerAdapter;
 import com.wagerr.wallet.ui.base.tools.adapter.BaseRecyclerViewHolder;
@@ -136,6 +141,15 @@ public class TransactionsFragmentBase extends BaseRecyclerFragment<TransactionWr
                 }*/
                 String memo = data.getTransaction().getMemo();
                 holder.description.setText(memo!=null?memo:"No description");
+                String betActionString = BetActionKt.getBetActionString(data.getTransaction());
+                if (BetActionKt.isValidBetActionSource(betActionString)){
+                    BetAction betAction = BetActionKt.toBetAction(betActionString);
+                    if (betAction.getBetChoose().equals("D")) {
+                        holder.description.setText("Bet DRAW at event"+betAction.getEventId());
+                    } else {
+                        holder.description.setText("Bet "+betAction.getBetChoose() +" WIN at event "+betAction.getEventId());
+                    }
+                }
             }
         };
         adapter.setListEventListener(new ListItemListeners<TransactionWrapper>() {
