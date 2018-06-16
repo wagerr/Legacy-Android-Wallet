@@ -391,5 +391,6 @@
     <string name="restoring_wallet">Restoring wallet..</string>
     <string name="no_transactions">You don\'t have any transfers yet.</string>
     <string name="sync_in_progress">The wallet is out of sync, some transactions may be missing.\nPlease wait until the sync process finishes to see your current balance.</string>
+    <string name="bet_event_sync_in_progress">The wallet is out of sync, some bet event may be missing.\nPlease wait until the sync process finishes to see what you can bet.</string>
 
 </resources>

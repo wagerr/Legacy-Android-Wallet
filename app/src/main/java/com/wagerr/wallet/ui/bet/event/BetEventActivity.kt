@@ -22,6 +22,7 @@ import android.support.v4.content.ContextCompat
 import android.support.v7.app.AlertDialog
 import android.util.Log
 import android.widget.*
+import chain.BlockchainState
 import com.squareup.okhttp.internal.Internal.logger
 import com.wagerr.wallet.data.bet.*
 import com.wagerr.wallet.service.IntentsConstants.ACTION_BROADCAST_TRANSACTION
@@ -34,14 +35,12 @@ import com.wagerr.wallet.ui.transaction_send_activity.SendTxDetailActivity
 import com.wagerr.wallet.ui.transaction_send_activity.custom.ChangeAddressActivity
 import com.wagerr.wallet.ui.transaction_send_activity.custom.CustomFeeFragment
 import com.wagerr.wallet.ui.transaction_send_activity.custom.outputs.OutputWrapper
-import com.wagerr.wallet.utils.CrashReporter
-import com.wagerr.wallet.utils.DialogsUtil
-import com.wagerr.wallet.utils.NavigationUtils
+import com.wagerr.wallet.utils.*
 import com.wagerr.wallet.utils.scanner.ScanActivity.INTENT_EXTRA_RESULT
-import com.wagerr.wallet.utils.wrapContent
 import global.exceptions.NoPeerConnectedException
 import global.wrappers.InputWrapper
 import global.wrappers.TransactionWrapper
+import kotlinx.android.synthetic.main.activity_bet.*
 import org.wagerrj.core.Address
 import org.wagerrj.core.Coin
 import org.wagerrj.core.InsufficientMoneyException
@@ -65,8 +64,6 @@ class BetEventActivity : BaseDrawerActivity() {
     lateinit var recyclerView: RecyclerView
     private lateinit var adapter: BetEventAdapter
     private var layoutManager: RecyclerView.LayoutManager? = null
-    private val oracleEvents: List<BetEvent>? = null
-    private var emptyView: LinearLayout? = null
     private var executor: ExecutorService? = null
     private val errorDialog: SimpleTextDialog by lazy {
         DialogsUtil.buildSimpleErrorTextDialog(this, resources.getString(R.string.invalid_inputs), "")
@@ -79,7 +76,12 @@ class BetEventActivity : BaseDrawerActivity() {
     override fun onCreateView(savedInstanceState: Bundle?, container: ViewGroup) {
         layoutInflater.inflate(R.layout.activity_bet, container)
         setTitle(R.string.bet_screen_title)
-        recyclerView = findViewById<View>(R.id.addressList) as RecyclerView
+        swipe_refresh_layout.setColorSchemeColors(ContextCompat.getColor(this,R.color.colorPrimary))
+        swipe_refresh_layout.setRefreshing(true)
+        swipe_refresh_layout.setOnRefreshListener {
+            load()
+        }
+        recyclerView = findViewById<View>(R.id.bet_event_list) as RecyclerView
         recyclerView.setHasFixedSize(true)
         layoutManager = LinearLayoutManager(this)
         recyclerView.layoutManager = layoutManager
@@ -90,8 +92,6 @@ class BetEventActivity : BaseDrawerActivity() {
 
         //        adapter.setListEventListener(this);
         recyclerView.adapter = adapter
-        emptyView = findViewById<View>(R.id.empty_view) as LinearLayout
-        emptyView!!.visibility = View.GONE
 
         adapter.setOnItemChildClickListener { adapter, view, position ->
             adapter as BetEventAdapter
@@ -292,8 +292,8 @@ class BetEventActivity : BaseDrawerActivity() {
 
 
     private fun showErrorDialog(message: String?) {
-        errorDialog?.setBody(message)
-        errorDialog?.show(fragmentManager, resources.getString(R.string.send_error_dialog_tag))
+        errorDialog.setBody(message)
+        errorDialog.show(fragmentManager, resources.getString(R.string.send_error_dialog_tag))
     }
 
     override fun onResume() {
@@ -336,7 +336,9 @@ class BetEventActivity : BaseDrawerActivity() {
                         it?.timeStamp
                     }
 
-            runOnUiThread { adapter.setNewData(list) }
+            runOnUiThread {
+                swipe_refresh_layout.setRefreshing(false)
+                adapter.setNewData(list) }
 
         }
     }
@@ -379,5 +381,15 @@ class BetEventActivity : BaseDrawerActivity() {
         Toast.makeText(this, R.string.sending_tx, Toast.LENGTH_LONG).show()
         finish()
         NavigationUtils.goBackToHome(this)
+    }
+
+    override fun onBlockchainStateChange() {
+        if (blockchainState == BlockchainState.SYNCING) {
+            AnimationUtils.fadeInView(container_bet_event_syncing, 500)
+        } else if (blockchainState == BlockchainState.SYNC) {
+            AnimationUtils.fadeOutGoneView(container_bet_event_syncing, 500)
+        } else if (blockchainState == BlockchainState.NOT_CONNECTION) {
+            AnimationUtils.fadeInView(container_bet_event_syncing, 500)
+        }
     }
 }
