@@ -1,7 +1,5 @@
 # Wagerr-Wallet
 
-![alt text](https://github.com/LooorTor/wagerr-android/blob/master/banner/Feature%20Image.jpg)
-
 Welcome to the Wagerr mobile wallet for android!
 
 
