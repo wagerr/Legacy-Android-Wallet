@@ -87,7 +87,7 @@
             android:gravity="center"
             android:layout_gravity="bottom"
             android:text="@string/backup_wallet"
-            android:textColor="@color/textColorPurple"
+            android:textColor="@color/textColorRed"
             android:textSize="14sp" />
 
     </LinearLayout>

@@ -130,7 +130,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:background="@color/transparent"
-                android:textColor="@color/colorPurple"
+                android:textColor="@color/colorRed"
                 android:text="@string/add_all"/>
 
             <LinearLayout
@@ -295,7 +295,7 @@
                     android:gravity="center"
                     android:layout_gravity="bottom"
                     android:text="@string/btn_send"
-                    android:textColor="@color/textColorPurple"
+                    android:textColor="@color/textColorRed"
                     android:textSize="14sp" />
 
 

@@ -47,7 +47,7 @@
             android:paddingTop="12dp"
             android:text="@string/several_outputs_add_address"
             android:textSize="14sp"
-            android:textColor="@color/colorPurple"
+            android:textColor="@color/colorRed"
             android:textStyle="bold" />
 
     </LinearLayout>

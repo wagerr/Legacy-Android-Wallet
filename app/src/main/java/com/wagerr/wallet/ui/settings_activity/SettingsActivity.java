@@ -138,10 +138,10 @@ public class SettingsActivity extends BaseDrawerActivity implements View.OnClick
         if (!isOnForeground)return;
         txt_network_info.setText(
                 Html.fromHtml(
-                        "Network<br><font color=#55476c>"+wagerrModule.getConf().getNetworkParams().getId()+
+                        "Network<br><font color=#dd0000>"+wagerrModule.getConf().getNetworkParams().getId()+
                                 "</font><br>" +
-                                "Height<br><font color=#55476c>"+wagerrModule.getChainHeight()+"</font><br>" +
-                                "Protocol Version<br><font color=#55476c>"+
+                                "Height<br><font color=#dd0000>"+wagerrModule.getChainHeight()+"</font><br>" +
+                                "Protocol Version<br><font color=#dd0000>"+
                                 wagerrModule.getProtocolVersion()+"</font>"
 
                 )

@@ -273,9 +273,9 @@ public class WagerrWalletService extends Service{
                             .setSmallIcon(R.drawable.ic_wagerr_launcher)
                             .setColor(
                                     (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) ?
-                                            getResources().getColor(R.color.bgPurple, null)
+                                            getResources().getColor(R.color.bgRed, null)
                                             :
-                                            ContextCompat.getColor(WagerrWalletService.this, R.color.bgPurple))
+                                            ContextCompat.getColor(WagerrWalletService.this, R.color.bgRed))
                             .setDeleteIntent(deleteIntent)
                             .setContentIntent(openPendingIntent);
                     nm.notify(NOT_COINS_RECEIVED, mBuilder.build());
@@ -575,9 +575,9 @@ public class WagerrWalletService extends Service{
                                 .setAutoCancel(true)
                                 .setColor(
                                         (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) ?
-                                                getResources().getColor(R.color.bgPurple,null)
+                                                getResources().getColor(R.color.bgRed,null)
                                                 :
-                                                ContextCompat.getColor(WagerrWalletService.this,R.color.bgPurple))
+                                                ContextCompat.getColor(WagerrWalletService.this,R.color.bgRed))
                         ;
 
                 nm.notify(NOT_BLOCKCHAIN_ALERT, mBuilder.build());

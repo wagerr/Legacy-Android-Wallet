@@ -67,7 +67,7 @@ public class AddContactActivity extends BaseActivity implements View.OnClickList
                 String temp = s.toString();
                 if(wagerrModule.chechAddress(temp)){
                     address = temp;
-                    edit_address.setTextColor(Color.parseColor("#55476c"));;
+                    edit_address.setTextColor(Color.parseColor("#dd0000"));;
                 }else {
                     edit_address.setTextColor(Color.parseColor("#4d4d4d"));;
                 }

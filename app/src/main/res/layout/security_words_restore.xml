@@ -53,7 +53,7 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="#55476C"
+        android:background="@color/red"
         android:id="@+id/container_loading"
         android:visibility="gone">
 
