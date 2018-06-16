@@ -44,7 +44,6 @@ import global.WalletConfiguration;
 import pivtrum.PivtrumPeerData;
 import wallet.WalletManager;
 
-import static global.PivtrumGlobalData.FURSZY_TESTNET_SERVER;
 
 public class BlockchainManager {
 
@@ -255,76 +254,66 @@ public class BlockchainManager {
                 peerGroup.setConnectTimeoutMillis(conf.getPeerTimeoutMs());
                 peerGroup.setPeerDiscoveryTimeoutMillis(conf.getPeerDiscoveryTimeoutMs());
 
-                if (conf.isTest()){
+                if (conf.isTest()) {
                     peerGroup.setMinBroadcastConnections(1);
                 }
 
-                if (conf.getNetworkParams().equals(RegTestParams.get())) {
-                    peerGroup.addPeerDiscovery(new PeerDiscovery() {
-                        @Override
-                        public InetSocketAddress[] getPeers(long services, long timeoutValue, TimeUnit timeUnit) throws PeerDiscoveryException {
-                            // No regtest in wagerr yet..
-                            return null; //RegtestUtil.getPeersToConnect(conf.getNetworkParams(),conf.getNode());
-                        }
+                peerGroup.addPeerDiscovery(new PeerDiscovery() {
 
-                        @Override
-                        public void shutdown() {
+                    private final PeerDiscovery normalPeerDiscovery = MultiplexingDiscovery.forServices(conf.getNetworkParams(), 0);
 
-                        }
-                    });
-                } else {
-                    peerGroup.addPeerDiscovery(new PeerDiscovery() {
+                    @Override
+                    public InetSocketAddress[] getPeers(final long services, final long timeoutValue, final TimeUnit timeoutUnit)
+                            throws PeerDiscoveryException {
+                        final List<InetSocketAddress> peers = new LinkedList<InetSocketAddress>();
 
-                        private final PeerDiscovery normalPeerDiscovery = MultiplexingDiscovery.forServices(conf.getNetworkParams(), 0);
+                        boolean needsTrimPeersWorkaround = false;
 
-                        @Override
-                        public InetSocketAddress[] getPeers(final long services, final long timeoutValue, final TimeUnit timeoutUnit)
-                                throws PeerDiscoveryException {
-                            final List<InetSocketAddress> peers = new LinkedList<InetSocketAddress>();
+                        if (hasTrustedPeer) {
+                            LOG.info("trusted peer '" + trustedPeerHost + "'" + (connectTrustedPeerOnly ? " only" : ""));
+                            final InetSocketAddress addr;
+                            addr = new InetSocketAddress(trustedPeerHost, conf.getNetworkParams().getPort());
 
-                            boolean needsTrimPeersWorkaround = false;
 
-                            if (hasTrustedPeer) {
-                                LOG.info("trusted peer '" + trustedPeerHost + "'" + (connectTrustedPeerOnly ? " only" : ""));
-                                final InetSocketAddress addr;
-                                if (trustedPeerHost.equals(FURSZY_TESTNET_SERVER) && !conf.isTest()){
-                                    addr = new InetSocketAddress(trustedPeerHost, 8443);
-                                }else {
-                                    addr = new InetSocketAddress(trustedPeerHost, conf.getNetworkParams().getPort());
-                                }
-
-                                if (addr.getAddress() != null) {
-                                    peers.add(addr);
-                                    needsTrimPeersWorkaround = true;
-                                }
+                            if (addr.getAddress() != null) {
+                                peers.add(addr);
+                                needsTrimPeersWorkaround = true;
+                            }
                                 /*if (conf.isTest()){
                                     // add one more peer to validate tx
                                     peers.add(new InetSocketAddress(FURSZY_TESTNET_SERVER,6444));
                                     needsTrimPeersWorkaround = false;
                                 }*/
-                            }else {
+                        } else {
+                            if (conf.isTest()) {
+                                for (PivtrumPeerData pivtrumPeerData : PivtrumGlobalData.listTrustedTestHosts()) {
+                                    peers.add(new InetSocketAddress(pivtrumPeerData.getHost(), pivtrumPeerData.getTcpPort()));
+                                }
+                            } else {
                                 for (PivtrumPeerData pivtrumPeerData : PivtrumGlobalData.listTrustedHosts()) {
                                     peers.add(new InetSocketAddress(pivtrumPeerData.getHost(), pivtrumPeerData.getTcpPort()));
                                 }
                             }
 
-                            if (!connectTrustedPeerOnly)
-                                peers.addAll(Arrays.asList(normalPeerDiscovery.getPeers(services, timeoutValue, timeoutUnit)));
-
-                            // workaround because PeerGroup will shuffle peers
-                            if (needsTrimPeersWorkaround)
-                                while (peers.size() >= maxConnectedPeers)
-                                    peers.remove(peers.size() - 1);
-
-                            return peers.toArray(new InetSocketAddress[0]);
                         }
 
-                        @Override
-                        public void shutdown() {
-                            normalPeerDiscovery.shutdown();
-                        }
-                    });
-                }
+                        if (!connectTrustedPeerOnly)
+                            peers.addAll(Arrays.asList(normalPeerDiscovery.getPeers(services, timeoutValue, timeoutUnit)));
+
+                        // workaround because PeerGroup will shuffle peers
+                        if (needsTrimPeersWorkaround)
+                            while (peers.size() >= maxConnectedPeers)
+                                peers.remove(peers.size() - 1);
+
+                        return peers.toArray(new InetSocketAddress[0]);
+                    }
+
+                    @Override
+                    public void shutdown() {
+                        normalPeerDiscovery.shutdown();
+                    }
+                });
+
 
                 // notify that the peergroup was initialized
                 if (blockchainManagerListeners != null) {
