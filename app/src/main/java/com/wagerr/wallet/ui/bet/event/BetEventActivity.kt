@@ -329,6 +329,9 @@ class BetEventActivity : BaseDrawerActivity() {
                 return@map it.getBetEventString()
             }.filter { it!!.isValidBetEventSource() }
                     .map { it?.toBetEvent() }
+                    .filter {
+                        it != null && it.timeStamp > System.currentTimeMillis() + 20000
+                    }
                     .sortedBy {
                         it?.timeStamp
                     }
@@ -339,7 +342,7 @@ class BetEventActivity : BaseDrawerActivity() {
     }
 
     public override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-       if (requestCode == REQ_CODE_SEND_DETAIL) {
+        if (requestCode == REQ_CODE_SEND_DETAIL) {
             if (resultCode == Activity.RESULT_OK) {
                 try {
                     // pin ok, send the tx now
