@@ -437,7 +437,7 @@ public class WalletManager {
     }
 
     public Coin getAvailableBalance() {
-        return wallet.getBalance(Wallet.BalanceType.AVAILABLE);
+        return wallet.getBalance(Wallet.BalanceType.AVAILABLE_SPENDABLE);
     }
 
     public Coin getValueSentFromMe(Transaction transaction) {
