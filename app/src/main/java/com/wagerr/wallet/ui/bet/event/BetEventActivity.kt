@@ -23,8 +23,8 @@ import android.support.v7.app.AlertDialog
 import android.util.Log
 import android.widget.*
 import chain.BlockchainState
-import com.squareup.okhttp.internal.Internal.logger
 import com.wagerr.wallet.data.bet.*
+import com.wagerr.wallet.module.WagerrContext
 import com.wagerr.wallet.service.IntentsConstants.ACTION_BROADCAST_TRANSACTION
 import com.wagerr.wallet.service.IntentsConstants.DATA_TRANSACTION_HASH
 import com.wagerr.wallet.service.WagerrWalletService
@@ -32,25 +32,17 @@ import com.wagerr.wallet.ui.base.dialogs.SimpleTextDialog
 import com.wagerr.wallet.ui.base.dialogs.SimpleTwoButtonsDialog
 import com.wagerr.wallet.ui.transaction_detail_activity.FragmentTxDetail.*
 import com.wagerr.wallet.ui.transaction_send_activity.SendTxDetailActivity
-import com.wagerr.wallet.ui.transaction_send_activity.custom.ChangeAddressActivity
-import com.wagerr.wallet.ui.transaction_send_activity.custom.CustomFeeFragment
-import com.wagerr.wallet.ui.transaction_send_activity.custom.outputs.OutputWrapper
 import com.wagerr.wallet.utils.*
-import com.wagerr.wallet.utils.scanner.ScanActivity.INTENT_EXTRA_RESULT
 import global.exceptions.NoPeerConnectedException
-import global.wrappers.InputWrapper
 import global.wrappers.TransactionWrapper
 import kotlinx.android.synthetic.main.activity_bet.*
-import org.wagerrj.core.Address
 import org.wagerrj.core.Coin
 import org.wagerrj.core.InsufficientMoneyException
 import org.wagerrj.core.Transaction
 import org.wagerrj.script.ScriptBuilder
 import org.wagerrj.script.ScriptOpCodes
-import org.wagerrj.uri.WagerrURI
 import org.wagerrj.wallet.Wallet
 import wallet.exceptions.InsufficientInputsException
-import wallet.exceptions.TxNotFoundException
 import java.io.IOException
 
 
@@ -76,7 +68,7 @@ class BetEventActivity : BaseDrawerActivity() {
     override fun onCreateView(savedInstanceState: Bundle?, container: ViewGroup) {
         layoutInflater.inflate(R.layout.activity_bet, container)
         setTitle(R.string.bet_screen_title)
-        swipe_refresh_layout.setColorSchemeColors(ContextCompat.getColor(this,R.color.colorPrimary))
+        swipe_refresh_layout.setColorSchemeColors(ContextCompat.getColor(this, R.color.colorPrimary))
         swipe_refresh_layout.setRefreshing(true)
         swipe_refresh_layout.setOnRefreshListener {
             load()
@@ -330,7 +322,7 @@ class BetEventActivity : BaseDrawerActivity() {
             }.filter { it!!.isValidBetEventSource() }
                     .map { it?.toBetEvent() }
                     .filter {
-                        it != null && it.timeStamp > System.currentTimeMillis() + 20000
+                        it != null && it.timeStamp > System.currentTimeMillis() + WagerrContext.STOP_ACCEPT_BET_BEFORE_EVENT_TIME
                     }
                     .sortedBy {
                         it?.timeStamp
@@ -338,7 +330,8 @@ class BetEventActivity : BaseDrawerActivity() {
 
             runOnUiThread {
                 swipe_refresh_layout.setRefreshing(false)
-                adapter.setNewData(list) }
+                adapter.setNewData(list)
+            }
 
         }
     }
