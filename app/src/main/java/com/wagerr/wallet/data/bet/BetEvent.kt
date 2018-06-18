@@ -18,17 +18,26 @@ fun String.toBetEvent(): BetEvent? {
 }
 
 fun Transaction.getBetEventString(): String? {
-    val item = this.outputs.filter {
+    val items = this.outputs.filter {
         it.scriptPubKey.isOpReturn
-    }[0].toString()
-    val hexString = item.substring(item.indexOf("[") + 1, item.indexOf("]"))
+    }
+    if (items.isEmpty()) {
+        return ""
+    }
+    val hexString = items[0].toString().substring(items[0].toString().indexOf("[") + 1, items[0].toString().indexOf("]"))
     val bytes = Hex.decodeHex(hexString.toCharArray())
     val string = String(bytes, Charset.forName("UTF-8"))
     return string
 }
 
 fun String.isValidBetEventSource(): Boolean {
+    if (TextUtils.isEmpty(this)) {
+        return false
+    }
     if (this.contains(",")) {
+        return false
+    }
+    if (!this.startsWith("1")) {
         return false
     }
     for (s in this.split("|")) {
