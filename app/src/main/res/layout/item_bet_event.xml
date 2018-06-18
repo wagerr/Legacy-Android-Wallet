@@ -11,7 +11,7 @@
         android:id="@+id/text_event_id"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="20dp"
+        android:layout_marginLeft="16dp"
         android:layout_marginTop="10dp"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toTopOf="parent"
@@ -21,7 +21,7 @@
         android:id="@+id/text_event_league"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="20dp"
+        android:layout_marginLeft="16dp"
         android:layout_marginTop="10dp"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toBottomOf="@id/text_event_id"
@@ -42,33 +42,59 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="15sp"
-        android:layout_marginRight="20dp"
+        android:layout_marginRight="16dp"
         android:layout_marginTop="10dp"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@id/text_event_id"
         tools:text="2018年6月5日" />
 
+    <ImageView
+        android:id="@+id/image_home_team"
+        android:layout_width="30dp"
+        android:layout_height="20dp"
+        android:layout_marginRight="8dp"
+        android:background="@color/bgBlack30"
+        android:padding="0.5dp"
+        android:scaleType="fitXY"
+        app:layout_constraintBottom_toTopOf="@id/button_home_odds"
+        app:layout_constraintRight_toLeftOf="@id/text_vs"
+        app:layout_constraintTop_toBottomOf="@id/text_event_league"
+        tools:src="@drawable/img_flag_jpn" />
+
+    <ImageView
+        android:id="@+id/image_away_team"
+        android:layout_width="30dp"
+        android:layout_height="20dp"
+        android:layout_marginLeft="8dp"
+        android:background="@color/bgBlack30"
+        android:padding="0.5dp"
+        android:scaleType="fitXY"
+        app:layout_constraintBottom_toTopOf="@id/button_home_odds"
+        app:layout_constraintLeft_toRightOf="@id/text_vs"
+        app:layout_constraintTop_toBottomOf="@id/text_event_league"
+        tools:src="@drawable/img_flag_arg" />
+
     <TextView
         android:id="@+id/text_home_team"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginRight="20dp"
-        android:layout_marginTop="5dp"
         android:textColor="@color/bgBlackX"
-        android:textSize="32sp"
-        app:layout_constraintRight_toLeftOf="@id/text_vs"
+        android:textSize="14sp"
+        app:layout_constraintBottom_toTopOf="@id/button_home_odds"
+        app:layout_constraintLeft_toLeftOf="@id/button_home_odds"
+        app:layout_constraintRight_toRightOf="@id/button_home_odds"
         app:layout_constraintTop_toBottomOf="@id/text_event_league"
-        tools:text="RUS" />
+        tools:text="Switzerland" />
 
 
     <TextView
         android:id="@+id/text_vs"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="18dp"
         android:text="VS"
         android:textColor="@color/bgBlackX"
         android:textSize="16sp"
+        app:layout_constraintBottom_toTopOf="@id/button_home_odds"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@id/text_event_league" />
@@ -77,46 +103,48 @@
         android:id="@+id/text_away_team"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="20dp"
-        android:layout_marginTop="5dp"
-        android:textSize="32sp"
         android:textColor="@color/bgBlackX"
-        app:layout_constraintLeft_toRightOf="@id/text_vs"
+        android:textSize="14sp"
+        app:layout_constraintBottom_toTopOf="@id/button_home_odds"
+        app:layout_constraintLeft_toLeftOf="@id/button_away_odds"
+        app:layout_constraintRight_toRightOf="@id/button_away_odds"
         app:layout_constraintTop_toBottomOf="@id/text_event_league"
-        tools:text="KSA" />
+        tools:text="Korean Republic" />
 
     <Button
         android:id="@+id/button_home_odds"
+        style="@style/WgrButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="20dp"
-        android:layout_marginTop="10dp"
-        style="@style/WgrButton"
-        app:layout_constraintRight_toLeftOf="@id/button_draw_odds"
+        android:layout_marginLeft="30dp"
+        android:layout_marginRight="25dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toBottomOf="@id/text_home_team"
-        android:layout_marginRight="10dp"
         tools:text="RUS WIN\n2.3" />
 
 
     <Button
         android:id="@+id/button_draw_odds"
+        style="@style/WgrButtonWithBorder"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        style="@style/WgrButtonWithBorder"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@id/text_home_team"
+
         tools:text="DRAW\n11" />
 
     <Button
         android:id="@+id/button_away_odds"
+        style="@style/WgrButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        style="@style/WgrButton"
-        android:layout_marginLeft="10dp"
-        app:layout_constraintLeft_toRightOf="@id/button_draw_odds"
+        android:layout_marginLeft="25dp"
+        android:layout_marginRight="30dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@id/text_home_team"
         tools:text="KSA WIN\n4.6" />
 
@@ -126,7 +154,6 @@
         android:background="@color/bgBlack05"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        />
+        app:layout_constraintRight_toRightOf="parent" />
 
 </android.support.constraint.ConstraintLayout>
