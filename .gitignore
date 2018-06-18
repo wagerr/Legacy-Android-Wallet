@@ -13,3 +13,7 @@ gradlew
 gradle.properties
 .idea
 app/release
+/app/*.jks
+/app/signing.properties
+/app/wgrtest/
+/app/wgrprod/
