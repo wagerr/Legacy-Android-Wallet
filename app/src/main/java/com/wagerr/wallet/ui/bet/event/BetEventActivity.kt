@@ -12,7 +12,6 @@ import com.wagerr.wallet.R
 import com.wagerr.wallet.ui.base.BaseDrawerActivity
 
 import java.util.concurrent.ExecutorService
-import java.util.concurrent.Executors
 
 import android.content.Intent
 import android.graphics.Color
@@ -24,7 +23,7 @@ import android.util.Log
 import android.widget.*
 import chain.BlockchainState
 import com.wagerr.wallet.data.bet.*
-import com.wagerr.wallet.module.WagerrContext
+import com.wagerr.wallet.module.bet.BetEventFetcher
 import com.wagerr.wallet.service.IntentsConstants.ACTION_BROADCAST_TRANSACTION
 import com.wagerr.wallet.service.IntentsConstants.DATA_TRANSACTION_HASH
 import com.wagerr.wallet.service.WagerrWalletService
@@ -35,6 +34,7 @@ import com.wagerr.wallet.ui.transaction_send_activity.SendTxDetailActivity
 import com.wagerr.wallet.utils.*
 import global.exceptions.NoPeerConnectedException
 import global.wrappers.TransactionWrapper
+import io.reactivex.rxkotlin.plusAssign
 import kotlinx.android.synthetic.main.activity_bet.*
 import org.wagerrj.core.Coin
 import org.wagerrj.core.InsufficientMoneyException
@@ -301,30 +301,11 @@ class BetEventActivity : BaseDrawerActivity() {
         load()
     }
 
-    override fun onStop() {
-        super.onStop()
-        if (executor != null) {
-            executor!!.shutdownNow()
-            executor = null
-        }
-    }
-
     private fun load() {
         // add loading..
-        if (executor == null) {
-            executor = Executors.newSingleThreadExecutor()
-        }
-        executor!!.submit {
-            val list = wagerrModule.watchedSpent.toBetEvents()?.filter {
-                it.timeStamp > System.currentTimeMillis() + WagerrContext.STOP_ACCEPT_BET_BEFORE_EVENT_TIME
-            }
-
-            runOnUiThread {
-                swipe_refresh_layout.setRefreshing(false)
-                adapter.setNewData(list)
-            }
-
-        }
+        compositeDisposable += BetEventFetcher.getCanBetBetEvents().subscribe({
+            swipe_refresh_layout.isRefreshing = false
+            adapter.setNewData(it)}, {})
     }
 
     public override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {

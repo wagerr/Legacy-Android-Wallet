@@ -12,6 +12,7 @@ import android.view.ViewGroup
 
 import com.wagerr.wallet.R
 import com.wagerr.wallet.data.bet.*
+import com.wagerr.wallet.module.bet.BetEventFetcher
 import com.wagerr.wallet.ui.base.BaseActivity
 import com.wagerr.wallet.ui.bet.event.formatToViewDateTimeDefaults
 import com.wagerr.wallet.ui.transaction_detail_activity.FragmentTxDetail
@@ -67,41 +68,39 @@ class BetActionDetailActivity : BaseActivity() {
 
     private fun loadTx() {
         val betAction = transactionWrapper.transaction.toBetAction()
-        compositeDisposable += Observable.fromCallable {
-            wagerrModule.watchedSpent.toBetEvents()
-        }.subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
-                .subscribe({
-                    val betEvent = it?.filter { it.eventId == betAction?.eventId }?.last()
-                    betEvent?.let {
-                        val eventSymbol = it.eventLeague.toEventSymbol()
-                        text_event_league.text = eventSymbol.getFullEventLeague()
-                        text_event_info.text = eventSymbol.getFullEventInfo(it.eventInfo)
-                        text_time.text = Date(it.timeStamp).formatToViewDateTimeDefaults()
-                        eventSymbol.getTeamImage(it.homeTeam)?.let {
-                            image_home_team.setImageResource(it)
-                        }
-                        eventSymbol.getTeamImage(it.awayTeam)?.let {
-                            image_away_team.setImageResource(it)
-                        }
-                        text_home_team.text = eventSymbol.getFullTeam(it.homeTeam)
-                        text_away_team.text = eventSymbol.getFullTeam(it.awayTeam)
-                        when (betAction?.betChoose) {
-                            it.homeTeam -> {
-                                text_choice.text = "${it.homeTeam} WIN (${it.homeOdds})"
+        betAction?.let {
+            BetEventFetcher.getBetEventByIdAndTime(it.eventId, transactionWrapper.transaction.updateTime.time)
+                    .subscribe({
+                        it?.let {
+                            val eventSymbol = it.eventLeague.toEventSymbol()
+                            text_event_league.text = eventSymbol.getFullEventLeague()
+                            text_event_info.text = eventSymbol.getFullEventInfo(it.eventInfo)
+                            text_time.text = Date(it.timeStamp).formatToViewDateTimeDefaults()
+                            eventSymbol.getTeamImage(it.homeTeam)?.let {
+                                image_home_team.setImageResource(it)
                             }
-                            it.awayTeam -> {
-                                text_choice.text = "${it.awayTeam} WIN (${it.awayOdds})"
+                            eventSymbol.getTeamImage(it.awayTeam)?.let {
+                                image_away_team.setImageResource(it)
                             }
-                            BET_ATCION_DRAW -> {
-                                text_choice.text = "Draw (${it.drawOdds})"
+                            text_home_team.text = eventSymbol.getFullTeam(it.homeTeam)
+                            text_away_team.text = eventSymbol.getFullTeam(it.awayTeam)
+                            when (betAction?.betChoose) {
+                                it.homeTeam -> {
+                                    text_choice.text = "${it.homeTeam} WIN (${it.homeOdds})"
+                                }
+                                it.awayTeam -> {
+                                    text_choice.text = "${it.awayTeam} WIN (${it.awayOdds})"
+                                }
+                                BET_ATCION_DRAW -> {
+                                    text_choice.text = "Draw (${it.drawOdds})"
+                                }
                             }
+                            text_amount.text = transactionWrapper.transaction.toBetActionAmount()?.toFriendlyString()
                         }
-                        text_amount.text = transactionWrapper.transaction.toBetActionAmount()?.toFriendlyString()
-                    }
-                }, {
 
-                })
+                    }, {})
 
+        }
     }
 
     override fun onBackPressed() {

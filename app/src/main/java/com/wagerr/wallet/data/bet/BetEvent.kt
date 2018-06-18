@@ -52,9 +52,6 @@ fun List<Transaction>.toBetEvents(): List<BetEvent>? {
         return@map it.getBetEventString()
     }.filter { it.isValidBetEventSource() }
             .map { it.toBetEvent() }
-            .sortedBy {
-                it.timeStamp
-            }
 }
 
 fun String.isValidBetEventSource(): Boolean {

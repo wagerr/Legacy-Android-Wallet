@@ -101,7 +101,7 @@
         android:id="@+id/text_away_team"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textColor="@color/bgBlackX"
+        android:textColor="@color/mainText"
         android:textSize="16sp"
         app:layout_constraintBottom_toTopOf="@id/button_home_odds"
         app:layout_constraintLeft_toLeftOf="@id/button_away_odds"
