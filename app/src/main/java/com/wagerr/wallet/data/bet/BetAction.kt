@@ -20,6 +20,14 @@ fun String.toBetAction(): BetAction {
     return BetAction(items[2], items[3])
 }
 
+fun Transaction.toBetAction(): BetAction? {
+    if (this.isBetAction()) {
+        return this.getBetActionString().toBetAction()
+    } else {
+        return null
+    }
+}
+
 fun Transaction.getBetActionString(): String {
     val items = this.outputs.filter {
         it.scriptPubKey.isOpReturn
@@ -31,6 +39,10 @@ fun Transaction.getBetActionString(): String {
     val bytes = Hex.decodeHex(hexString.toCharArray())
     val string = String(bytes, Charset.forName("UTF-8"))
     return string
+}
+
+fun Transaction.isBetAction(): Boolean {
+    return this.getBetActionString().isValidBetActionSource()
 }
 
 fun String.isValidBetActionSource(): Boolean {

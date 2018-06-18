@@ -37,6 +37,9 @@ public class WagerrContext {
     public static final String ORACLE_ADDRESS = IS_TEST ? "TVASr4bm6Rz19udhUWmSGtrrDExCjQdATp":"WZk3UecHPz48WJXM79oFX85PTme3EsbsJZ";
 
     public static final long STOP_ACCEPT_BET_BEFORE_EVENT_TIME = (20+1)*60*1000; //+1 for safety
+
+    public static final long ORACLE_BET_EVENT_START_TIME = IS_TEST? 1528539485000L :1528539485000L;
+
     // report mail
     public static final String REPORT_EMAIL = "LooorTor@gmail.com";
     /** Subject line for manually reported issues. */

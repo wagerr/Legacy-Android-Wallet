@@ -263,28 +263,6 @@ public class WalletActivity extends BaseDrawerActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    //Create a list of Data objects
-    public List<TransactionData> fill_with_data() {
-
-        List<TransactionData> data = new ArrayList<>();
-
-        data.add(new TransactionData("Sent Wagerr", "18:23", R.mipmap.ic_transaction_receive,"56.32", "701 USD" ));
-        data.add(new TransactionData("Sent Wagerr", "1 days ago", R.mipmap.ic_transaction_send,"56.32", "701 USD"));
-        data.add(new TransactionData("Sent Wagerr", "2 days ago", R.mipmap.ic_transaction_receive,"56.32", "701 USD"));
-        data.add(new TransactionData("Sent Wagerr", "2 days ago", R.mipmap.ic_transaction_receive,"56.32", "701 USD"));
-        data.add(new TransactionData("Sent Wagerr", "3 days ago", R.mipmap.ic_transaction_send,"56.32", "701 USD"));
-        data.add(new TransactionData("Sent Wagerr", "3 days ago", R.mipmap.ic_transaction_receive,"56.32", "701 USD"));
-
-        data.add(new TransactionData("Sent Wagerr", "4 days ago", R.mipmap.ic_transaction_receive,"56.32", "701 USD"));
-        data.add(new TransactionData("Sent Wagerr", "4 days ago", R.mipmap.ic_transaction_receive,"56.32", "701 USD"));
-        data.add(new TransactionData("Sent Wagerr", "one week ago", R.mipmap.ic_transaction_send,"56.32", "701 USD"));
-        data.add(new TransactionData("Sent Wagerr", "one week ago", R.mipmap.ic_transaction_receive,"56.32", "701 USD"));
-        data.add(new TransactionData("Sent Wagerr", "one week ago", R.mipmap.ic_transaction_receive,"56.32", "701 USD"));
-        data.add(new TransactionData("Sent Wagerr", "one week ago", R.mipmap.ic_transaction_receive,"56.32", "701 USD" ));
-
-        return data;
-    }
-
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == SCANNER_RESULT){

@@ -315,18 +315,9 @@ class BetEventActivity : BaseDrawerActivity() {
             executor = Executors.newSingleThreadExecutor()
         }
         executor!!.submit {
-            val list = wagerrModule.watchedSpent.filter {
-                it.updateTime.time > 1528539485000
-            }.map {
-                return@map it.getBetEventString()
-            }.filter { it!!.isValidBetEventSource() }
-                    .map { it?.toBetEvent() }
-                    .filter {
-                        it != null && it.timeStamp > System.currentTimeMillis() + WagerrContext.STOP_ACCEPT_BET_BEFORE_EVENT_TIME
-                    }
-                    .sortedBy {
-                        it?.timeStamp
-                    }
+            val list = wagerrModule.watchedSpent.toBetEvents()?.filter {
+                it.timeStamp > System.currentTimeMillis() + WagerrContext.STOP_ACCEPT_BET_BEFORE_EVENT_TIME
+            }
 
             runOnUiThread {
                 swipe_refresh_layout.setRefreshing(false)

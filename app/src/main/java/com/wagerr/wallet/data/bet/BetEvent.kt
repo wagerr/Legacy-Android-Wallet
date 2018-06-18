@@ -1,6 +1,8 @@
 package com.wagerr.wallet.data.bet
 
 import android.text.TextUtils
+import com.wagerr.wallet.module.WagerrContext
+import com.wagerr.wallet.module.WagerrContext.ORACLE_BET_EVENT_START_TIME
 import org.apache.commons.codec.binary.Hex
 import org.wagerrj.core.Transaction
 import java.nio.charset.Charset
@@ -11,13 +13,21 @@ data class BetEvent(val txType: TxType, val protocolVersion: String, val eventId
                     val homeTeam: String, val awayTeam: String, val homeOdds: Double,
                     val awayOdds: Double, val drawOdds: Double)
 
-fun String.toBetEvent(): BetEvent? {
+fun String.toBetEvent(): BetEvent {
     val items = this.split("|")
     return BetEvent(TxType.TxTypeEvent, items[1], items[2], items[3].toLong() * 1000, items[4], items[5],
             items[6], items[7], items[8].toDouble(), items[9].toDouble(), items[10].toDouble())
 }
 
-fun Transaction.getBetEventString(): String? {
+fun Transaction.toBetEvent(): BetEvent? {
+    if (this.isBetEvent()) {
+        return this.getBetEventString().toBetEvent()
+    } else {
+        return null
+    }
+}
+
+fun Transaction.getBetEventString(): String {
     val items = this.outputs.filter {
         it.scriptPubKey.isOpReturn
     }
@@ -28,6 +38,23 @@ fun Transaction.getBetEventString(): String? {
     val bytes = Hex.decodeHex(hexString.toCharArray())
     val string = String(bytes, Charset.forName("UTF-8"))
     return string
+}
+
+fun Transaction.isBetEvent(): Boolean {
+    return this.getBetEventString().isValidBetEventSource()
+}
+
+
+fun List<Transaction>.toBetEvents(): List<BetEvent>? {
+    return this.filter {
+        it.updateTime.time > ORACLE_BET_EVENT_START_TIME
+    }.map {
+        return@map it.getBetEventString()
+    }.filter { it.isValidBetEventSource() }
+            .map { it.toBetEvent() }
+            .sortedBy {
+                it.timeStamp
+            }
 }
 
 fun String.isValidBetEventSource(): Boolean {
