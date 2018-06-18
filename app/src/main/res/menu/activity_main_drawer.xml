@@ -8,7 +8,7 @@
             android:title="@string/my_wallet" />
         <item
             android:id="@+id/nav_bet"
-            android:icon="@mipmap/ic_address"
+            android:icon="@drawable/ic_drawer_bet"
             android:title="@string/bet_screen_title" />
         <item
             android:id="@+id/nav_address"
