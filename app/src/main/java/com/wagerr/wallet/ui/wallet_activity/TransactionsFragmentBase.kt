@@ -28,6 +28,7 @@ import com.wagerr.wallet.ui.base.BaseRecyclerFragment
 import com.wagerr.wallet.ui.base.tools.adapter.BaseRecyclerAdapter
 import com.wagerr.wallet.ui.base.tools.adapter.BaseRecyclerViewHolder
 import com.wagerr.wallet.ui.base.tools.adapter.ListItemListeners
+import com.wagerr.wallet.ui.bet_action_detail.BetActionDetailActivity
 import com.wagerr.wallet.ui.transaction_detail_activity.TransactionDetailActivity
 import global.wrappers.TransactionWrapper
 
@@ -132,21 +133,27 @@ class TransactionsFragmentBase : BaseRecyclerFragment<TransactionWrapper>() {
                     val (eventId, betChoose) = it
                     holder.imageView.setImageResource(R.drawable.ic_transaction_bet)
                     if (betChoose == "D") {
-                        holder.description.text = "Bet DRAW at event $eventId"
+                        holder.description.text = "Bet DRAW"
                     } else {
-                        holder.description.text = "Bet $betChoose WIN at event $eventId"
+                        holder.description.text = "Bet $betChoose WIN"
                     }
                 }
+
+
             }
         }
         adapter.setListEventListener(object : ListItemListeners<TransactionWrapper> {
             override fun onItemClickListener(data: TransactionWrapper, position: Int) {
-                val intent = Intent(activity, TransactionDetailActivity::class.java)
-                val bundle = Bundle()
-                bundle.putSerializable(TX_WRAPPER, data)
-                bundle.putBoolean(IS_DETAIL, true)
-                intent.putExtras(bundle)
-                startActivity(intent)
+                if (data.transaction.isBetAction()) {
+                    BetActionDetailActivity.enter(activity!!, data)
+                } else {
+                    val bundle = Bundle()
+                    bundle.putSerializable(TX_WRAPPER, data)
+                    bundle.putBoolean(IS_DETAIL, true)
+                    val intent = Intent(activity, TransactionDetailActivity::class.java)
+                    intent.putExtras(bundle)
+                    startActivity(intent)
+                }
             }
 
             override fun onLongItemClickListener(data: TransactionWrapper, position: Int) {

@@ -2,9 +2,11 @@ package com.wagerr.wallet.data.bet
 
 import android.text.TextUtils
 import org.apache.commons.codec.binary.Hex
+import org.wagerrj.core.Coin
 import org.wagerrj.core.Transaction
 import java.nio.charset.Charset
 
+const val BET_ATCION_DRAW = "D"
 //2|1.0|#453|RUS
 data class BetTransactionData(val txType: TxType, val protocolVersion: String, val eventId: String,
                               val betChoose: String)
@@ -23,6 +25,17 @@ fun String.toBetAction(): BetAction {
 fun Transaction.toBetAction(): BetAction? {
     if (this.isBetAction()) {
         return this.getBetActionString().toBetAction()
+    } else {
+        return null
+    }
+}
+
+fun Transaction.toBetActionAmount(): Coin? {
+    if (this.isBetAction()) {
+        val item = this.outputs.filter {
+            it.scriptPubKey.isOpReturn
+        }[0]
+        return item.value
     } else {
         return null
     }

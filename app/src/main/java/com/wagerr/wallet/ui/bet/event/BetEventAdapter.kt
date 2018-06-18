@@ -38,7 +38,7 @@ class BetEventAdapter : BaseQuickAdapter<BetEvent, BaseViewHolder>(R.layout.item
 }
 
 fun Date.formatToViewDateTimeDefaults(): String {
-    val sdf = SimpleDateFormat("dd/MM/yyyy HH:mm:ss", Locale.getDefault())
+    val sdf = SimpleDateFormat("dd/MM/yyyy HH:mm", Locale.getDefault())
     return sdf.format(this)
 }
 

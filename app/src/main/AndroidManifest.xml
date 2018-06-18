@@ -105,6 +105,7 @@
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/file_provider_paths" />
         </provider>
+        <activity android:name=".ui.bet_action_detail.BetActionDetailActivity"/>
 
     </application>
 

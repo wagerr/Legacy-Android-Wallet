@@ -12,6 +12,8 @@ import android.support.v7.app.AppCompatActivity;
 import com.wagerr.wallet.WagerrApplication;
 import com.wagerr.wallet.R;
 import global.WagerrModule;
+import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.internal.operators.completable.CompletableDisposeOn;
 
 import com.wagerr.wallet.ui.base.dialogs.SimpleTextDialog;
 import com.wagerr.wallet.utils.DialogsUtil;
@@ -33,6 +35,7 @@ public class WagerrActivity extends AppCompatActivity {
     private static final IntentFilter errorIntentFilter = new IntentFilter(ACTION_STORED_BLOCKCHAIN_ERROR);
 
     protected boolean isOnForeground = false;
+    public CompositeDisposable compositeDisposable = new CompositeDisposable();
 
     private BroadcastReceiver trustedPeerConnectionDownReceiver = new BroadcastReceiver() {
         @Override
@@ -69,5 +72,11 @@ public class WagerrActivity extends AppCompatActivity {
         super.onStop();
         isOnForeground = false;
         localBroadcastManager.unregisterReceiver(trustedPeerConnectionDownReceiver);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        compositeDisposable.clear();
     }
 }
