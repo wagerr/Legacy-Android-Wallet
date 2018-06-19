@@ -26,7 +26,7 @@ class SplashActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
 
         setContentView(R.layout.activity_splash)
-        Observable.timer(2, TimeUnit.SECONDS).subscribe({
+        Observable.timer(1500, TimeUnit.MILLISECONDS).subscribe({
             jump()
         },{})
     }

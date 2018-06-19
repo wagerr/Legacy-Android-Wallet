@@ -22,12 +22,7 @@ public class InitialActivity extends AppCompatActivity {
         WagerrApplication wagerrApplication = WagerrApplication.getInstance();
         AppConf appConf = wagerrApplication.getAppConf();
         // show report dialog if something happen with the previous process
-        Intent intent;
-        if (!appConf.isAppInit()){
-            intent = new Intent(this, SplashActivity.class);
-        }else {
-            intent = new Intent(this, WalletActivity.class);
-        }
+        Intent intent = new Intent(this, SplashActivity.class);
         startActivity(intent);
         finish();
     }
