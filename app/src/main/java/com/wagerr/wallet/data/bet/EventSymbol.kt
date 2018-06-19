@@ -82,11 +82,17 @@ sealed class EventSymbol {
                 "URU" to R.drawable.img_flag_uru
         )
         val EVENT_INFO_MAP = hashMapOf(
-                "R1" to "Round 1"
+                "R1" to "Round 1",
+                "RD2" to "Round 2",
+                "RD3" to "Round 3",
+                "F16" to "Final 16",
+                "QFL" to "Quarter Final",
+                "SFL" to "Semi Final",
+                "FIN" to "Final"
         )
 
         override fun getFullEventInfo(eventInfoSymbol: String): String {
-            return EVENT_INFO_MAP[eventInfoSymbol] ?: ""
+            return EVENT_INFO_MAP[eventInfoSymbol] ?: eventInfoSymbol
         }
 
         override fun getFullEventLeague(): String {
@@ -94,7 +100,7 @@ sealed class EventSymbol {
         }
 
         override fun getFullTeam(teamSymbol: String): String {
-            return TEAM_MAP[teamSymbol] ?: ""
+            return TEAM_MAP[teamSymbol] ?: teamSymbol
         }
 
         override fun getTeamImage(teamSymbol: String): Int? {
