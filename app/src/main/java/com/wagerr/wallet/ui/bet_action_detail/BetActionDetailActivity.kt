@@ -70,6 +70,7 @@ class BetActionDetailActivity : BaseActivity() {
         val betAction = transactionWrapper.transaction.toBetAction()
         betAction?.let {
             BetEventFetcher.getBetEventByIdAndTime(it.eventId, transactionWrapper.transaction.updateTime.time)
+                    .observeOn(AndroidSchedulers.mainThread())
                     .subscribe({
                         it?.let {
                             val eventSymbol = it.eventLeague.toEventSymbol()

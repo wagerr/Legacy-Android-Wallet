@@ -2,8 +2,7 @@ package com.wagerr.wallet.module.bet
 
 import android.util.Log
 import com.wagerr.wallet.WagerrApplication
-import com.wagerr.wallet.data.bet.BetEvent
-import com.wagerr.wallet.data.bet.toBetEvents
+import com.wagerr.wallet.data.bet.*
 import com.wagerr.wallet.module.WagerrContext
 import io.reactivex.Observable
 import io.reactivex.Scheduler
@@ -19,7 +18,6 @@ class BetEventFetcher {
                     it.timeStamp > System.currentTimeMillis() + WagerrContext.STOP_ACCEPT_BET_BEFORE_EVENT_TIME
                 }?.sortedByDescending { it.timeStamp }?.distinctBy { it.eventId }?.sortedBy { it.timeStamp }
             }.subscribeOn(Schedulers.io())
-                    .observeOn(AndroidSchedulers.mainThread())
         }
 
         fun getFinishedBetEvents(): Observable<List<BetEvent>?> {
@@ -28,7 +26,6 @@ class BetEventFetcher {
                     it.timeStamp < System.currentTimeMillis() + WagerrContext.STOP_ACCEPT_BET_BEFORE_EVENT_TIME
                 }?.sortedByDescending { it.timeStamp }?.distinctBy { it.eventId }?.sortedBy { it.timeStamp }
             }.subscribeOn(Schedulers.io())
-                    .observeOn(AndroidSchedulers.mainThread())
         }
         //get bet event exact before the bet action with match odds
         fun getBetEventByIdAndTime(eventId: String, betTimeInMillis: Long): Observable<BetEvent?> {
@@ -39,7 +36,6 @@ class BetEventFetcher {
                     it.eventId == eventId
                 }?.sortedBy { it.timeStamp }?.last()
             }.subscribeOn(Schedulers.io())
-                    .observeOn(AndroidSchedulers.mainThread())
         }
     }
 }

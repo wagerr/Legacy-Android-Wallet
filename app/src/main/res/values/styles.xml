@@ -133,4 +133,11 @@
         <item name="android:background">@drawable/bg_button_border_red</item>
     </style>
 
+    <style name="WgrHintButtonWithBorder" parent="android:Widget.Material.Button">
+        <item name="android:textColor">@color/bgBlack30</item>
+        <item name="colorButtonNormal">@color/bgBlack30</item>
+        <item name="android:textAllCaps">true</item>
+        <item name="android:background">@drawable/bg_button_border_grey</item>
+    </style>
+
 </resources>

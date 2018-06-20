@@ -14,6 +14,7 @@
         layout="@layout/bet_event_sincyng_view"
         android:visibility="gone"
         tools:visibility="visible" />
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -26,6 +27,11 @@
             android:layout_gravity="center_horizontal" />
 
     </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1.5dp"s
+        android:background="@color/bgBlack05" />
 
     <android.support.v4.view.ViewPager
         android:id="@+id/view_pager"

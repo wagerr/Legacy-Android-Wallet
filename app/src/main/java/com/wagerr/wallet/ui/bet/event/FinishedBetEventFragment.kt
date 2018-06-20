@@ -4,12 +4,18 @@ import android.os.Bundle
 import android.support.v4.content.ContextCompat
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.wagerr.wallet.R
+import com.wagerr.wallet.data.worldcup.api.WorldCupApi
 import com.wagerr.wallet.module.bet.BetEventFetcher
+import com.wagerr.wallet.module.bet.BetResultFetcher
 import com.wagerr.wallet.ui.base.BaseFragment
+import io.reactivex.Observable
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.rxkotlin.Observables
 import io.reactivex.rxkotlin.plusAssign
 import kotlinx.android.synthetic.main.fragment_finished_bet_event.*
 
@@ -50,14 +56,21 @@ class FinishedBetEventFragment : BaseFragment() {
 
     private fun load() {
         // add loading..
-        compositeDisposable += BetEventFetcher.getFinishedBetEvents().subscribe({
-            swipe_refresh_layout.isRefreshing = false
-            if (it.orEmpty().isEmpty()) {
-                finishedAdapter.setEmptyView(R.layout.layout_empty_view)
-            } else {
-                finishedAdapter.setNewData(it?.sortedByDescending { it.timeStamp })
+        Observables.zip(BetEventFetcher.getFinishedBetEvents(), BetResultFetcher.getBetResults()) { finishedBetEvents, betResults ->
+            return@zip finishedBetEvents?.map { event ->
+                return@map FinishedBetData(event, betResults?.firstOrNull() {
+                    event.eventId == it.eventId
+                })
             }
-        }, {})
+        }.observeOn(AndroidSchedulers.mainThread())
+                .subscribe({
+                    swipe_refresh_layout.isRefreshing = false
+                    if (it.orEmpty().isEmpty()) {
+                        finishedAdapter.setEmptyView(R.layout.layout_empty_view)
+                    } else {
+                        finishedAdapter.setNewData(it?.sortedByDescending { it.betEvent.timeStamp })
+                    }
+                }, {it.printStackTrace()})
     }
 
 

@@ -23,6 +23,7 @@ import com.wagerr.wallet.data.bet.BetAction
 import com.wagerr.wallet.data.bet.BetEvent
 import com.wagerr.wallet.data.bet.toBetTransactionData
 import com.wagerr.wallet.utils.wrapContent
+import io.reactivex.android.schedulers.AndroidSchedulers
 
 
 class OngoingBetEventFragment : BaseFragment() {
@@ -118,7 +119,9 @@ class OngoingBetEventFragment : BaseFragment() {
 
     private fun load() {
         // add loading..
-        compositeDisposable += BetEventFetcher.getCanBetBetEvents().subscribe({
+        compositeDisposable += BetEventFetcher.getCanBetBetEvents()
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe({
             swipe_refresh_layout.isRefreshing = false
             if (it == null || it.isEmpty()) {
                 adapter.setEmptyView(emptyView)
