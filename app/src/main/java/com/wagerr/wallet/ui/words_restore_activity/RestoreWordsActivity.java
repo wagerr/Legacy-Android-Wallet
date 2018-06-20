@@ -36,7 +36,7 @@ import com.wagerr.wallet.utils.AnimationUtils;
 import com.wagerr.wallet.utils.CrashReporter;
 import com.wagerr.wallet.utils.DialogsUtil;
 
-import static com.wagerr.wallet.module.WagerrContext.WAGERR_ANDROID_REPO_FIRST_COMMIT_BY_LOOORTOR_TIME;
+import static com.wagerr.wallet.module.WagerrContext.WAGERR_ANDROID_REPO_FIRST_COMMIT_BY_LOOOR_TOR_TIME;
 
 /**
  * Created by Neoperol on 7/19/17.
