@@ -3,15 +3,10 @@ package com.wagerr.wallet.ui.bet.event
 import android.app.Activity
 import android.content.Context
 import android.os.Bundle
-import android.support.v7.widget.LinearLayoutManager
-import android.support.v7.widget.RecyclerView
-import android.view.View
 import android.view.ViewGroup
 
 import com.wagerr.wallet.R
 import com.wagerr.wallet.ui.base.BaseDrawerActivity
-
-import java.util.concurrent.ExecutorService
 
 import android.content.Intent
 import android.graphics.Color
@@ -23,7 +18,6 @@ import android.util.Log
 import android.widget.*
 import chain.BlockchainState
 import com.wagerr.wallet.data.bet.*
-import com.wagerr.wallet.module.bet.BetEventFetcher
 import com.wagerr.wallet.service.IntentsConstants.ACTION_BROADCAST_TRANSACTION
 import com.wagerr.wallet.service.IntentsConstants.DATA_TRANSACTION_HASH
 import com.wagerr.wallet.service.WagerrWalletService
@@ -34,8 +28,14 @@ import com.wagerr.wallet.ui.transaction_send_activity.SendTxDetailActivity
 import com.wagerr.wallet.utils.*
 import global.exceptions.NoPeerConnectedException
 import global.wrappers.TransactionWrapper
-import io.reactivex.rxkotlin.plusAssign
-import kotlinx.android.synthetic.main.activity_bet.*
+import kotlinx.android.synthetic.main.activity_bet_event.*
+import net.lucode.hackware.magicindicator.ViewPagerHelper
+import net.lucode.hackware.magicindicator.buildins.commonnavigator.CommonNavigator
+import net.lucode.hackware.magicindicator.buildins.commonnavigator.abs.CommonNavigatorAdapter
+import net.lucode.hackware.magicindicator.buildins.commonnavigator.abs.IPagerIndicator
+import net.lucode.hackware.magicindicator.buildins.commonnavigator.abs.IPagerTitleView
+import net.lucode.hackware.magicindicator.buildins.commonnavigator.indicators.LinePagerIndicator
+import net.lucode.hackware.magicindicator.buildins.commonnavigator.titles.ColorTransitionPagerTitleView
 import org.wagerrj.core.Coin
 import org.wagerrj.core.InsufficientMoneyException
 import org.wagerrj.core.Transaction
@@ -53,91 +53,60 @@ import java.io.IOException
 
 class BetEventActivity : BaseDrawerActivity() {
 
-    lateinit var recyclerView: RecyclerView
-    private lateinit var adapter: BetEventAdapter
-    private var layoutManager: RecyclerView.LayoutManager? = null
-    private var executor: ExecutorService? = null
     private val errorDialog: SimpleTextDialog by lazy {
         DialogsUtil.buildSimpleErrorTextDialog(this, resources.getString(R.string.invalid_inputs), "")
     }
-
+    val pagerTitleList = listOf("Onging", "Finished")
     private var transaction: Transaction? = null
 
     private val REQ_CODE_SEND_DETAIL = 8990
 
+    lateinit var viewpagerAdapter: BetEventPagerAdapter
+
     override fun onCreateView(savedInstanceState: Bundle?, container: ViewGroup) {
-        layoutInflater.inflate(R.layout.activity_bet, container)
+        layoutInflater.inflate(R.layout.activity_bet_event, container)
         setTitle(R.string.bet_screen_title)
-        swipe_refresh_layout.setColorSchemeColors(ContextCompat.getColor(this, R.color.colorPrimary))
-        swipe_refresh_layout.setRefreshing(true)
-        swipe_refresh_layout.setOnRefreshListener {
-            load()
-        }
-        recyclerView = findViewById<View>(R.id.bet_event_list) as RecyclerView
-        recyclerView.setHasFixedSize(true)
-        layoutManager = LinearLayoutManager(this)
-        recyclerView.layoutManager = layoutManager
-        adapter = BetEventAdapter()
-        adapter.setEnableLoadMore(false)
-        recyclerView.adapter = adapter
-        recyclerView.layoutManager = layoutManager
-
-        //        adapter.setListEventListener(this);
-        recyclerView.adapter = adapter
-
-        adapter.setOnItemChildClickListener { adapter, view, position ->
-            adapter as BetEventAdapter
-            when (view.id) {
-                R.id.button_home_odds -> {
-                    showBetDialog(adapter.getItem(position)!!, BetType.BetTypeHomeWin)
-                }
-                R.id.button_draw_odds -> {
-                    showBetDialog(adapter.getItem(position)!!, BetType.BetTypeDraw)
-                }
-                R.id.button_away_odds -> {
-                    showBetDialog(adapter.getItem(position)!!, BetType.BetTypeAwayWin)
-                }
-            }
-        }
+        initViewPager()
+        initMagicIndicator()
     }
 
-    fun showBetDialog(event: BetEvent, betType: BetType) {
-        val sheetView = layoutInflater.inflate(R.layout.dialog_bet, null)
-        val textChoose = sheetView.findViewById<TextView>(R.id.text_choose)
-        val textEvent = sheetView.findViewById<TextView>(R.id.text_event)
-        val textOdds = sheetView.findViewById<TextView>(R.id.text_odds)
-        val betAmount = sheetView.findViewById<EditText>(R.id.edit_amount)
-        val betGo = sheetView.findViewById<Button>(R.id.button_go_bet)
-        val dialogBuilder = AlertDialog.Builder(this)
-        dialogBuilder.setView(sheetView)
+    private fun initViewPager() {
+        viewpagerAdapter = BetEventPagerAdapter(supportFragmentManager, listOf(OngoingBetEventFragment(), FinishedBetEventFragment()))
+        view_pager.adapter = viewpagerAdapter
+    }
 
-        val dialog = dialogBuilder.create()
+    private fun initMagicIndicator() {
+        val commonNavigator = CommonNavigator(this)
+        commonNavigator.isAdjustMode = true
+        commonNavigator.adapter = object : CommonNavigatorAdapter() {
+            override fun getCount(): Int {
+                return pagerTitleList.size
+            }
 
-        textEvent.text = "${event.homeTeam} vs ${event.awayTeam}"
-        when (betType) {
-            BetType.BetTypeHomeWin -> {
-                textChoose.text = "${event.homeTeam} WIN"
-                textOdds.text = "(${event.homeOdds})"
+            override fun getTitleView(context: Context, index: Int): IPagerTitleView {
+                val simplePagerTitleView = ColorTransitionPagerTitleView(context)
+                simplePagerTitleView.text = pagerTitleList[index]
+                simplePagerTitleView.normalColor = ContextCompat.getColor(this@BetEventActivity, R.color.colorPrimaryVeryLight)
+                simplePagerTitleView.selectedColor = ContextCompat.getColor(this@BetEventActivity, R.color.colorPrimary)
+                simplePagerTitleView.setOnClickListener {
+                    view_pager.currentItem = index
+                }
+                return simplePagerTitleView
             }
-            BetType.BetTypeDraw -> {
-                textChoose.text = "DRAW"
-                textOdds.text = "(${event.drawOdds})"
+
+
+            override fun getIndicator(context: Context): IPagerIndicator {
+                val indicator = LinePagerIndicator(context)
+                indicator.setColors(ContextCompat.getColor(this@BetEventActivity, R.color.colorPrimary))
+                return indicator
             }
-            BetType.BetTypeAwayWin -> {
-                textChoose.text = "${event.awayTeam} WIN"
-                textOdds.text = "(${event.awayOdds})"
+
+            override fun getTitleWeight(context: Context?, index: Int): Float {
+                return 1F
             }
         }
-        betGo.setOnClickListener {
-            sendBetTransaction(betAmount.text.toString(), BetAction(event.eventId, when (betType) {
-                BetType.BetTypeHomeWin -> event.homeTeam
-                BetType.BetTypeDraw -> "D"
-                BetType.BetTypeAwayWin -> event.awayTeam
-            }).toBetTransactionData())
-            dialog.dismiss()
-        }
-        dialog.show()
-        dialog.wrapContent()
+        magic_indicator.navigator = commonNavigator
+        ViewPagerHelper.bind(magic_indicator, view_pager)
     }
 
     fun sendBetTransaction(amountStr: String, betActionStr: String) {
@@ -293,19 +262,6 @@ class BetEventActivity : BaseDrawerActivity() {
         // check current activity in the navigation drawer
         setNavigationMenuItemChecked(1)
 
-    }
-
-    override fun onStart() {
-        super.onStart()
-        // re load
-        load()
-    }
-
-    private fun load() {
-        // add loading..
-        compositeDisposable += BetEventFetcher.getCanBetBetEvents().subscribe({
-            swipe_refresh_layout.isRefreshing = false
-            adapter.setNewData(it)}, {})
     }
 
     public override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {

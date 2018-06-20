@@ -1,0 +1,64 @@
+package com.wagerr.wallet.ui.bet.event
+
+import android.os.Bundle
+import android.support.v4.content.ContextCompat
+import android.support.v7.widget.LinearLayoutManager
+import android.support.v7.widget.RecyclerView
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import com.wagerr.wallet.R
+import com.wagerr.wallet.module.bet.BetEventFetcher
+import com.wagerr.wallet.ui.base.BaseFragment
+import io.reactivex.rxkotlin.plusAssign
+import kotlinx.android.synthetic.main.fragment_finished_bet_event.*
+
+class FinishedBetEventFragment : BaseFragment() {
+
+
+    private lateinit var finishedAdapter: FinishedBetEventAdapter
+    private var layoutManager: RecyclerView.LayoutManager? = null
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+
+        val view = inflater.inflate(R.layout.fragment_finished_bet_event, container, false)
+
+        return view
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        swipe_refresh_layout.setColorSchemeColors(ContextCompat.getColor(activity!!, R.color.colorPrimary))
+        swipe_refresh_layout.setRefreshing(true)
+        swipe_refresh_layout.setOnRefreshListener {
+            load()
+        }
+        finished_bet_event_list.setHasFixedSize(true)
+        layoutManager = LinearLayoutManager(activity)
+        finished_bet_event_list.layoutManager = layoutManager
+        finishedAdapter = FinishedBetEventAdapter()
+        finishedAdapter.setEnableLoadMore(false)
+        finished_bet_event_list.adapter = finishedAdapter
+        finishedAdapter.bindToRecyclerView(finished_bet_event_list)
+
+    }
+
+    override fun onStart() {
+        super.onStart()
+        // re load
+        load()
+    }
+
+    private fun load() {
+        // add loading..
+        compositeDisposable += BetEventFetcher.getFinishedBetEvents().subscribe({
+            swipe_refresh_layout.isRefreshing = false
+            if (it.orEmpty().isEmpty()) {
+                finishedAdapter.setEmptyView(R.layout.layout_empty_view)
+            } else {
+                finishedAdapter.setNewData(it?.sortedByDescending { it.timeStamp })
+            }
+        }, {})
+    }
+
+
+}

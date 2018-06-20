@@ -14,11 +14,11 @@ import com.wagerr.wallet.R
 import com.wagerr.wallet.data.bet.*
 import com.wagerr.wallet.module.bet.BetEventFetcher
 import com.wagerr.wallet.ui.base.BaseActivity
-import com.wagerr.wallet.ui.bet.event.formatToViewDateTimeDefaults
 import com.wagerr.wallet.ui.transaction_detail_activity.FragmentTxDetail
 import com.wagerr.wallet.ui.transaction_detail_activity.FragmentTxDetail.TX_WRAPPER
 import com.wagerr.wallet.ui.transaction_detail_activity.TransactionDetailActivity
 import com.wagerr.wallet.utils.NavigationUtils
+import com.wagerr.wallet.utils.formatToViewDateTimeDefaults
 
 import org.wagerrj.core.Coin
 import org.wagerrj.core.TransactionInput

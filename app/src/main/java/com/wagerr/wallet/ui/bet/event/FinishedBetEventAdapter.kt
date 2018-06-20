@@ -9,7 +9,7 @@ import com.wagerr.wallet.utils.formatToViewDateTimeDefaults
 import java.text.SimpleDateFormat
 import java.util.*
 
-class BetEventAdapter : BaseQuickAdapter<BetEvent, BaseViewHolder>(R.layout.item_bet_event) {
+class FinishedBetEventAdapter : BaseQuickAdapter<BetEvent, BaseViewHolder>(R.layout.item_bet_event) {
 
     override fun convert(helper: BaseViewHolder, item: BetEvent) {
 
@@ -36,3 +36,4 @@ class BetEventAdapter : BaseQuickAdapter<BetEvent, BaseViewHolder>(R.layout.item
     }
 
 }
+

@@ -22,7 +22,14 @@ class BetEventFetcher {
                     .observeOn(AndroidSchedulers.mainThread())
         }
 
-
+        fun getFinishedBetEvents(): Observable<List<BetEvent>?> {
+            return Observable.fromCallable {
+                WagerrApplication.getInstance().module.watchedSpent.toBetEvents()?.filter {
+                    it.timeStamp < System.currentTimeMillis() + WagerrContext.STOP_ACCEPT_BET_BEFORE_EVENT_TIME
+                }?.sortedByDescending { it.timeStamp }?.distinctBy { it.eventId }?.sortedBy { it.timeStamp }
+            }.subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+        }
         //get bet event exact before the bet action with match odds
         fun getBetEventByIdAndTime(eventId: String, betTimeInMillis: Long): Observable<BetEvent?> {
             return Observable.fromCallable {
