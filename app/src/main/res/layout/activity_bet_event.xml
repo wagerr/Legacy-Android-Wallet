@@ -30,7 +30,7 @@
 
     <View
         android:layout_width="match_parent"
-        android:layout_height="1.5dp"s
+        android:layout_height="1.5dp"
         android:background="@color/bgBlack05" />
 
     <android.support.v4.view.ViewPager
