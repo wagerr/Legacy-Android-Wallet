@@ -9,6 +9,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.wagerr.wallet.R
+import com.wagerr.wallet.data.bet.getMatchResult
 import com.wagerr.wallet.data.worldcup.api.WorldCupApi
 import com.wagerr.wallet.module.bet.BetEventFetcher
 import com.wagerr.wallet.module.bet.BetResultFetcher
@@ -56,11 +57,12 @@ class FinishedBetEventFragment : BaseFragment() {
 
     private fun load() {
         // add loading..
-        Observables.zip(BetEventFetcher.getFinishedBetEvents(), BetResultFetcher.getBetResults()) { finishedBetEvents, betResults ->
+        Observables.zip(BetEventFetcher.getFinishedBetEvents(), WorldCupApi.getWorldCupMatchData(),
+                BetResultFetcher.getBetResults()) { finishedBetEvents, worldCupMatches, betResults ->
             return@zip finishedBetEvents?.map { event ->
                 return@map FinishedBetData(event, betResults?.firstOrNull() {
                     event.eventId == it.eventId
-                })
+                }, worldCupMatches.getMatchResult(event))
             }
         }.observeOn(AndroidSchedulers.mainThread())
                 .subscribe({
@@ -70,7 +72,7 @@ class FinishedBetEventFragment : BaseFragment() {
                     } else {
                         finishedAdapter.setNewData(it?.sortedByDescending { it.betEvent.timeStamp })
                     }
-                }, {it.printStackTrace()})
+                }, { it.printStackTrace() })
     }
 
 

@@ -25,15 +25,11 @@ class FinishedBetEventAdapter : BaseQuickAdapter<FinishedBetData, BaseViewHolder
         eventSymbol.getTeamImage(item.betEvent.awayTeam)?.let {
             helper.setImageResource(R.id.image_away_team, it)
         }
-//        item.match.score1?.let {
-//            if (item.match.team1.code == item.betEvent.homeTeam) {
-//                helper.setText(R.id.text_score, "${item.match.score1}:${item.match.score2}")
-//            } else {
-//                helper.setText(R.id.text_score, "${item.match.score2}:${item.match.score1}")
-//            }
-//        } ?: run {
-//            helper.setText(R.id.text_score, "VS")
-//        }
+        item.betMatchResult?.homeScore?.let {
+            helper.setText(R.id.text_score, "${item.betMatchResult.homeScore}:${item.betMatchResult.awayScore}")
+        } ?: run {
+            helper.setText(R.id.text_score, "VS")
+        }
 
         item.betResult?.let {
             if (item.betResult.betResult == "D") {
