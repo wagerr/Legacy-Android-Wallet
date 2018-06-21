@@ -10,20 +10,35 @@ import java.nio.charset.Charset
 //1|1.0|#453|1528992000|WCUP|R1|RUS|KSA|1.33|11|4.5
 data class BetEvent(val txType: TxType, val protocolVersion: String, val eventId: String,
                     val timeStamp: Long, val eventLeague: String, val eventInfo: String,
-                    val homeTeam: String, val awayTeam: String, val homeOdds: Double,
+                    var homeTeam: String, var awayTeam: String, val homeOdds: Double,
                     val awayOdds: Double, val drawOdds: Double)
 
 fun Transaction.toBetEvent(): BetEvent? {
     if (this.isBetEvent()) {
-        val items = this.getBetEventString().split("|")
+        val items = this.getBetEventString().split("|").toMutableList()
         if (items[6] == "NIG") { // mistake from wagerr team in the testnet
             items[6] = "NGA"
         }
         if (items[7] == "NIG") {
             items[7] = "NGA"
         }
+
+        val homeOdds: Double
+        val awayOdds: Double
+        val drawOdds: Double
+
+        if (items[8].toDouble() > 10000) { // wagerr team change odd format
+            homeOdds = items[8].toDouble() / 10000
+            awayOdds = items[9].toDouble() / 10000
+            drawOdds = items[10].toDouble() / 10000
+        } else {
+            homeOdds = items[8].toDouble()
+            awayOdds = items[9].toDouble()
+            drawOdds = items[10].toDouble()
+        }
+
         return BetEvent(TxType.TxTypeEvent, items[1], items[2], items[3].toLong() * 1000, items[4], items[5],
-                items[6], items[7], items[8].toDouble(), items[9].toDouble(), items[10].toDouble())
+                items[6], items[7], homeOdds, awayOdds, drawOdds)
     } else {
         return null
     }
