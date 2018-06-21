@@ -13,17 +13,20 @@ class BetResultFetcher {
     companion object Factory {
         fun getBetResults(): Observable<List<BetResult>?> {
             return Observable.fromCallable {
-                return@fromCallable  WagerrApplication.getInstance().module.watchedSpent.filter {
-                    it.updateTime.time > WagerrContext.ORACLE_BET_EVENT_START_TIME
-                }.map {
-                    return@map it.getBetResultString()
-                }.filter { it.isValidBetResultSource() }
-                        .map {
-                            it.toBetResult()
-                        }
-                        .sortedBy {
+                return@fromCallable WagerrApplication.getInstance().module.watchedSpent.toBetResults()?.sortedBy {
+                    it.eventId.replace("#", "").toInt()
+                }
+            }.subscribeOn(Schedulers.io())
+        }
+
+        fun getBetResultByEventId(eventId: String): Observable<BetResult?> {
+            return Observable.fromCallable {
+                return@fromCallable WagerrApplication.getInstance().module.watchedSpent
+                        .toBetResults()?.filter {
+                            it.eventId == eventId
+                        }?.sortedBy {
                             it.eventId.replace("#", "").toInt()
-                        }
+                        }?.firstOrNull()
             }.subscribeOn(Schedulers.io())
         }
     }

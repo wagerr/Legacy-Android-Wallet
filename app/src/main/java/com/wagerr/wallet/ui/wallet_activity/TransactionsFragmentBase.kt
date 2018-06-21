@@ -130,12 +130,11 @@ class TransactionsFragmentBase : BaseRecyclerFragment<TransactionWrapper>() {
                 holder.description.text = memo ?: "No description"
 
                 data.transaction.toBetAction()?.let {
-                    val (eventId, betChoose) = it
                     holder.imageView.setImageResource(R.drawable.ic_transaction_bet)
-                    if (betChoose == "D") {
+                    if (it.betChoose == "D") {
                         holder.description.text = "Bet DRAW"
                     } else {
-                        holder.description.text = "Bet $betChoose WIN"
+                        holder.description.text = "Bet ${it.betChoose} WIN"
                     }
                 }
 

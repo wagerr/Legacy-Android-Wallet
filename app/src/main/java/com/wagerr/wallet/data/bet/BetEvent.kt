@@ -13,18 +13,26 @@ data class BetEvent(val txType: TxType, val protocolVersion: String, val eventId
                     val homeTeam: String, val awayTeam: String, val homeOdds: Double,
                     val awayOdds: Double, val drawOdds: Double)
 
-fun String.toBetEvent(): BetEvent {
-    val items = this.split("|")
-    return BetEvent(TxType.TxTypeEvent, items[1], items[2], items[3].toLong() * 1000, items[4], items[5],
-            items[6], items[7], items[8].toDouble(), items[9].toDouble(), items[10].toDouble())
-}
-
 fun Transaction.toBetEvent(): BetEvent? {
     if (this.isBetEvent()) {
-        return this.getBetEventString().toBetEvent()
+        val items = this.getBetEventString().split("|")
+        return BetEvent(TxType.TxTypeEvent, items[1], items[2], items[3].toLong() * 1000, items[4], items[5],
+                items[6], items[7], items[8].toDouble(), items[9].toDouble(), items[10].toDouble())
     } else {
         return null
     }
+}
+
+fun List<Transaction>.toBetEvents(): List<BetEvent>? {
+    return this.filter {
+        it.updateTime.time > ORACLE_BET_EVENT_START_TIME
+    }.mapNotNull {
+        it.toBetEvent()
+    }
+}
+
+fun Transaction.isBetEvent(): Boolean {
+    return this.getBetEventString().isValidBetEventSource()
 }
 
 fun Transaction.getBetEventString(): String {
@@ -40,19 +48,6 @@ fun Transaction.getBetEventString(): String {
     return string
 }
 
-fun Transaction.isBetEvent(): Boolean {
-    return this.getBetEventString().isValidBetEventSource()
-}
-
-
-fun List<Transaction>.toBetEvents(): List<BetEvent>? {
-    return this.filter {
-        it.updateTime.time > ORACLE_BET_EVENT_START_TIME
-    }.map {
-        return@map it.getBetEventString()
-    }.filter { it.isValidBetEventSource() }
-            .map { it.toBetEvent() }
-}
 
 fun String.isValidBetEventSource(): Boolean {
     if (TextUtils.isEmpty(this)) {
@@ -68,9 +63,9 @@ fun String.isValidBetEventSource(): Boolean {
         return false
     }
     try {
-        Integer.parseInt(this.split("|")[2].replace("#",""))
+        Integer.parseInt(this.split("|")[2].replace("#", ""))
     } catch (e: NumberFormatException) {
-       return false
+        return false
     }
 
     for (s in this.split("|")) {

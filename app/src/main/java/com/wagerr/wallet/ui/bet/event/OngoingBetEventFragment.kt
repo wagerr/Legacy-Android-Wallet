@@ -13,15 +13,12 @@ import android.widget.EditText
 import android.widget.TextView
 import com.wagerr.wallet.R
 import com.wagerr.wallet.R.id.swipe_refresh_layout
-import com.wagerr.wallet.data.bet.BetType
 import com.wagerr.wallet.module.bet.BetEventFetcher
 import com.wagerr.wallet.ui.base.BaseFragment
 import io.reactivex.rxkotlin.plusAssign
 import kotlinx.android.synthetic.main.fragment_ongoing_bet_event.*
 import com.wagerr.wallet.R.id.ongoing_bet_event_list
-import com.wagerr.wallet.data.bet.BetAction
-import com.wagerr.wallet.data.bet.BetEvent
-import com.wagerr.wallet.data.bet.toBetTransactionData
+import com.wagerr.wallet.data.bet.*
 import com.wagerr.wallet.utils.wrapContent
 import io.reactivex.android.schedulers.AndroidSchedulers
 
@@ -100,7 +97,7 @@ class OngoingBetEventFragment : BaseFragment() {
             }
         }
         betGo.setOnClickListener {
-            (activity as BetEventActivity).sendBetTransaction(betAmount.text.toString(), BetAction(event.eventId, when (betType) {
+            (activity as BetEventActivity).sendBetTransaction(betAmount.text.toString(), BetActionForSend(event.eventId, when (betType) {
                 BetType.BetTypeHomeWin -> event.homeTeam
                 BetType.BetTypeDraw -> "D"
                 BetType.BetTypeAwayWin -> event.awayTeam

@@ -8,26 +8,31 @@ import org.wagerrj.core.Transaction
 import java.nio.charset.Charset
 
 const val BET_ATCION_DRAW = "D"
+
 //2|1.0|#453|RUS
-data class BetTransactionData(val txType: TxType, val protocolVersion: String, val eventId: String,
-                              val betChoose: String)
+data class BetAction(val txType: TxType, val protocolVersion: String, val eventId: String,
+                     val betChoose: String, val transaction: Transaction)
 
-data class BetAction(val eventId: String, val betChoose: String)
+data class BetActionForSend(val eventId: String, val betChoose: String)
 
-fun BetAction.toBetTransactionData(): String {
+fun BetActionForSend.toBetTransactionData(): String {
     return "2|1.0|${this.eventId}|${this.betChoose}"
-}
-
-fun String.toBetAction(): BetAction {
-    val items = this.split("|")
-    return BetAction(items[2], items[3])
 }
 
 fun Transaction.toBetAction(): BetAction? {
     if (this.isBetAction()) {
-        return this.getBetActionString().toBetAction()
+        val items = this.getBetActionString().split("|")
+        return BetAction(TxType.TxTypeBet, items[1], items[2], items[3], this)
     } else {
         return null
+    }
+}
+
+fun List<Transaction>.toBetActions(): List<BetAction>? {
+    return this.filter {
+        it.updateTime.time > WagerrContext.ORACLE_BET_EVENT_START_TIME
+    }.mapNotNull {
+        it.toBetAction()
     }
 }
 
@@ -40,6 +45,10 @@ fun Transaction.toBetActionAmount(): Coin? {
     } else {
         return null
     }
+}
+
+fun Transaction.isBetAction(): Boolean {
+    return this.getBetActionString().isValidBetActionSource()
 }
 
 fun Transaction.getBetActionString(): String {
@@ -55,19 +64,6 @@ fun Transaction.getBetActionString(): String {
     return string
 }
 
-fun List<Transaction>.toBetActions(): List<BetAction>? {
-    return this.filter {
-        it.updateTime.time > WagerrContext.ORACLE_BET_EVENT_START_TIME
-    }.map {
-        return@map it.getBetActionString()
-    }.filter { it.isValidBetActionSource() }
-            .map { it.toBetAction() }
-}
-
-fun Transaction.isBetAction(): Boolean {
-    return this.getBetActionString().isValidBetActionSource()
-}
-
 fun String.isValidBetActionSource(): Boolean {
     if (TextUtils.isEmpty(this)) {
         return false
@@ -79,7 +75,7 @@ fun String.isValidBetActionSource(): Boolean {
         return false
     }
     try {
-        Integer.parseInt(this.split("|")[2].replace("#",""))
+        Integer.parseInt(this.split("|")[2].replace("#", ""))
     } catch (e: NumberFormatException) {
         return false
     }

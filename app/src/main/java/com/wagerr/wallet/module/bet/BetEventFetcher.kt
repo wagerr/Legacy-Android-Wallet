@@ -37,5 +37,22 @@ class BetEventFetcher {
                 }?.sortedBy { it.timeStamp }?.last()
             }.subscribeOn(Schedulers.io())
         }
+
+        //get bet event exact before the bet action with match odds
+        fun getBetEventsById(eventId: String): Observable<List<BetEvent>?> {
+            return Observable.fromCallable {
+                WagerrApplication.getInstance().module.watchedSpent.toBetEvents()?.filter {
+                    it.eventId == eventId
+                }?.sortedBy { it.timeStamp }
+            }.subscribeOn(Schedulers.io())
+        }
+
+        fun getBetEventById(eventId: String): Observable<BetEvent?> {
+            return Observable.fromCallable {
+                WagerrApplication.getInstance().module.watchedSpent.toBetEvents()?.filter {
+                    it.eventId == eventId
+                }?.sortedBy { it.timeStamp }?.first()
+            }.subscribeOn(Schedulers.io())
+        }
     }
 }
