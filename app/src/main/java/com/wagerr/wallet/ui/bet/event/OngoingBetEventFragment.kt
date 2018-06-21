@@ -57,7 +57,7 @@ class OngoingBetEventFragment : BaseFragment() {
         ongoing_bet_event_list.layoutManager = layoutManager
 
         adapter.setOnItemChildClickListener { adapter, view, position ->
-            adapter as BetEventAdapter
+            adapter as OngoingBetEventAdapter
             when (view.id) {
                 R.id.button_home_odds -> {
                     showBetDialog(adapter.getItem(position)!!, BetType.BetTypeHomeWin)
