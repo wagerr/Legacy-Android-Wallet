@@ -16,6 +16,12 @@ data class BetEvent(val txType: TxType, val protocolVersion: String, val eventId
 fun Transaction.toBetEvent(): BetEvent? {
     if (this.isBetEvent()) {
         val items = this.getBetEventString().split("|")
+        if (items[6] == "NIG") { // mistake from wagerr team in the testnet
+            items[6] = "NGA"
+        }
+        if (items[7] == "NIG") {
+            items[7] = "NGA"
+        }
         return BetEvent(TxType.TxTypeEvent, items[1], items[2], items[3].toLong() * 1000, items[4], items[5],
                 items[6], items[7], items[8].toDouble(), items[9].toDouble(), items[10].toDouble())
     } else {

@@ -9,16 +9,7 @@ import java.util.*
 data class BetMatchResult(val eventId:String, val homeScore: Int?, val awayScore: Int?)
 
 fun List<WorldCupMatch>.getMatchResult(betEvent: BetEvent): BetMatchResult? {
-    return this.map {
-        //Nigeria is NIG in the api
-        if (it.team1.code == "NGA") {
-            it.team1.code = "NIG"
-        }
-        if (it.team2.code == "NGA") {
-            it.team2.code = "NIG"
-        }
-        return@map it
-    }.filter {
+    return this.filter {
         return@filter (betEvent.homeTeam == it.team1.code && betEvent.awayTeam == it.team2.code) || (betEvent.homeTeam == it.team2.code && betEvent.awayTeam == it.team1.code)
     }.filter {
         val fmt = SimpleDateFormat("yyyy-MM-dd")

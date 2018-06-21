@@ -1,6 +1,5 @@
 package com.wagerr.wallet.data.bet
 
-import android.support.annotation.DrawableRes
 import com.wagerr.wallet.R
 
 sealed class EventSymbol {
@@ -33,7 +32,8 @@ sealed class EventSymbol {
                 "KSA" to "Saudi Arabia",
                 "MAR" to "Morocco",
                 "MEX" to "Mexico",
-                "NIG" to "Nigeria",
+                "NIG" to "Nigeria", //NIG is a mistake from wagerr team
+                "NGA" to "Nigeria",
                 "PAN" to "Panama",
                 "PER" to "Peru",
                 "POR" to "Portugal",
@@ -68,7 +68,8 @@ sealed class EventSymbol {
                 "KSA" to R.drawable.img_flag_ksa,
                 "MAR" to R.drawable.img_flag_mar,
                 "MEX" to R.drawable.img_flag_mex,
-                "NIG" to R.drawable.img_flag_nig,
+                "NIG" to R.drawable.img_flag_nga, //NIG is a mistake from wagerr team
+                "NGA" to R.drawable.img_flag_nga,
                 "PAN" to R.drawable.img_flag_pan,
                 "PER" to R.drawable.img_flag_per,
                 "POR" to R.drawable.img_flag_por,
