@@ -255,7 +255,13 @@ class BetEventActivity : BaseDrawerActivity() {
     }
 
 
-    private fun showErrorDialog(message: String?) {
+    fun showErrorDialog(message: String?) {
+        errorDialog.setBody(message)
+        errorDialog.show(fragmentManager, resources.getString(R.string.send_error_dialog_tag))
+    }
+
+    fun showErrorDialog(title:String, message: String?) {
+        errorDialog.setTitle(title)
         errorDialog.setBody(message)
         errorDialog.show(fragmentManager, resources.getString(R.string.send_error_dialog_tag))
     }

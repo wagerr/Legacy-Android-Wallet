@@ -19,6 +19,7 @@ import io.reactivex.rxkotlin.plusAssign
 import kotlinx.android.synthetic.main.fragment_ongoing_bet_event.*
 import com.wagerr.wallet.R.id.ongoing_bet_event_list
 import com.wagerr.wallet.data.bet.*
+import com.wagerr.wallet.module.WagerrContext
 import com.wagerr.wallet.utils.wrapContent
 import io.reactivex.android.schedulers.AndroidSchedulers
 
@@ -55,15 +56,23 @@ class OngoingBetEventFragment : BaseFragment() {
 
         adapter.setOnItemChildClickListener { adapter, view, position ->
             adapter as OngoingBetEventAdapter
-            when (view.id) {
-                R.id.button_home_odds -> {
-                    showBetDialog(adapter.getItem(position)!!, BetType.BetTypeHomeWin)
+
+            val betEvent = adapter.getItem(position)
+            betEvent?.let {
+                if (it.timeStamp < System.currentTimeMillis() + WagerrContext.STOP_ACCEPT_BET_BEFORE_EVENT_TIME) {
+                    (activity as BetEventActivity).showErrorDialog(getString(R.string.warning_title),getString(R.string.bet_event_stop))
+                    return@setOnItemChildClickListener
                 }
-                R.id.button_draw_odds -> {
-                    showBetDialog(adapter.getItem(position)!!, BetType.BetTypeDraw)
-                }
-                R.id.button_away_odds -> {
-                    showBetDialog(adapter.getItem(position)!!, BetType.BetTypeAwayWin)
+                when (view.id) {
+                    R.id.button_home_odds -> {
+                        showBetDialog(it, BetType.BetTypeHomeWin)
+                    }
+                    R.id.button_draw_odds -> {
+                        showBetDialog(it, BetType.BetTypeDraw)
+                    }
+                    R.id.button_away_odds -> {
+                        showBetDialog(it, BetType.BetTypeAwayWin)
+                    }
                 }
             }
         }
@@ -97,6 +106,11 @@ class OngoingBetEventFragment : BaseFragment() {
             }
         }
         betGo.setOnClickListener {
+            if (event.timeStamp < System.currentTimeMillis() + WagerrContext.STOP_ACCEPT_BET_BEFORE_EVENT_TIME) {
+                (activity as BetEventActivity).showErrorDialog(getString(R.string.warning_title),getString(R.string.bet_event_stop))
+                dialog.dismiss()
+                return@setOnClickListener
+            }
             (activity as BetEventActivity).sendBetTransaction(betAmount.text.toString(), BetActionForSend(event.eventId, when (betType) {
                 BetType.BetTypeHomeWin -> event.homeTeam
                 BetType.BetTypeDraw -> "D"
@@ -119,12 +133,12 @@ class OngoingBetEventFragment : BaseFragment() {
         compositeDisposable += BetEventFetcher.getCanBetBetEvents()
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({
-            swipe_refresh_layout.isRefreshing = false
-            if (it == null || it.isEmpty()) {
-                adapter.setEmptyView(emptyView)
-            } else {
-                adapter.setNewData(it)
-            }
-        }, {})
+                    swipe_refresh_layout.isRefreshing = false
+                    if (it == null || it.isEmpty()) {
+                        adapter.setEmptyView(emptyView)
+                    } else {
+                        adapter.setNewData(it)
+                    }
+                }, {})
     }
 }
