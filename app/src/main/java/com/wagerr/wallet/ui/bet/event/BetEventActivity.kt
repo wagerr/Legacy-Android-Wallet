@@ -208,41 +208,7 @@ class BetEventActivity : BaseDrawerActivity() {
 
     private fun checkConnectivity(amountStr: String, betActionStr: String): Boolean {
         if (!isOnline()) {
-            val noConnectivityDialog = DialogsUtil.buildSimpleTwoBtnsDialog(
-                    this,
-                    getString(R.string.error_no_connectivity_title),
-                    getString(R.string.error_no_connectivity_body),
-                    object : SimpleTwoButtonsDialog.SimpleTwoBtnsDialogListener {
-                        override fun onRightBtnClicked(dialog: SimpleTwoButtonsDialog) {
-                            try {
-                                send(true, amountStr, betActionStr)
-                            } catch (e: Exception) {
-                                e.printStackTrace()
-                                showErrorDialog(e.message)
-                            }
-
-                            dialog.dismiss()
-
-                        }
-
-                        override fun onLeftBtnClicked(dialog: SimpleTwoButtonsDialog) {
-                            dialog.dismiss()
-                        }
-                    }
-            )
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                noConnectivityDialog.setRightBtnTextColor(getColor(R.color.lightGreen))
-            } else {
-                noConnectivityDialog.setRightBtnTextColor(ContextCompat.getColor(this, R.color.lightGreen))
-            }
-            noConnectivityDialog.setLeftBtnTextColor(Color.WHITE)
-                    .setRightBtnTextColor(Color.BLACK)
-                    .setRightBtnBackgroundColor(Color.WHITE)
-                    .setLeftBtnTextColor(Color.BLACK)
-                    .setLeftBtnText(getString(R.string.button_cancel))
-                    .setRightBtnText(getString(R.string.button_ok))
-                    .show()
-
+            showErrorDialog( getString(R.string.error_no_connectivity_title),  getString(R.string.error_no_connectivity_body))
             return false
         }
         return true
