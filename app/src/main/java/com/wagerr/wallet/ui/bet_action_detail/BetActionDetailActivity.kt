@@ -11,6 +11,7 @@ import android.view.View
 import android.view.ViewGroup
 
 import com.wagerr.wallet.R
+import com.wagerr.wallet.WagerrApplication
 import com.wagerr.wallet.data.bet.*
 import com.wagerr.wallet.module.bet.BetEventFetcher
 import com.wagerr.wallet.ui.base.BaseActivity
@@ -20,10 +21,6 @@ import com.wagerr.wallet.ui.transaction_detail_activity.TransactionDetailActivit
 import com.wagerr.wallet.utils.NavigationUtils
 import com.wagerr.wallet.utils.formatToViewDateTimeDefaults
 
-import org.wagerrj.core.Coin
-import org.wagerrj.core.TransactionInput
-import org.wagerrj.core.TransactionOutPoint
-import org.wagerrj.core.TransactionOutput
 import org.wagerrj.script.Script
 
 import java.text.SimpleDateFormat
@@ -36,6 +33,7 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.rxkotlin.plusAssign
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_bet_action_detail.*
+import org.wagerrj.core.*
 import java.util.*
 
 /**
@@ -45,8 +43,16 @@ import java.util.*
 class BetActionDetailActivity : BaseActivity() {
 
     val transactionWrapper: TransactionWrapper by lazy {
-        (intent.getSerializableExtra(EXTRA_TX_WRAPPER) as TransactionWrapper).apply {
-            transaction = wagerrModule.getTx(txId)
+        if (intent.getSerializableExtra(EXTRA_TX_WRAPPER) != null) {
+            (intent.getSerializableExtra(EXTRA_TX_WRAPPER) as TransactionWrapper).apply {
+                transaction = wagerrModule.getTx(txId)
+            }
+        } else {
+            WagerrApplication.getInstance().module.listTx().filter {
+                it.txId == Sha256Hash.wrap(intent.getStringExtra(EXTRA_TX_ID))
+            }.first().apply {
+                transaction = wagerrModule.getTx(txId)
+            }
         }
     }
 
@@ -104,19 +110,22 @@ class BetActionDetailActivity : BaseActivity() {
         }
     }
 
-    override fun onBackPressed() {
-        super.onBackPressed()
-        NavigationUtils.goBackToHome(this)
-    }
 
     companion object {
         val EXTRA_TX_WRAPPER = "EXTRA_TX_WRAPPER"
+        val EXTRA_TX_ID = "EXTRA_TX_ID"
 
         fun enter(activity: Context, data: TransactionWrapper) {
             val bundle = Bundle()
             bundle.putSerializable(EXTRA_TX_WRAPPER, data)
             val intent = Intent(activity, BetActionDetailActivity::class.java)
             intent.putExtras(bundle)
+            activity.startActivity(intent)
+        }
+
+        fun enter(activity: Context, txId: String) {
+            val intent = Intent(activity, BetActionDetailActivity::class.java)
+            intent.putExtra(EXTRA_TX_ID, txId)
             activity.startActivity(intent)
         }
     }

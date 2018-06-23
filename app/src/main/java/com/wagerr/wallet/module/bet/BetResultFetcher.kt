@@ -22,11 +22,9 @@ class BetResultFetcher {
         fun getBetResultByEventId(eventId: String): Observable<BetResult?> {
             return Observable.fromCallable {
                 return@fromCallable WagerrApplication.getInstance().module.watchedSpent
-                        .toBetResults()?.filter {
+                        .toBetResults()?.firstOrNull {
                             it.eventId == eventId
-                        }?.sortedBy {
-                            it.eventId.replace("#", "").toInt()
-                        }?.firstOrNull()
+                        }
             }.subscribeOn(Schedulers.io())
         }
     }

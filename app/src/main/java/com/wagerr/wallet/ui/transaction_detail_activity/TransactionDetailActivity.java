@@ -24,8 +24,6 @@ public class TransactionDetailActivity extends BaseActivity {
         setTitle("Transaction Detail");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
-
-
     }
 
     @Override
