@@ -24,7 +24,13 @@ fun BetActionForSend.toBetTransactionData(): String {
 
 fun Transaction.toBetAction(): BetAction? {
     if (this.isBetAction()) {
-        val items = this.getBetActionString().split("|")
+        val items = this.getBetActionString().split("|").toMutableList()
+        if (items[3] == "NIG") { // mistake from wagerr team in the testnet
+            items[3] = "NGA"
+        }
+        if (items[3] == "NIG") {
+            items[3] = "NGA"
+        }
         return BetAction(TxType.TxTypeBet, items[1], items[2], items[3], this)
     } else {
         return null
