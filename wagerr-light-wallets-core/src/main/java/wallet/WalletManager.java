@@ -650,7 +650,10 @@ public class WalletManager {
     }
 
     public List<Transaction> getWatchedSpent() {
-        return wallet.getWatchedSpentTransactions(true);
+        return wallet.getWatchedSpentTransactions(true); }
+
+    public List<Transaction> getMineSpent() {
+        return wallet.getMineSpentTransactions(true);
     }
 
     public boolean isTransactionRelatedToWatchedAddress(Transaction tx){

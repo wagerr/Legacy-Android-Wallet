@@ -144,6 +144,11 @@ public class WagerrModuleImp implements WagerrModule {
     }
 
     @Override
+    public List<Transaction> getMineSpent() {
+        return walletManager.getMineSpent();
+    }
+
+    @Override
     public Address getFreshNewAddress(){
         return walletManager.newFreshReceiveAddress();
     }

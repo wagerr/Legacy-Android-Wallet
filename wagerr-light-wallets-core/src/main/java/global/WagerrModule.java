@@ -87,6 +87,8 @@ public interface WagerrModule {
 
     List<Transaction> getWatchedSpent();
 
+    List<Transaction> getMineSpent();
+
     /******    Address Label          ******/
 
     List<AddressLabel> getContacts();
