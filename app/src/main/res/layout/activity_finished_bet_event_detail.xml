@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/address_content"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#fafafa"
+    tools:context=".ui.bet_action_detail.BetActionDetailActivity">
+
+
+    <TextView
+        android:id="@+id/text_event_league"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="16dp"
+        android:layout_marginTop="10dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="World Cup" />
+
+    <TextView
+        android:id="@+id/text_event_info"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="15sp"
+        android:layout_marginTop="10dp"
+        app:layout_constraintLeft_toRightOf="@+id/text_event_league"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="Round 1" />
+
+    <TextView
+        android:id="@+id/text_time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="15sp"
+        android:layout_marginRight="16dp"
+        android:layout_marginTop="10dp"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="2018年6月5日" />
+
+    <ImageView
+        android:id="@+id/image_home_team"
+        android:layout_width="120dp"
+        android:layout_height="80dp"
+        android:layout_marginLeft="36dp"
+        android:layout_marginTop="16dp"
+        android:background="@color/bgBlack30"
+        android:padding="0.5dp"
+        android:scaleType="fitXY"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/text_event_league"
+        tools:src="@drawable/img_flag_jpn" />
+
+    <ImageView
+        android:id="@+id/image_away_team"
+        android:layout_width="120dp"
+        android:layout_height="80dp"
+        android:layout_marginRight="36dp"
+        android:layout_marginTop="16dp"
+        android:background="@color/bgBlack30"
+        android:padding="0.5dp"
+        android:scaleType="fitXY"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/text_event_league"
+        tools:src="@drawable/img_flag_arg" />
+
+    <TextView
+        android:id="@+id/text_vs"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="VS"
+        android:textColor="@color/bgBlackX"
+        android:textSize="16sp"
+        app:layout_constraintBottom_toBottomOf="@+id/image_away_team"
+        app:layout_constraintLeft_toLeftOf="@+id/image_home_team"
+        app:layout_constraintRight_toRightOf="@+id/image_away_team"
+        app:layout_constraintTop_toTopOf="@+id/image_home_team" />
+
+    <TextView
+        android:id="@+id/text_home_team"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:textColor="@color/bgBlackX"
+        android:textSize="14sp"
+        app:layout_constraintLeft_toLeftOf="@+id/image_home_team"
+        app:layout_constraintRight_toRightOf="@+id/image_home_team"
+        app:layout_constraintTop_toBottomOf="@+id/image_home_team"
+        tools:text="Switzerland" />
+
+
+    <TextView
+        android:id="@+id/text_away_team"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:textColor="@color/bgBlackX"
+        android:textSize="14sp"
+        app:layout_constraintLeft_toLeftOf="@+id/image_away_team"
+        app:layout_constraintRight_toRightOf="@+id/image_away_team"
+        app:layout_constraintTop_toBottomOf="@+id/image_home_team"
+        tools:text="Korean Republic" />
+    <Button
+        android:id="@+id/button_status"
+        style="@style/WgrHintButtonWithBorder"
+        android:layout_width="320dp"
+        android:layout_height="40dp"
+        android:layout_marginTop="10dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/text_home_team"
+        tools:text="Waiting For Oracle Result" />
+
+    <TextView
+        android:id="@+id/text_title_your_bet"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:layout_marginLeft="16dp"
+        android:textSize="14sp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/top_panel_divier"
+        android:text="YOUR BET" />
+    <View
+        android:id="@+id/top_panel_divier"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginTop="40dp"
+        android:background="@color/bgBlack05"
+        app:layout_constraintTop_toBottomOf="@+id/button_status" />
+
+    <android.support.v4.widget.SwipeRefreshLayout
+        android:id="@+id/swipe_refresh_layout"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/top_panel_divier">
+
+        <android.support.v7.widget.RecyclerView xmlns:android="http://schemas.android.com/apk/res/android"
+            android:id="@+id/bet_action_list"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+    </android.support.v4.widget.SwipeRefreshLayout>
+
+
+</android.support.constraint.ConstraintLayout>

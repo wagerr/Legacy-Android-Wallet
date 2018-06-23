@@ -3,6 +3,8 @@ package com.wagerr.wallet.data.bet
 import android.text.TextUtils
 import com.wagerr.wallet.module.WagerrContext
 import com.wagerr.wallet.module.WagerrContext.ORACLE_BET_EVENT_START_TIME
+import io.reactivex.Observable
+import io.reactivex.schedulers.Schedulers
 import org.apache.commons.codec.binary.Hex
 import org.wagerrj.core.Transaction
 import java.nio.charset.Charset
@@ -11,7 +13,7 @@ import java.nio.charset.Charset
 data class BetEvent(val txType: TxType, val protocolVersion: String, val eventId: String,
                     val timeStamp: Long, val eventLeague: String, val eventInfo: String,
                     var homeTeam: String, var awayTeam: String, val homeOdds: Double,
-                    val awayOdds: Double, val drawOdds: Double)
+                    val awayOdds: Double, val drawOdds: Double, val transaction: Transaction)
 
 fun Transaction.toBetEvent(): BetEvent? {
     if (this.isBetEvent()) {
@@ -38,10 +40,17 @@ fun Transaction.toBetEvent(): BetEvent? {
         }
 
         return BetEvent(TxType.TxTypeEvent, items[1], items[2], items[3].toLong() * 1000, items[4], items[5],
-                items[6], items[7], homeOdds, awayOdds, drawOdds)
+                items[6], items[7], homeOdds, awayOdds, drawOdds, this)
     } else {
         return null
     }
+}
+
+
+fun List<Transaction>.getBetEventsById(eventId: String): List<BetEvent>? {
+    return this.toBetEvents()?.filter {
+        it.eventId == eventId
+    }?.sortedBy { it.timeStamp }
 }
 
 fun List<Transaction>.toBetEvents(): List<BetEvent>? {

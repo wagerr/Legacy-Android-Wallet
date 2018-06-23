@@ -14,6 +14,7 @@ import com.wagerr.wallet.data.worldcup.api.WorldCupApi
 import com.wagerr.wallet.module.bet.BetEventFetcher
 import com.wagerr.wallet.module.bet.BetResultFetcher
 import com.wagerr.wallet.ui.base.BaseFragment
+import com.wagerr.wallet.ui.bet.result.FinishedBetEventDetailActivity
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.rxkotlin.Observables
@@ -46,6 +47,9 @@ class FinishedBetEventFragment : BaseFragment() {
         finishedAdapter.setEnableLoadMore(false)
         finished_bet_event_list.adapter = finishedAdapter
         finishedAdapter.bindToRecyclerView(finished_bet_event_list)
+        finishedAdapter.setOnItemClickListener { adapter, view, position ->
+            FinishedBetEventDetailActivity.enter(activity!!, finishedAdapter.getItem(position)!!.betEvent.eventId)
+        }
 
     }
 

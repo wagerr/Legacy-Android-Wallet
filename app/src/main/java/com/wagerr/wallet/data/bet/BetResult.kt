@@ -1,7 +1,10 @@
 package com.wagerr.wallet.data.bet
 
 import android.text.TextUtils
+import com.wagerr.wallet.WagerrApplication
 import com.wagerr.wallet.module.WagerrContext
+import io.reactivex.Observable
+import io.reactivex.schedulers.Schedulers
 import org.apache.commons.codec.binary.Hex
 import org.wagerrj.core.Transaction
 import java.nio.charset.Charset
@@ -26,6 +29,12 @@ fun List<Transaction>.toBetResults(): List<BetResult>? {
     }.mapNotNull {
         it.toBetResult()
     }
+}
+
+fun List<Transaction>.getBetResultByEventId(eventId: String): BetResult? {
+    return this.toBetResults()?.firstOrNull {
+                it.eventId == eventId
+            }
 }
 
 fun Transaction.isBetResult(): Boolean {
