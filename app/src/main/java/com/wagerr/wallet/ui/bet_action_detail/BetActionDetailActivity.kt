@@ -43,16 +43,8 @@ import java.util.*
 class BetActionDetailActivity : BaseActivity() {
 
     val transactionWrapper: TransactionWrapper by lazy {
-        if (intent.getSerializableExtra(EXTRA_TX_WRAPPER) != null) {
-            (intent.getSerializableExtra(EXTRA_TX_WRAPPER) as TransactionWrapper).apply {
-                transaction = wagerrModule.getTx(txId)
-            }
-        } else {
-            WagerrApplication.getInstance().module.listTx().filter {
-                it.txId == Sha256Hash.wrap(intent.getStringExtra(EXTRA_TX_ID))
-            }.first().apply {
-                transaction = wagerrModule.getTx(txId)
-            }
+        (intent.getSerializableExtra(EXTRA_TX_WRAPPER) as TransactionWrapper).apply {
+            transaction = wagerrModule.getTx(txId)
         }
     }
 
@@ -113,19 +105,12 @@ class BetActionDetailActivity : BaseActivity() {
 
     companion object {
         val EXTRA_TX_WRAPPER = "EXTRA_TX_WRAPPER"
-        val EXTRA_TX_ID = "EXTRA_TX_ID"
 
         fun enter(activity: Context, data: TransactionWrapper) {
             val bundle = Bundle()
             bundle.putSerializable(EXTRA_TX_WRAPPER, data)
             val intent = Intent(activity, BetActionDetailActivity::class.java)
             intent.putExtras(bundle)
-            activity.startActivity(intent)
-        }
-
-        fun enter(activity: Context, txId: String) {
-            val intent = Intent(activity, BetActionDetailActivity::class.java)
-            intent.putExtra(EXTRA_TX_ID, txId)
             activity.startActivity(intent)
         }
     }
