@@ -34,7 +34,7 @@ public class WagerrContext {
     /** Currency exchange rate */
     public static final String URL_FIAT_CURRENCIES_RATE = "https://bitpay.com/rates";
 
-    public static final String ORACLE_ADDRESS = IS_TEST ? "TVASr4bm6Rz19udhUWmSGtrrDExCjQdATp":"WZk3UecHPz48WJXM79oFX85PTme3EsbsJZ";
+    public static final String ORACLE_ADDRESS = IS_TEST ? "TCQyQ6dm6GKfpeVvHWHzcRAjtKsJ3hX4AJ":"WZk3UecHPz48WJXM79oFX85PTme3EsbsJZ";
 
     public static final long STOP_ACCEPT_BET_BEFORE_EVENT_TIME = (20+1)*60*1000; //+1 for safety
 
