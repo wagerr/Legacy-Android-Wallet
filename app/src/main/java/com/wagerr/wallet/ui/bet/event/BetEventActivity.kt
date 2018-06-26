@@ -59,7 +59,7 @@ class BetEventActivity : BaseDrawerActivity() {
     private val errorDialog: SimpleTextDialog by lazy {
         DialogsUtil.buildSimpleErrorTextDialog(this, resources.getString(R.string.invalid_inputs), "")
     }
-    val pagerTitleList = listOf("Onging", "Finished")
+    val pagerTitleList = listOf("Ongoing", "Finished")
     private var transaction: Transaction? = null
 
     private val REQ_CODE_SEND_DETAIL = 8990
