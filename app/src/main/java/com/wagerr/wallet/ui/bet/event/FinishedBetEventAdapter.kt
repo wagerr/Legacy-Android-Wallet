@@ -1,5 +1,6 @@
 package com.wagerr.wallet.ui.bet.event
 
+import android.widget.TextView
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.BaseViewHolder
 import com.wagerr.wallet.R
@@ -35,10 +36,12 @@ class FinishedBetEventAdapter : BaseQuickAdapter<FinishedBetData, BaseViewHolder
             if (item.betResult.betResult == "D") {
                 helper.setText(R.id.button_status, "DRAW")
             } else {
-                helper.setText(R.id.button_status, "${item.betResult.betResult}")
+                helper.setText(R.id.button_status, "${item.betResult.betResult} WIN")
             }
+            helper.getView<TextView>(R.id.button_status).setTextAppearance(mContext, R.style.WgrButtonWithBorder)
         } ?: run {
             helper.setText(R.id.button_status, "Waiting For Oracle Result")
+            helper.getView<TextView>(R.id.button_status).setTextAppearance(mContext, R.style.WgrHintButtonWithBorder)
         }
     }
 

@@ -130,6 +130,17 @@ class FinishedBetEventDetailActivity : BaseActivity() {
             val betEvents = it.first.getBetEventsById(eventId)
             val betResult = it.first.getBetResultByEventId(eventId)
             val betActions = it.second.getBetActionsByEventId(eventId)
+                    betResult?.let {
+                        if (it.betResult == "D") {
+                            button_status.text = "DRAW"
+                        } else {
+                            button_status.text = "${it.betResult} WIN"
+                        }
+                        button_status.setTextAppearance(this, R.style.WgrButtonWithBorder)
+                    } ?: run {
+                        button_status.text = "Waiting For Oracle Result"
+                        button_status.setTextAppearance(this, R.style.WgrHintButtonWithBorder)
+                    }
             return@map betActions?.map { betAction ->
                 FinishedBetEventDetailData(betEvents?.last { betEvent ->
                     betAction.transaction.updateTime > betEvent.transaction.updateTime
@@ -137,15 +148,7 @@ class FinishedBetEventDetailActivity : BaseActivity() {
             }
         }.observeOn(AndroidSchedulers.mainThread())
                 .subscribe({
-                    it?.firstOrNull()?.betResult?.let {
-                        if (it.betResult == "D") {
-                            button_status.text = "DRAW"
-                        } else {
-                            button_status.text = "${it.betResult}"
-                        }
-                    } ?: run {
-                        button_status.text = "Waiting For Oracle Result"
-                    }
+
                     swipe_refresh_layout.isRefreshing = false
                     if (it.orEmpty().isEmpty()) {
                         betActionsAdapter.setEmptyView(R.layout.layout_empty_bet_action)
