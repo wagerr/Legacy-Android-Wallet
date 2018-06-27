@@ -397,13 +397,18 @@ public class WagerrModuleImp implements WagerrModule {
                         break;
                     }
                 }*/
-
-                for (TransactionOutput transactionOutput : transaction.getOutputs()) {
-                    if (!transactionOutput.getScriptPubKey().isOpReturn()) { //filter opreturn
-                        address = transactionOutput.getScriptPubKey().getToAddress(getConf().getNetworkParams(),true);
-                        // if the tx is mine i know that the first output address is the sent and the second one is the change address
-                        outputsLabeled.put(transactionOutput.getIndex(),contactsStore.getContact(address.toBase58()));
+                try{
+                    for (TransactionOutput transactionOutput : transaction.getOutputs()) {
+                        if (!transactionOutput.getScriptPubKey().isOpReturn() && !transactionOutput.isEmpty()) { //filter opreturn and coinstake sign
+                            address = transactionOutput.getScriptPubKey().getToAddress(getConf().getNetworkParams(),true);
+                            // if the tx is mine i know that the first output address is the sent and the second one is the change address
+                            outputsLabeled.put(transactionOutput.getIndex(),contactsStore.getContact(address.toBase58()));
+                        }
                     }
+                }catch (Exception e){
+                    logger.warn("logger logger "+transaction.getHashAsString());
+                    e.printStackTrace();
+                    //swallow this for now too
                 }
             }
             TransactionWrapper wrapper;
