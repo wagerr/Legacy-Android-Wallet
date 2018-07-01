@@ -1,6 +1,7 @@
 package wallet;
 
 import com.google.common.base.Charsets;
+import com.google.common.collect.Lists;
 
 import org.wagerrj.core.Address;
 import org.wagerrj.core.BlockChain;
@@ -44,6 +45,7 @@ import java.io.OutputStreamWriter;
 import java.io.Writer;
 import java.security.SecureRandom;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
@@ -650,14 +652,29 @@ public class WalletManager {
     }
 
     public List<Transaction> getWatchedSpent() {
-        return wallet.getWatchedSpentTransactions(true); }
+        LinkedList<Transaction> candidates = Lists.newLinkedList();
+        for (Transaction tx : wallet.getTransactions(true)) {
+            if (!tx.isMature()) continue;
+            if (tx.getValueSentFromWatched(wallet).signum() > 0) {
+                candidates.add(tx);
+            }
+        }
+        return candidates;
+    }
 
     public List<Transaction> getMineSpent() {
-        return wallet.getMineSpentTransactions(true);
+        LinkedList<Transaction> candidates = Lists.newLinkedList();
+        for (Transaction tx : wallet.getTransactions(true)) {
+            if (!tx.isMature()) continue;
+            if (tx.getValueSentFromMe(wallet,false).signum() > 0) {
+                candidates.add(tx);
+            }
+        }
+        return candidates;
     }
 
     public boolean isTransactionRelatedToWatchedAddress(Transaction tx){
-        return wallet.isTransactionRelatedToWatchedAddress(tx);
+        return wallet.isTransactionRelevantToWatched(tx) && !wallet.isTransactionRelevantToMe(tx);
     }
 
     /**
