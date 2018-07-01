@@ -135,7 +135,7 @@ public class WagerrModuleImp implements WagerrModule {
 
     @Override
     public boolean isTransactionRelatedToWatchedAddress(Transaction tx) {
-        return walletManager.isTransactionRelatedToWatchedAddress(tx);
+        return walletManager.isTransactionOnlyRelatedToWatchedAddress(tx);
     }
 
     @Override
@@ -346,34 +346,32 @@ public class WagerrModuleImp implements WagerrModule {
     public List<TransactionWrapper> listTx() {
         List<TransactionWrapper> list = new ArrayList<>();
         for (Transaction transaction : walletManager.listTransactions()) {
-            boolean isMine = walletManager.isMine(transaction);
+            boolean isSendFromMe = walletManager.isMine(transaction);
             boolean isStaking = false;
-            Map<Integer,AddressLabel> outputsLabeled = new HashMap<>();
-            Map<Integer,AddressLabel> inputsLabeled = new HashMap<>();
+            Map<Integer, AddressLabel> outputsLabeled = new HashMap<>();
+            Map<Integer, AddressLabel> inputsLabeled = new HashMap<>();
             Address address = null;
-            if (isMine){
-                try {
-                    for (TransactionOutput transactionOutput : transaction.getOutputs()) {
-                        Script script = transactionOutput.getScriptPubKey();
-                        if (script.isSentToAddress() || script.isPayToScriptHash()) {
-                            try {
-                                address = script.getToAddress(getConf().getNetworkParams(),true);
-                                // if the tx is mine i know that the first output address is the sent and the second one is the change address
-                                outputsLabeled.put(transactionOutput.getIndex(), contactsStore.getContact(address.toBase58()));
-                            }catch (ScriptException e){
-                                logger.warn("unknown tx output, "+script.toString()+", is tx coinbase: "+transaction.isCoinBase());
-                                e.printStackTrace();
-                            }
-                        }else if (script.isSentToRawPubKey()){
-                            // is the staking reward
-                            address = script.getToAddress(getConf().getNetworkParams(),true);
+            try {
+                for (TransactionOutput transactionOutput : transaction.getOutputs()) {
+                    Script script = transactionOutput.getScriptPubKey();
+                    if (script.isSentToAddress() || script.isPayToScriptHash()) {
+                        try {
+                            address = script.getToAddress(getConf().getNetworkParams(), true);
                             // if the tx is mine i know that the first output address is the sent and the second one is the change address
                             outputsLabeled.put(transactionOutput.getIndex(), contactsStore.getContact(address.toBase58()));
-                            isStaking = true;
-                        }else {
-                            logger.warn("unknown tx output, "+script.toString()+", is tx coinbase: "+transaction.isCoinBase());
+                        } catch (ScriptException e) {
+                            logger.warn("unknown tx output, " + script.toString() + ", is tx coinbase: " + transaction.isCoinBase());
+                            e.printStackTrace();
                         }
+                    } else if (script.isSentToRawPubKey()) {
+                        // is the staking reward
+                        address = script.getToAddress(getConf().getNetworkParams(), true);
+                        // if the tx is mine i know that the first output address is the sent and the second one is the change address
+                        outputsLabeled.put(transactionOutput.getIndex(), contactsStore.getContact(address.toBase58()));
+                    } else {
+                        logger.warn("unknown tx output, " + script.toString() + ", is tx coinbase: " + transaction.isCoinBase());
                     }
+                }
 
                     /*for (TransactionInput transactionInput : transaction.getInputs()) {
                         try {
@@ -385,67 +383,54 @@ public class WagerrModuleImp implements WagerrModule {
                         }
                     }*/
 
-                }catch (Exception e){
-                    e.printStackTrace();
-                    //swallow this for now..
-                }
-            }else {
-                /*for (TransactionOutput transactionOutput : transaction.getOutputs()) {
-                    Address addressToCheck = transactionOutput.getScriptPubKey().getToAddress(getConf().getNetworkParams());
-                    if(walletManager.isAddressMine(addressToCheck)){
-                        address = addressToCheck;
-                        break;
-                    }
-                }*/
-                try{
-                    for (TransactionOutput transactionOutput : transaction.getOutputs()) {
-                        if (!transactionOutput.getScriptPubKey().isOpReturn() && !transactionOutput.isEmpty()) { //filter opreturn and coinstake sign
-                            address = transactionOutput.getScriptPubKey().getToAddress(getConf().getNetworkParams(),true);
-                            // if the tx is mine i know that the first output address is the sent and the second one is the change address
-                            outputsLabeled.put(transactionOutput.getIndex(),contactsStore.getContact(address.toBase58()));
-                        }
-                    }
-                }catch (Exception e){
-                    logger.warn("logger logger "+transaction.getHashAsString());
-                    e.printStackTrace();
-                    //swallow this for now too
-                }
+            } catch (Exception e) {
+                e.printStackTrace();
+                //swallow this for now..
             }
+
             TransactionWrapper wrapper;
-            if (!isStaking){
-                // Check if a zc_spend
-                boolean isZcSpend = false;
-                for (TransactionInput transactionInput : transaction.getInputs()) {
-                    if (transactionInput.isZcspend()){
-                        isZcSpend = true;
-                        break;
-                    }
+            if (transaction.isCoinStake()) {
+                if (transaction.getOutputs().get(1).isMine(getWallet())) {
+                    wrapper = new TransactionWrapper(
+                            transaction,
+                            inputsLabeled,
+                            outputsLabeled,
+                            walletManager.getValueSentToMe(transaction),
+                            TransactionWrapper.TransactionUse.STAKE
+                    );
+                } else {
+                    //no masternode reward here
+                    wrapper = new TransactionWrapper(
+                            transaction,
+                            inputsLabeled,
+                            outputsLabeled,
+                            walletManager.getValueSentToMe(transaction),
+                            TransactionWrapper.TransactionUse.BET_REWARD
+                    );
                 }
-                TransactionWrapper.TransactionUse transactionUse;
-                if (!isZcSpend)
-                    transactionUse = isMine ? TransactionWrapper.TransactionUse.SENT_SINGLE: TransactionWrapper.TransactionUse.RECEIVE;
-                else {
-                    transactionUse = TransactionWrapper.TransactionUse.ZC_SPEND;
-                }
+
+            } else if (transaction.isZerocoinSpend()) {
                 wrapper = new TransactionWrapper(
                         transaction,
                         inputsLabeled,
                         outputsLabeled,
-                        isMine ? getValueSentFromMe(transaction,true):walletManager.getValueSentToMe(transaction),
-                        transactionUse
+                        isSendFromMe ? getValueSentFromMe(transaction, true) : walletManager.getValueSentToMe(transaction),
+                        TransactionWrapper.TransactionUse.ZC_SPEND
                 );
-            }else {
+
+            } else {
+
                 wrapper = new TransactionWrapper(
                         transaction,
                         inputsLabeled,
                         outputsLabeled,
-                        walletManager.getValueSentToMe(transaction),
-                        TransactionWrapper.TransactionUse.STAKE
+                        isSendFromMe ? getValueSentFromMe(transaction, true) : walletManager.getValueSentToMe(transaction),
+                        isSendFromMe ? TransactionWrapper.TransactionUse.SENT_SINGLE : TransactionWrapper.TransactionUse.RECEIVE
                 );
             }
 
             //no need to add oracle transations
-            if (!walletManager.isTransactionRelatedToWatchedAddress(transaction)) {
+            if (!walletManager.isTransactionOnlyRelatedToWatchedAddress(transaction)) {
                 list.add(wrapper);
             }
         }

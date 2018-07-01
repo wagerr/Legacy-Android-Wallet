@@ -673,7 +673,7 @@ public class WalletManager {
         return candidates;
     }
 
-    public boolean isTransactionRelatedToWatchedAddress(Transaction tx){
+    public boolean isTransactionOnlyRelatedToWatchedAddress(Transaction tx){
         return wallet.isTransactionRelevantToWatched(tx) && !wallet.isTransactionRelevantToMe(tx);
     }
 

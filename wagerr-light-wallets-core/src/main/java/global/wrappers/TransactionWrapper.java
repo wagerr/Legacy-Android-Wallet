@@ -18,8 +18,8 @@ public class TransactionWrapper implements Serializable{
         SENT_SINGLE,
         RECEIVE,
         STAKE,
-        ZC_SPEND
-        ;
+        ZC_SPEND,
+        BET_REWARD,
 
     }
 
@@ -80,6 +80,10 @@ public class TransactionWrapper implements Serializable{
 
     public boolean isZcSpend(){
         return transactionUse == TransactionUse.ZC_SPEND;
+    }
+
+    public boolean isBetReward(){
+        return transactionUse == TransactionUse.BET_REWARD;
     }
 
     @Override
