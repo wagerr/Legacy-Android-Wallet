@@ -104,7 +104,10 @@ class TransactionsFragmentBase : BaseRecyclerFragment<TransactionWrapper>() {
                 } else if (data.isZcSpend) {
                     holder.imageView.setImageResource(R.drawable.ic_transaction_incognito)
                     holder.amount.setTextColor(ContextCompat.getColor(context, R.color.green))
-                } else if (!data.isStake) {
+                } else if(data.isBetReward){
+                    holder.imageView.setImageResource(R.drawable.ic_bet_reward)
+                    holder.amount.setTextColor(ContextCompat.getColor(context, R.color.green))
+                }else if (!data.isStake) {
                     holder.imageView.setImageResource(R.drawable.ic_transaction_receive)
                     holder.amount.setTextColor(ContextCompat.getColor(context, R.color.green))
                 } else {
