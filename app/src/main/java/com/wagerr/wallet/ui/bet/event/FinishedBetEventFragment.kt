@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.support.v4.content.ContextCompat
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -14,11 +13,9 @@ import com.wagerr.wallet.data.worldcup.api.WorldCupApi
 import com.wagerr.wallet.module.bet.BetEventFetcher
 import com.wagerr.wallet.module.bet.BetResultFetcher
 import com.wagerr.wallet.ui.base.BaseFragment
-import com.wagerr.wallet.ui.bet.result.FinishedBetEventDetailActivity
-import io.reactivex.Observable
+import com.wagerr.wallet.ui.bet.result.BetEventDetailActivity
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.rxkotlin.Observables
-import io.reactivex.rxkotlin.plusAssign
 import kotlinx.android.synthetic.main.fragment_finished_bet_event.*
 
 class FinishedBetEventFragment : BaseFragment() {
@@ -48,7 +45,7 @@ class FinishedBetEventFragment : BaseFragment() {
         finished_bet_event_list.adapter = finishedAdapter
         finishedAdapter.bindToRecyclerView(finished_bet_event_list)
         finishedAdapter.setOnItemClickListener { adapter, view, position ->
-            FinishedBetEventDetailActivity.enter(activity!!, finishedAdapter.getItem(position)!!.betEvent.eventId)
+            BetEventDetailActivity.enter(activity!!, finishedAdapter.getItem(position)!!.betEvent.eventId)
         }
 
     }

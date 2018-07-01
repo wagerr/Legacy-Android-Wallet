@@ -7,32 +7,21 @@ import android.support.v7.widget.RecyclerView
 import android.view.ViewGroup
 
 import com.wagerr.wallet.R
-import com.wagerr.wallet.ui.base.BaseDrawerActivity
 
 import android.content.Intent
 import android.support.v4.content.ContextCompat
-import android.util.Log
-import com.wagerr.wallet.R.id.bet_action_list
-import com.wagerr.wallet.R.id.swipe_refresh_layout
 
 
 import com.wagerr.wallet.WagerrApplication
 import com.wagerr.wallet.data.bet.*
 import com.wagerr.wallet.data.worldcup.api.WorldCupApi
-import com.wagerr.wallet.module.bet.BetActionFetcher
 import com.wagerr.wallet.module.bet.BetEventFetcher
-import com.wagerr.wallet.module.bet.BetResultFetcher
 import com.wagerr.wallet.ui.base.BaseActivity
-import com.wagerr.wallet.ui.base.WagerrActivity
-import com.wagerr.wallet.ui.bet.event.FinishedBetEventAdapter
-import com.wagerr.wallet.ui.bet_action_detail.BetActionDetailActivity
 import com.wagerr.wallet.ui.transaction_detail_activity.FragmentTxDetail
 import com.wagerr.wallet.ui.transaction_detail_activity.TransactionDetailActivity
 import com.wagerr.wallet.utils.*
 import io.reactivex.Observable
-import io.reactivex.Scheduler
 import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.rxkotlin.Observables
 import io.reactivex.rxkotlin.plusAssign
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_finished_bet_event_detail.*
@@ -45,13 +34,13 @@ import java.util.*
  */
 
 
-class FinishedBetEventDetailActivity : BaseActivity() {
+class BetEventDetailActivity : BaseActivity() {
 
 
     val eventId: String by lazy {
         intent.getStringExtra(EXTRA_EVENT_ID)
     }
-    private lateinit var betActionsAdapter: FinishedBetEventBetActionAdapter
+    private lateinit var betActionsAdapter: BetEventBetActionAdapter
     private var layoutManager: RecyclerView.LayoutManager? = null
 
     override fun onCreateView(savedInstanceState: Bundle?, container: ViewGroup) {
@@ -67,7 +56,7 @@ class FinishedBetEventDetailActivity : BaseActivity() {
         bet_action_list.setHasFixedSize(true)
         layoutManager = LinearLayoutManager(this)
         bet_action_list.layoutManager = layoutManager
-        betActionsAdapter = FinishedBetEventBetActionAdapter()
+        betActionsAdapter = BetEventBetActionAdapter()
         betActionsAdapter.setEnableLoadMore(false)
         bet_action_list.adapter = betActionsAdapter
         betActionsAdapter.bindToRecyclerView(bet_action_list)
@@ -138,11 +127,16 @@ class FinishedBetEventDetailActivity : BaseActivity() {
                         }
                         button_status.setTextAppearance(this, R.style.WgrButtonWithBorder)
                     } ?: run {
-                        button_status.text = "Waiting For Oracle Result"
-                        button_status.setTextAppearance(this, R.style.WgrHintButtonWithBorder)
+                        if (betEvents?.get(0)?.timeStamp!! > System.currentTimeMillis()) {
+                            button_status.text = "Game Not Started"
+                            button_status.setTextAppearance(this, R.style.WgrHintButtonWithBorder)
+                        } else {
+                            button_status.text = "Waiting For Oracle Result"
+                            button_status.setTextAppearance(this, R.style.WgrHintButtonWithBorder)
+                        }
                     }
             return@map betActions?.map { betAction ->
-                FinishedBetEventDetailData(betEvents?.last { betEvent ->
+                BetEventDetailData(betEvents?.last { betEvent ->
                     betAction.transaction.updateTime > betEvent.transaction.updateTime
                 }, betResult, betAction)
             }
@@ -167,7 +161,7 @@ class FinishedBetEventDetailActivity : BaseActivity() {
         val EXTRA_EVENT_ID = "EXTRA_EVENT_ID"
 
         fun enter(activity: Context, eventId: String) {
-            val intent = Intent(activity, FinishedBetEventDetailActivity::class.java)
+            val intent = Intent(activity, BetEventDetailActivity::class.java)
             intent.putExtra(EXTRA_EVENT_ID, eventId)
             activity.startActivity(intent)
         }

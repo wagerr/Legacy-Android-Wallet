@@ -106,7 +106,7 @@
                 android:resource="@xml/file_provider_paths" />
         </provider>
         <activity android:name=".ui.bet_action_detail.BetActionDetailActivity"/>
-        <activity android:name=".ui.bet.result.FinishedBetEventDetailActivity"/>
+        <activity android:name=".ui.bet.result.BetEventDetailActivity"/>
 
     </application>
 

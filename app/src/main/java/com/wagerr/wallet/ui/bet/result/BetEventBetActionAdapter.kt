@@ -3,20 +3,12 @@ package com.wagerr.wallet.ui.bet.result
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.BaseViewHolder
 import com.wagerr.wallet.R
-import com.wagerr.wallet.R.id.text_amount
-import com.wagerr.wallet.R.id.text_choice
 import com.wagerr.wallet.data.bet.BET_ATCION_DRAW
-import com.wagerr.wallet.data.bet.BetEvent
 import com.wagerr.wallet.data.bet.toBetActionAmount
-import com.wagerr.wallet.data.bet.toEventSymbol
-import com.wagerr.wallet.utils.formatToViewDateTimeDefaults
-import kotlinx.android.synthetic.main.activity_bet_action_detail.*
-import java.text.SimpleDateFormat
-import java.util.*
 
-class FinishedBetEventBetActionAdapter : BaseQuickAdapter<FinishedBetEventDetailData, BaseViewHolder>(R.layout.item_finished_bet_event_bet_action) {
+class BetEventBetActionAdapter : BaseQuickAdapter<BetEventDetailData, BaseViewHolder>(R.layout.item_finished_bet_event_bet_action) {
 
-    override fun convert(helper: BaseViewHolder, item: FinishedBetEventDetailData) {
+    override fun convert(helper: BaseViewHolder, item: BetEventDetailData) {
         item.betEvent?.let {
             when (item.betAction?.betChoose) {
                 it.homeTeam -> {

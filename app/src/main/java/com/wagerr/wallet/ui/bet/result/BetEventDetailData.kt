@@ -5,4 +5,4 @@ import com.wagerr.wallet.data.bet.BetEvent
 import com.wagerr.wallet.data.bet.BetResult
 import com.wagerr.wallet.data.bet.BetMatchResult
 
-data class FinishedBetEventDetailData(val betEvent: BetEvent?, val betResult: BetResult?, val betAction: BetAction?)
+data class BetEventDetailData(val betEvent: BetEvent?, val betResult: BetResult?, val betAction: BetAction?)

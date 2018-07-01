@@ -12,14 +12,13 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
 import com.wagerr.wallet.R
-import com.wagerr.wallet.R.id.swipe_refresh_layout
 import com.wagerr.wallet.module.bet.BetEventFetcher
 import com.wagerr.wallet.ui.base.BaseFragment
 import io.reactivex.rxkotlin.plusAssign
 import kotlinx.android.synthetic.main.fragment_ongoing_bet_event.*
-import com.wagerr.wallet.R.id.ongoing_bet_event_list
 import com.wagerr.wallet.data.bet.*
 import com.wagerr.wallet.module.WagerrContext
+import com.wagerr.wallet.ui.bet.result.BetEventDetailActivity
 import com.wagerr.wallet.utils.wrapContent
 import io.reactivex.android.schedulers.AndroidSchedulers
 
@@ -75,6 +74,11 @@ class OngoingBetEventFragment : BaseFragment() {
                     }
                 }
             }
+        }
+        adapter.setOnItemClickListener { adapter, view, position ->
+            adapter as OngoingBetEventAdapter
+            val betEvent = adapter.getItem(position)
+            BetEventDetailActivity.enter(activity!!, betEvent!!.eventId)
         }
     }
 
