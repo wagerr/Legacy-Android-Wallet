@@ -11,7 +11,7 @@ import pivtrum.PivtrumPeerData;
 
 public class PivtrumGlobalData {
 
-    public static final String[] TRUSTED_TEST_NODES = new String[]{"35.189.104.248"};
+    public static final String[] TRUSTED_TEST_NODES = new String[]{"35.231.63.53"};
 
     public static final String[] TRUSTED_NODES = new String[]{"46.166.148.3"};
 
