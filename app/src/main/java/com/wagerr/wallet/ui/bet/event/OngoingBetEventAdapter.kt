@@ -1,5 +1,6 @@
 package com.wagerr.wallet.ui.bet.event
 
+import android.view.View.GONE
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.BaseViewHolder
 import com.wagerr.wallet.R
@@ -20,10 +21,16 @@ class OngoingBetEventAdapter : BaseQuickAdapter<BetEvent, BaseViewHolder>(R.layo
         helper.setText(R.id.text_home_team, eventSymbol.getFullTeam(item.homeTeam))
         helper.setText(R.id.text_away_team, eventSymbol.getFullTeam(item.awayTeam))
         eventSymbol.getTeamImage(item.homeTeam)?.let {
+            helper.setVisible(R.id.image_home_team, true)
             helper.setImageResource(R.id.image_home_team, it)
+        }?: run {
+            helper.setVisible(R.id.image_home_team, false)
         }
         eventSymbol.getTeamImage(item.awayTeam)?.let {
+            helper.setVisible(R.id.image_away_team, true)
             helper.setImageResource(R.id.image_away_team, it)
+        }?: run {
+            helper.setVisible(R.id.image_away_team, false)
         }
         helper.setText(R.id.button_home_odds, "${item.homeTeam} WIN\n${item.homeOdds}")
         helper.setText(R.id.button_draw_odds, "DRAW\n${item.drawOdds}")
