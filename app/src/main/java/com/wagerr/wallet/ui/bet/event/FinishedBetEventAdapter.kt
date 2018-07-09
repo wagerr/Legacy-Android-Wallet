@@ -5,6 +5,7 @@ import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.BaseViewHolder
 import com.wagerr.wallet.R
 import com.wagerr.wallet.data.bet.BetEvent
+import com.wagerr.wallet.data.bet.DRAW_SYMBOL
 import com.wagerr.wallet.data.bet.toEventSymbol
 import com.wagerr.wallet.utils.formatToViewDateTimeDefaults
 import java.text.SimpleDateFormat
@@ -33,7 +34,7 @@ class FinishedBetEventAdapter : BaseQuickAdapter<FinishedBetData, BaseViewHolder
         }
 
         item.betResult?.let {
-            if (item.betResult.betResult == "D") {
+            if (item.betResult.betResult == DRAW_SYMBOL) {
                 helper.setText(R.id.button_status, "DRAW")
             } else {
                 helper.setText(R.id.button_status, "${item.betResult.betResult} WIN")

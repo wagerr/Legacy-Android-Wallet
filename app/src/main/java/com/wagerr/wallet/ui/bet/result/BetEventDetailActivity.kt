@@ -120,7 +120,7 @@ class BetEventDetailActivity : BaseActivity() {
             val betResult = it.first.getBetResultByEventId(eventId)
             val betActions = it.second.getBetActionsByEventId(eventId)
                     betResult?.let {
-                        if (it.betResult == "D") {
+                        if (it.betResult == DRAW_SYMBOL) {
                             button_status.text = "DRAW"
                         } else {
                             button_status.text = "${it.betResult} WIN"

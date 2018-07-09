@@ -117,7 +117,7 @@ class OngoingBetEventFragment : BaseFragment() {
             }
             (activity as BetEventActivity).sendBetTransaction(betAmount.text.toString(), BetActionForSend(event.eventId, when (betType) {
                 BetType.BetTypeHomeWin -> event.homeTeam
-                BetType.BetTypeDraw -> "D"
+                BetType.BetTypeDraw -> DRAW_SYMBOL
                 BetType.BetTypeAwayWin -> event.awayTeam
             }).toBetTransactionData())
             dialog.dismiss()

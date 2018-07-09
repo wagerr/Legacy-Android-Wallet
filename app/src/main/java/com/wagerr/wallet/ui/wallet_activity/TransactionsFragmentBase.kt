@@ -134,7 +134,7 @@ class TransactionsFragmentBase : BaseRecyclerFragment<TransactionWrapper>() {
 
                 data.transaction.toBetAction()?.let {
                     holder.imageView.setImageResource(R.drawable.ic_transaction_bet)
-                    if (it.betChoose == "D") {
+                    if (it.betChoose == DRAW_SYMBOL) {
                         holder.description.text = "Bet DRAW"
                     } else {
                         holder.description.text = "Bet ${it.betChoose} WIN"
