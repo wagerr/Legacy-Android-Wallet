@@ -152,9 +152,10 @@ class BetEventActivity : BaseDrawerActivity() {
             val amount = Coin.parseCoin(amountStr)
             if (amount.isZero) throw IllegalArgumentException("Amount zero, please correct it")
             if (amount.isLessThan(Transaction.MIN_NONDUST_OUTPUT)) throw IllegalArgumentException("Amount must be greater than the minimum amount accepted from miners, " + Transaction.MIN_NONDUST_OUTPUT.toFriendlyString())
+            if (amount.isLessThan(Coin.parseCoin("1")) || amount.isGreaterThan(Coin.parseCoin("10000")))
+                throw IllegalArgumentException("Incorrect bet amount. Please ensure your bet is beteen 1 - 10000 WGR inclusive.")
             if (amount.isGreaterThan(Coin.valueOf(wagerrModule.availableBalance)))
                 throw IllegalArgumentException("Insuficient balance")
-
             val params = wagerrModule.conf.networkParams
 
             transaction = Transaction(params)
