@@ -16,6 +16,8 @@ import com.wagerr.wallet.WagerrApplication
 import com.wagerr.wallet.data.bet.*
 import com.wagerr.wallet.data.worldcup.api.WorldCupApi
 import com.wagerr.wallet.module.bet.BetEventFetcher
+import com.wagerr.wallet.module.bet.BetEventFetcher.Factory.getBetEventsById
+import com.wagerr.wallet.module.bet.BetResultFetcher.Factory.getBetResultByEventId
 import com.wagerr.wallet.ui.base.BaseActivity
 import com.wagerr.wallet.ui.transaction_detail_activity.FragmentTxDetail
 import com.wagerr.wallet.ui.transaction_detail_activity.TransactionDetailActivity
@@ -45,7 +47,7 @@ class BetEventDetailActivity : BaseActivity() {
 
     override fun onCreateView(savedInstanceState: Bundle?, container: ViewGroup) {
         layoutInflater.inflate(R.layout.activity_finished_bet_event_detail, container)
-        title = "Finished Bet Event Detail"
+        title = "Bet Event Detail"
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.setDisplayShowHomeEnabled(true)
         swipe_refresh_layout.setColorSchemeColors(ContextCompat.getColor(this, R.color.colorPrimary))
@@ -110,10 +112,37 @@ class BetEventDetailActivity : BaseActivity() {
                         text_vs.text = "VS"
                     }
                 }, {})
+        Observable.fromCallable {
+            WagerrApplication.getInstance().module.watchedSpent
+        }.subscribeOn(Schedulers.io())
+                .map {
+                    val betEvents = it.getBetEventsById(eventId)
+                    val betResult = it.getBetResultByEventId(eventId)
 
+                    return@map betEvents to betResult
+                }.observeOn(AndroidSchedulers.mainThread())
+                .subscribe({
+                    it.second?.let {
+                        if (it.betResult == DRAW_SYMBOL) {
+                            button_status.text = "DRAW"
+                        } else {
+                            button_status.text = "${it.betResult} WIN"
+                        }
+                        button_status.setTextAppearance(this, R.style.WgrButtonWithBorder)
+                    } ?: run {
+                        if (it.first?.get(0)?.timeStamp!! > System.currentTimeMillis()) {
+                            button_status.text = "Game Not Started"
+                            button_status.setTextAppearance(this, R.style.WgrHintButtonWithBorder)
+                        } else {
+                            button_status.text = "Waiting For Oracle Result"
+                            button_status.setTextAppearance(this, R.style.WgrHintButtonWithBorder)
+                        }
+                    }
+                }, {
+                    it.printStackTrace()
+                })
         Observable.fromCallable {
             WagerrApplication.getInstance().module.watchedSpent to WagerrApplication.getInstance().module.mineSpent
-
         }.subscribeOn(Schedulers.io())
                 .map {
             val betEvents = it.first.getBetEventsById(eventId)
@@ -149,7 +178,10 @@ class BetEventDetailActivity : BaseActivity() {
                     } else {
                         betActionsAdapter.setNewData(it?.sortedByDescending { it.betAction?.transaction?.updateTime })
                     }
-                }, { it.printStackTrace() })
+                }, {
+                    swipe_refresh_layout.isRefreshing = false
+                    it.printStackTrace()
+                })
 
     }
 

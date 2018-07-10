@@ -4,10 +4,12 @@ import android.widget.TextView
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.BaseViewHolder
 import com.wagerr.wallet.R
+import com.wagerr.wallet.R.id.button_status
 import com.wagerr.wallet.data.bet.BetEvent
 import com.wagerr.wallet.data.bet.DRAW_SYMBOL
 import com.wagerr.wallet.data.bet.toEventSymbol
 import com.wagerr.wallet.utils.formatToViewDateTimeDefaults
+import kotlinx.android.synthetic.main.activity_finished_bet_event_detail.*
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -47,8 +49,13 @@ class FinishedBetEventAdapter : BaseQuickAdapter<FinishedBetData, BaseViewHolder
             }
             helper.getView<TextView>(R.id.button_status).setTextAppearance(mContext, R.style.WgrButtonWithBorder)
         } ?: run {
-            helper.setText(R.id.button_status, "Waiting For Oracle Result")
-            helper.getView<TextView>(R.id.button_status).setTextAppearance(mContext, R.style.WgrHintButtonWithBorder)
+            if (item.betEvent.timeStamp > System.currentTimeMillis()) {
+                helper.setText(R.id.button_status, "Game Not Started")
+                helper.getView<TextView>(R.id.button_status).setTextAppearance(mContext, R.style.WgrHintButtonWithBorder)
+            } else {
+                helper.setText(R.id.button_status, "Waiting For Oracle Result")
+                helper.getView<TextView>(R.id.button_status).setTextAppearance(mContext, R.style.WgrHintButtonWithBorder)
+            }
         }
     }
 
