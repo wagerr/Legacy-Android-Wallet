@@ -174,8 +174,10 @@ public class FragmentTxDetail extends BaseFragment implements View.OnClickListen
                 Script script = transactionOutput.getScriptPubKey();
                 if (script.isPayToScriptHash() || script.isSentToRawPubKey() || script.isSentToAddress()) {
                     label = script.getToAddress(wagerrModule.getConf().getNetworkParams(), true).toBase58();
-                }else {
+                } else if (script.isOpReturn()) {
                     label = script.toString();
+                } else {
+                    label = "NON-STANDARD";
                 }
             }
 
