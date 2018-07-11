@@ -90,7 +90,7 @@ class BetActionDetailActivity : BaseActivity() {
                                 it.awayTeam -> {
                                     text_choice.text = "${it.awayTeam} WIN (${it.awayOdds})"
                                 }
-                                BET_ATCION_DRAW -> {
+                                DRAW_SYMBOL -> {
                                     text_choice.text = "Draw (${it.drawOdds})"
                                 }
                             }

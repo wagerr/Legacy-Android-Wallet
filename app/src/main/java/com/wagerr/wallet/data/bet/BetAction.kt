@@ -10,7 +10,6 @@ import org.wagerrj.core.Coin
 import org.wagerrj.core.Transaction
 import java.nio.charset.Charset
 
-const val BET_ATCION_DRAW = "D"
 
 //2|1.0|#453|RUS
 data class BetAction(val txType: TxType, val protocolVersion: String, val eventId: String,
