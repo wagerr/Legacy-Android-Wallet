@@ -148,22 +148,6 @@ class BetEventDetailActivity : BaseActivity() {
             val betEvents = it.first.getBetEventsById(eventId)
             val betResult = it.first.getBetResultByEventId(eventId)
             val betActions = it.second.getBetActionsByEventId(eventId)
-                    betResult?.let {
-                        if (it.betResult == DRAW_SYMBOL) {
-                            button_status.text = "DRAW"
-                        } else {
-                            button_status.text = "${it.betResult} WIN"
-                        }
-                        button_status.setTextAppearance(this, R.style.WgrButtonWithBorder)
-                    } ?: run {
-                        if (betEvents?.get(0)?.timeStamp!! > System.currentTimeMillis()) {
-                            button_status.text = "Game Not Started"
-                            button_status.setTextAppearance(this, R.style.WgrHintButtonWithBorder)
-                        } else {
-                            button_status.text = "Waiting For Oracle Result"
-                            button_status.setTextAppearance(this, R.style.WgrHintButtonWithBorder)
-                        }
-                    }
             return@map betActions?.map { betAction ->
                 BetEventDetailData(betEvents?.last { betEvent ->
                     betAction.transaction.updateTime > betEvent.transaction.updateTime
