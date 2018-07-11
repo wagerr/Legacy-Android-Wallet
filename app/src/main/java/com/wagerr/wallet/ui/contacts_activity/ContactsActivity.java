@@ -62,7 +62,7 @@ public class ContactsActivity extends BaseDrawerActivity implements ListItemList
     protected void onResume() {
         super.onResume();
         // check current activity in the navigation drawer
-        setNavigationMenuItemChecked(1);
+        setNavigationMenuItemChecked(2);
 
     }
 
