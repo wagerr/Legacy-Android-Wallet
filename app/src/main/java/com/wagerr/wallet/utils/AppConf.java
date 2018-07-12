@@ -4,7 +4,7 @@ import android.content.SharedPreferences;
 
 import network.PeerData;
 
-import static com.wagerr.wallet.module.WagerrContext.DEFAULT_RATE_COIN;
+import static com.wagerr.wallet.module.WagerrAppContext.DEFAULT_RATE_COIN;
 
 /**
  * Created by furszy on 6/8/17.

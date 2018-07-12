@@ -1,12 +1,13 @@
 package com.wagerr.wallet.utils;
 
-import org.wagerrj.core.ScriptException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.wagerrj.core.ScriptException;
 
 import java.util.Collection;
 
 import global.AddressLabel;
+import global.WagerrCoreContext;
 import global.WagerrModule;
 import global.wrappers.TransactionWrapper;
 
@@ -30,9 +31,9 @@ public class TxUtils {
                     text = addressLabel.getAddresses().get(0);
             }else {
                 try {
-                    text = data.getTransaction().getOutput(0).getScriptPubKey().getToAddress(wagerrModule.getConf().getNetworkParams(), true).toBase58();
+                    text = data.getTransaction().getOutput(0).getScriptPubKey().getToAddress(WagerrCoreContext.NETWORK_PARAMETERS, true).toBase58();
                 }catch (ScriptException e){
-                    text = data.getTransaction().getOutput(1).getScriptPubKey().getToAddress(wagerrModule.getConf().getNetworkParams(),true).toBase58();
+                    text = data.getTransaction().getOutput(1).getScriptPubKey().getToAddress(WagerrCoreContext.NETWORK_PARAMETERS,true).toBase58();
                 }
             }
         }else {

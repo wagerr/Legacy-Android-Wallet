@@ -3,6 +3,8 @@ package chain;
 import com.google.common.base.Stopwatch;
 import com.google.common.util.concurrent.ListenableFuture;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.wagerrj.core.BlockChain;
 import org.wagerrj.core.CheckpointManager;
 import org.wagerrj.core.Peer;
@@ -23,8 +25,6 @@ import org.wagerrj.params.TestNet3Params;
 import org.wagerrj.store.BlockStore;
 import org.wagerrj.store.BlockStoreException;
 import org.wagerrj.store.LevelDBBlockStore;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.io.IOException;
@@ -38,11 +38,15 @@ import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
 import global.ContextWrapper;
-import network.PeerGlobalData;
+import global.WagerrCoreContext;
 import global.WalletConfiguration;
 import network.PeerData;
+import network.PeerGlobalData;
 import wallet.WalletManager;
 
+import static global.WagerrCoreContext.Files.CHECKPOINTS_FILENAME;
+import static global.WagerrCoreContext.PEER_DISCOVERY_TIMEOUT_MS;
+import static global.WagerrCoreContext.PEER_TIMEOUT_MS;
 
 public class BlockchainManager {
 
@@ -91,20 +95,20 @@ public class BlockchainManager {
 
             // Create the blockstore
             try {
-                this.blockStore = (blockStore!=null) ? blockStore : new LevelDBBlockStore(conf.getWalletContext(), blockChainFile);
+                this.blockStore = (blockStore!=null) ? blockStore : new LevelDBBlockStore(WagerrCoreContext.CONTEXT, blockChainFile);
                 blockStore.getChainHead(); // detect corruptions as early as possible
 
                 final long earliestKeyCreationTime = walletManager.getEarliestKeyCreationTime();
 
-                if (!blockStoreFileExists && earliestKeyCreationTime > 0 && !(conf.getNetworkParams() instanceof RegTestParams)) {
+                if (!blockStoreFileExists && earliestKeyCreationTime > 0 && !(WagerrCoreContext.NETWORK_PARAMETERS instanceof RegTestParams)) {
                     try {
-                        String filename = conf.getCheckpointFilename();
-                        String suffix = conf.getNetworkParams() instanceof MainNetParams ? "":"-testnet";
+                        String filename = CHECKPOINTS_FILENAME;
+                        String suffix = WagerrCoreContext.NETWORK_PARAMETERS instanceof MainNetParams ? "":"-testnet";
                         final Stopwatch watch = Stopwatch.createStarted();
                         final InputStream checkpointsInputStream =  context.openAssestsStream(filename+suffix);
-                        CheckpointManager.checkpoint(conf.getNetworkParams(), checkpointsInputStream, blockStore, earliestKeyCreationTime);
+                        CheckpointManager.checkpoint(WagerrCoreContext.NETWORK_PARAMETERS, checkpointsInputStream, blockStore, earliestKeyCreationTime);
                         watch.stop();
-                        LOG.info("checkpoints loaded from '{}', took {}", conf.getCheckpointFilename(), watch);
+                        LOG.info("checkpoints loaded from '{}', took {}", WagerrCoreContext.Files.CHECKPOINTS_FILENAME, watch);
                     }catch (final IOException x) {
                         LOG.error("problem reading checkpoints, continuing without", x);
                     }catch (Exception e){
@@ -122,7 +126,7 @@ public class BlockchainManager {
 
             // create the blockchain
             try {
-                blockChain = new BlockChain(conf.getNetworkParams(), blockStore);
+                blockChain = new BlockChain(WagerrCoreContext.NETWORK_PARAMETERS, blockStore);
                 walletManager.addWalletFrom(blockChain);
             } catch (final BlockStoreException x) {
                 throw new Error("blockchain cannot be created", x);
@@ -174,7 +178,7 @@ public class BlockchainManager {
         if (peerGroup != null) {
             LOG.info("broadcasting transaction " + tx.getHashAsString());
             boolean onlyTrustedNode =
-                    (conf.getNetworkParams() instanceof RegTestParams || conf.getNetworkParams() instanceof TestNet3Params)
+                    (WagerrCoreContext.NETWORK_PARAMETERS instanceof RegTestParams || WagerrCoreContext.NETWORK_PARAMETERS instanceof TestNet3Params)
                             ||
                             conf.getTrustedNodeHost()!=null;
             TransactionBroadcast transactionBroadcast = peerGroup.broadcastTransaction(
@@ -235,7 +239,7 @@ public class BlockchainManager {
 //                CrashReporter.saveBackgroundTrace(new RuntimeException(message), application.packageInfoWrapper());
                 }
                 LOG.info("starting peergroup");
-                peerGroup = new PeerGroup(conf.getNetworkParams(), blockChain);
+                peerGroup = new PeerGroup(WagerrCoreContext.NETWORK_PARAMETERS, blockChain);
                 peerGroup.setDownloadTxDependencies(0); // recursive implementation causes StackOverflowError
                 walletManager.addWalletFrom(peerGroup);
                 peerGroup.setUserAgent(USER_AGENT, context.getVersionName());
@@ -250,16 +254,17 @@ public class BlockchainManager {
 
                 final boolean connectTrustedPeerOnly = true;//hasTrustedPeer && config.getTrustedPeerOnly();
                 peerGroup.setMaxConnections(connectTrustedPeerOnly ? 1 : maxConnectedPeers);
-                peerGroup.setConnectTimeoutMillis(conf.getPeerTimeoutMs());
-                peerGroup.setPeerDiscoveryTimeoutMillis(conf.getPeerDiscoveryTimeoutMs());
+                peerGroup.setConnectTimeoutMillis(PEER_TIMEOUT_MS);
+                peerGroup.setPeerDiscoveryTimeoutMillis(PEER_DISCOVERY_TIMEOUT_MS);
 
-                if (conf.isTest()) {
+                if (WagerrCoreContext.IS_TEST) {
                     peerGroup.setMinBroadcastConnections(1);
                 }
 
                 peerGroup.addPeerDiscovery(new PeerDiscovery() {
 
-                    private final PeerDiscovery normalPeerDiscovery = MultiplexingDiscovery.forServices(conf.getNetworkParams(), 0);
+                    private final PeerDiscovery normalPeerDiscovery = MultiplexingDiscovery.forServices(
+                            WagerrCoreContext.NETWORK_PARAMETERS, 0);
 
                     @Override
                     public InetSocketAddress[] getPeers(final long services, final long timeoutValue, final TimeUnit timeoutUnit)
@@ -271,7 +276,7 @@ public class BlockchainManager {
                         if (hasTrustedPeer) {
                             LOG.info("trusted peer '" + trustedPeerHost + "'" + (connectTrustedPeerOnly ? " only" : ""));
                             final InetSocketAddress addr;
-                            addr = new InetSocketAddress(trustedPeerHost, conf.getNetworkParams().getPort());
+                            addr = new InetSocketAddress(trustedPeerHost, WagerrCoreContext.NETWORK_PARAMETERS.getPort());
 
 
                             if (addr.getAddress() != null) {
@@ -284,7 +289,7 @@ public class BlockchainManager {
                                     needsTrimPeersWorkaround = false;
                                 }*/
                         } else {
-                            if (conf.isTest()) {
+                            if (WagerrCoreContext.IS_TEST) {
                                 for (PeerData peerData : PeerGlobalData.listTrustedTestHosts()) {
                                     peers.add(new InetSocketAddress(peerData.getHost(), peerData.getTcpPort()));
                                 }
@@ -407,7 +412,4 @@ public class BlockchainManager {
         return new ArrayList<>();
     }
 
-    public int getProtocolVersion() {
-        return conf.getProtocolVersion();
-    }
 }

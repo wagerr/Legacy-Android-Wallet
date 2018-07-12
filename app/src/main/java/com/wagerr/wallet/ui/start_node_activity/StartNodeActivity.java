@@ -14,20 +14,20 @@ import android.widget.Button;
 import android.widget.CheckedTextView;
 import android.widget.Spinner;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.concurrent.TimeUnit;
-
-import network.PeerGlobalData;
-import network.PeerData;
-
 import com.wagerr.wallet.R;
-import com.wagerr.wallet.module.WagerrContext;
 import com.wagerr.wallet.ui.base.BaseActivity;
 import com.wagerr.wallet.ui.pincode_activity.PincodeActivity;
 import com.wagerr.wallet.ui.wallet_activity.WalletActivity;
 import com.wagerr.wallet.utils.DialogBuilder;
 import com.wagerr.wallet.utils.DialogsUtil;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.TimeUnit;
+
+import global.WagerrCoreContext;
+import network.PeerData;
+import network.PeerGlobalData;
 
 import static network.PeerGlobalData.listTrustedHosts;
 
@@ -43,7 +43,7 @@ public class StartNodeActivity extends BaseActivity {
     private ArrayAdapter<String> adapter;
     private List<String> hosts = new ArrayList<>();
 
-    private static final List<PeerData> trustedNodes = WagerrContext.IS_TEST? PeerGlobalData.listTrustedTestHosts():listTrustedHosts();
+    private static final List<PeerData> trustedNodes = WagerrCoreContext.IS_TEST? PeerGlobalData.listTrustedTestHosts():listTrustedHosts();
 
     @Override
     protected void onCreateView(Bundle savedInstanceState, ViewGroup container) {

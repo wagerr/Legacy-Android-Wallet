@@ -25,6 +25,24 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ViewFlipper;
 
+import com.wagerr.wallet.R;
+import com.wagerr.wallet.service.WagerrWalletService;
+import com.wagerr.wallet.ui.base.BaseActivity;
+import com.wagerr.wallet.ui.base.dialogs.SimpleTextDialog;
+import com.wagerr.wallet.ui.base.dialogs.SimpleTwoButtonsDialog;
+import com.wagerr.wallet.ui.transaction_send_activity.custom.ChangeAddressActivity;
+import com.wagerr.wallet.ui.transaction_send_activity.custom.CustomFeeActivity;
+import com.wagerr.wallet.ui.transaction_send_activity.custom.CustomFeeFragment;
+import com.wagerr.wallet.ui.transaction_send_activity.custom.inputs.InputsActivity;
+import com.wagerr.wallet.ui.transaction_send_activity.custom.outputs.OutputWrapper;
+import com.wagerr.wallet.ui.transaction_send_activity.custom.outputs.OutputsActivity;
+import com.wagerr.wallet.utils.CrashReporter;
+import com.wagerr.wallet.utils.DialogsUtil;
+import com.wagerr.wallet.utils.NavigationUtils;
+import com.wagerr.wallet.utils.scanner.ScanActivity;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.wagerrj.core.Address;
 import org.wagerrj.core.Coin;
 import org.wagerrj.core.InsufficientMoneyException;
@@ -34,8 +52,6 @@ import org.wagerrj.core.TransactionInput;
 import org.wagerrj.core.TransactionOutput;
 import org.wagerrj.uri.WagerrURI;
 import org.wagerrj.wallet.Wallet;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.io.Serializable;
@@ -45,26 +61,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
-import com.wagerr.wallet.R;
 import global.AddressLabel;
-import global.exceptions.NoPeerConnectedException;
+import global.WagerrCoreContext;
 import global.WagerrRate;
-import com.wagerr.wallet.service.WagerrWalletService;
-import com.wagerr.wallet.ui.base.BaseActivity;
-import com.wagerr.wallet.ui.base.dialogs.SimpleTextDialog;
-import com.wagerr.wallet.ui.base.dialogs.SimpleTwoButtonsDialog;
-import com.wagerr.wallet.ui.transaction_send_activity.custom.ChangeAddressActivity;
-import com.wagerr.wallet.ui.transaction_send_activity.custom.CustomFeeActivity;
-import com.wagerr.wallet.ui.transaction_send_activity.custom.CustomFeeFragment;
+import global.exceptions.NoPeerConnectedException;
 import global.wrappers.InputWrapper;
-import com.wagerr.wallet.ui.transaction_send_activity.custom.inputs.InputsActivity;
-import com.wagerr.wallet.ui.transaction_send_activity.custom.outputs.OutputWrapper;
-import com.wagerr.wallet.ui.transaction_send_activity.custom.outputs.OutputsActivity;
 import global.wrappers.TransactionWrapper;
-import com.wagerr.wallet.utils.CrashReporter;
-import com.wagerr.wallet.utils.DialogsUtil;
-import com.wagerr.wallet.utils.NavigationUtils;
-import com.wagerr.wallet.utils.scanner.ScanActivity;
 import wallet.exceptions.InsufficientInputsException;
 import wallet.exceptions.TxNotFoundException;
 
@@ -347,7 +349,7 @@ public class SendActivity extends BaseActivity implements View.OnClickListener {
         super.onRestoreInstanceState(savedInstanceState);
         // todo: test this roting the screen..
         if (savedInstanceState.containsKey(TX)){
-            transaction = new Transaction(wagerrModule.getConf().getNetworkParams(),savedInstanceState.getByteArray(TX));
+            transaction = new Transaction(WagerrCoreContext.NETWORK_PARAMETERS,savedInstanceState.getByteArray(TX));
         }
     }
 
@@ -587,7 +589,7 @@ public class SendActivity extends BaseActivity implements View.OnClickListener {
                     }else {
                         if (data.hasExtra(INTENT_EXTRA_CHANGE_ADDRESS)) {
                             String address = data.getStringExtra(INTENT_EXTRA_CHANGE_ADDRESS);
-                            changeAddress = Address.fromBase58(wagerrModule.getConf().getNetworkParams(),address);
+                            changeAddress = Address.fromBase58(WagerrCoreContext.NETWORK_PARAMETERS,address);
                         }
                     }
                     txt_change_address.setVisibility(View.VISIBLE);
@@ -679,7 +681,7 @@ public class SendActivity extends BaseActivity implements View.OnClickListener {
             // memo
             String memo = edit_memo.getText().toString();
 
-            NetworkParameters params = wagerrModule.getConf().getNetworkParams();
+            NetworkParameters params = WagerrCoreContext.NETWORK_PARAMETERS;
 
             if ( (outputWrappers==null || outputWrappers.isEmpty()) && (unspent==null || unspent.isEmpty()) ){
                 addressStr = edit_address.getText().toString();
@@ -713,7 +715,7 @@ public class SendActivity extends BaseActivity implements View.OnClickListener {
                     addressStr = edit_address.getText().toString();
                     if (!wagerrModule.chechAddress(addressStr))
                         throw new IllegalArgumentException("Address not valid");
-                    transaction.addOutput(amount, Address.fromBase58(wagerrModule.getConf().getNetworkParams(), addressStr));
+                    transaction.addOutput(amount, Address.fromBase58(WagerrCoreContext.NETWORK_PARAMETERS, addressStr));
                 }
 
                 // then check custom inputs if there is any

@@ -5,13 +5,13 @@ import android.content.Intent;
 import android.net.Uri;
 import android.widget.Toast;
 
+import com.wagerr.wallet.R;
+import com.wagerr.wallet.module.WagerrAppContext;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
-
-import com.wagerr.wallet.R;
-import com.wagerr.wallet.module.WagerrContext;
 
 /**
  * Created by furszy on 7/10/17.
@@ -38,7 +38,7 @@ public class IntentsUtils {
             intent.putParcelableArrayListExtra(Intent.EXTRA_STREAM, attachments);
         }
 
-        intent.putExtra(Intent.EXTRA_EMAIL, new String[]{WagerrContext.REPORT_EMAIL});
+        intent.putExtra(Intent.EXTRA_EMAIL, new String[]{ WagerrAppContext.REPORT_EMAIL});
         if (subject != null)
             intent.putExtra(Intent.EXTRA_SUBJECT, subject);
 //		ArrayList<CharSequence> str = new ArrayList<CharSequence>();

@@ -3,6 +3,8 @@ package wallet;
 import com.google.common.base.Charsets;
 import com.google.common.collect.Lists;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.wagerrj.core.Address;
 import org.wagerrj.core.BlockChain;
 import org.wagerrj.core.Coin;
@@ -27,8 +29,6 @@ import org.wagerrj.wallet.Wallet;
 import org.wagerrj.wallet.WalletFiles;
 import org.wagerrj.wallet.WalletProtobufSerializer;
 import org.wagerrj.wallet.listeners.WalletCoinsReceivedEventListener;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
@@ -51,10 +51,13 @@ import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
 import global.ContextWrapper;
+import global.WagerrCoreContext;
 import global.WalletConfiguration;
 import global.utils.Io;
 import wallet.exceptions.InsufficientInputsException;
 import wallet.exceptions.TxNotFoundException;
+
+import static global.WagerrCoreContext.Files.WALLET_FILENAME_PROTOBUF;
 
 /**
  * Created by furszy on 6/4/17.
@@ -128,14 +131,14 @@ public class WalletManager {
 
     private void initMnemonicCode() {
         try {
-            MnemonicCode.INSTANCE = new MnemonicCode(contextWrapper.openAssestsStream(conf.getMnemonicFilename()), null);
+            MnemonicCode.INSTANCE = new MnemonicCode(contextWrapper.openAssestsStream(WagerrCoreContext.Files.BIP39_WORDLIST_FILENAME), null);
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
     private void restoreOrCreateWallet() throws IOException {
-        walletFile = contextWrapper.getFileStreamPath(conf.getWalletProtobufFilename());
+        walletFile = contextWrapper.getFileStreamPath(WALLET_FILENAME_PROTOBUF);
         loadWalletFromProtobuf(walletFile);
     }
 
@@ -147,7 +150,7 @@ public class WalletManager {
                 walletStream = new FileInputStream(walletFile);
                 wallet = new WalletProtobufSerializer().readWallet(walletStream);
 
-                if (!wallet.getParams().equals(conf.getNetworkParams()))
+                if (!wallet.getParams().equals(WagerrCoreContext.NETWORK_PARAMETERS))
                     throw new UnreadableWalletException("bad wallet network parameters: " + wallet.getParams().getId());
 
             } catch (UnreadableWalletException e) {
@@ -170,7 +173,7 @@ public class WalletManager {
                 logger.error("inconsistent wallet " + walletFile);
                 wallet = restoreWalletFromBackup();
             }
-            if (!wallet.getParams().equals(conf.getNetworkParams()))
+            if (!wallet.getParams().equals(WagerrCoreContext.NETWORK_PARAMETERS))
                 throw new Error("bad wallet network parameters: " + wallet.getParams().getId());
 
             afterLoadWallet();
@@ -180,7 +183,7 @@ public class WalletManager {
             // generate wallet from random mnemonic
             wallet = generateRandomWallet();
             //add oracle watcg address after create wallet
-            wallet.addWatchedAddress(Address.fromBase58(conf.getNetworkParams(), conf.getOracleAddress()));
+            wallet.addWatchedAddress(Address.fromBase58(WagerrCoreContext.NETWORK_PARAMETERS, WagerrCoreContext.ORACLE_ADDRESS));
 
             saveWallet();
             backupWallet();
@@ -192,7 +195,7 @@ public class WalletManager {
         wallet.addCoinsReceivedEventListener(new WalletCoinsReceivedEventListener() {
             @Override
             public void onCoinsReceived(Wallet wallet, Transaction transaction, Coin coin, Coin coin1) {
-                org.wagerrj.core.Context.propagate(conf.getWalletContext());
+                org.wagerrj.core.Context.propagate(WagerrCoreContext.CONTEXT);
                 saveWallet();
             }
         });
@@ -204,7 +207,7 @@ public class WalletManager {
         }
         List<String> words = generateMnemonic(SEED_ENTROPY_EXTRA);
         DeterministicSeed seed = new DeterministicSeed(words, null, "", System.currentTimeMillis());
-        return Wallet.fromSeed(conf.getNetworkParams(), seed, DeterministicKeyChain.KeyChainType.BIP44_WAGERR_ONLY);
+        return Wallet.fromSeed(WagerrCoreContext.NETWORK_PARAMETERS, seed, DeterministicKeyChain.KeyChainType.BIP44_WAGERR_ONLY);
     }
 
     public static List<String> generateMnemonic(int entropyBitsSize) {
@@ -232,8 +235,8 @@ public class WalletManager {
 
     private void afterLoadWallet() throws IOException {
         //add oracle watcg address after restore wallet
-        wallet.addWatchedAddress(Address.fromBase58(conf.getNetworkParams(), conf.getOracleAddress()));
-        wallet.autosaveToFile(walletFile, conf.getWalletAutosaveDelayMs(), TimeUnit.MILLISECONDS, new WalletAutosaveEventListener(conf));
+        wallet.addWatchedAddress(Address.fromBase58(WagerrCoreContext.NETWORK_PARAMETERS, WagerrCoreContext.ORACLE_ADDRESS));
+        wallet.autosaveToFile(walletFile, WagerrCoreContext.Files.WALLET_AUTOSAVE_DELAY_MS, TimeUnit.MILLISECONDS, new WalletAutosaveEventListener(conf));
         try {
             // clean up spam
             wallet.cleanup();
@@ -242,7 +245,7 @@ public class WalletManager {
         }
 
         // make sure there is at least one recent backup
-        if (!contextWrapper.getFileStreamPath(conf.getKeyBackupProtobuf()).exists())
+        if (!contextWrapper.getFileStreamPath(WagerrCoreContext.Files.WALLET_KEY_BACKUP_PROTOBUF).exists())
             backupWallet();
 
         logger.info("Wallet loaded.");
@@ -257,14 +260,14 @@ public class WalletManager {
 
         InputStream is = null;
         try {
-            is = contextWrapper.openFileInput(conf.getKeyBackupProtobuf());
+            is = contextWrapper.openFileInput(WagerrCoreContext.Files.WALLET_KEY_BACKUP_PROTOBUF);
             final Wallet wallet = new WalletProtobufSerializer().readWallet(is, true, null);
             if (!wallet.isConsistent())
                 throw new Error("Inconsistent backup");
             // todo: acá tengo que resetear la wallet
             //resetBlockchain();
             //context.toast("Your wallet was reset!\\\\nIt will take some time to recover.");
-            logger.info("wallet restored from backup: '" + conf.getKeyBackupProtobuf() + "'");
+            logger.info("wallet restored from backup: '" + WagerrCoreContext.Files.WALLET_KEY_BACKUP_PROTOBUF + "'");
             return wallet;
         } catch (final IOException e) {
             throw new Error("cannot read backup", e);
@@ -284,7 +287,7 @@ public class WalletManager {
     public void restoreWalletFrom(List<String> mnemonic, long timestamp, boolean bip44) throws IOException, MnemonicException {
         MnemonicCode.INSTANCE.check(mnemonic);
         wallet = Wallet.fromSeed(
-                conf.getNetworkParams(),
+                WagerrCoreContext.NETWORK_PARAMETERS,
                 new DeterministicSeed(mnemonic, null, "", timestamp),
                 bip44 ? DeterministicKeyChain.KeyChainType.BIP44_WAGERR_ONLY : DeterministicKeyChain.KeyChainType.BIP32
         );
@@ -336,7 +339,7 @@ public class WalletManager {
         OutputStream os = null;
 
         try {
-            os = contextWrapper.openFileOutputPrivateMode(conf.getKeyBackupProtobuf());
+            os = contextWrapper.openFileOutputPrivateMode(WagerrCoreContext.Files.WALLET_KEY_BACKUP_PROTOBUF);
             walletProto.writeTo(os);
         } catch (FileNotFoundException e) {
             logger.error("problem writing wallet backup", e);
@@ -459,7 +462,7 @@ public class WalletManager {
         FileInputStream is = null;
         try {
             is = new FileInputStream(file);
-            restoreWallet(WalletUtils.restoreWalletFromProtobuf(is, conf.getNetworkParams()));
+            restoreWallet(WalletUtils.restoreWalletFromProtobuf(is, WagerrCoreContext.NETWORK_PARAMETERS));
             logger.info("successfully restored unencrypted wallet: {}", file);
         } finally {
             if (is != null) {
@@ -508,13 +511,13 @@ public class WalletManager {
     public void restoreWalletFromEncrypted(File file, String password) throws IOException {
         final BufferedReader cipherIn = new BufferedReader(new InputStreamReader(new FileInputStream(file), Charsets.UTF_8));
         final StringBuilder cipherText = new StringBuilder();
-        Io.copy(cipherIn, cipherText, conf.getBackupMaxChars());
+        Io.copy(cipherIn, cipherText, WagerrCoreContext.BACKUP_MAX_CHARS);
         cipherIn.close();
 
         final byte[] plainText = Crypto.decryptBytes(cipherText.toString(), password.toCharArray());
         final InputStream is = new ByteArrayInputStream(plainText);
 
-        restoreWallet(WalletUtils.restoreWalletFromProtobufOrBase58(is, conf.getNetworkParams(), conf.getBackupMaxChars()));
+        restoreWallet(WalletUtils.restoreWalletFromProtobufOrBase58(is, WagerrCoreContext.NETWORK_PARAMETERS, WagerrCoreContext.BACKUP_MAX_CHARS));
 
         logger.info("successfully restored encrypted wallet: {}", file);
     }
@@ -525,7 +528,7 @@ public class WalletManager {
      * @param xpub
      */
     public void watchOnlyMode(String xpub, DeterministicKeyChain.KeyChainType keyChainType) throws IOException {
-        Wallet wallet = Wallet.fromWatchingKeyB58(conf.getNetworkParams(), xpub, 0, keyChainType);
+        Wallet wallet = Wallet.fromWatchingKeyB58(WagerrCoreContext.NETWORK_PARAMETERS, xpub, 0, keyChainType);
         restoreWallet(wallet);
     }
 
@@ -644,7 +647,7 @@ public class WalletManager {
     }
 
     public String getExtPubKey() {
-        return wallet.getWatchingKey().serializePubB58(conf.getNetworkParams());
+        return wallet.getWatchingKey().serializePubB58(WagerrCoreContext.NETWORK_PARAMETERS);
     }
 
     public boolean isBip32Wallet() {

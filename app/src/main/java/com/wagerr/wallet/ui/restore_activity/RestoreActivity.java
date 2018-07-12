@@ -19,6 +19,14 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.wagerr.wallet.R;
+import com.wagerr.wallet.ui.base.BaseActivity;
+import com.wagerr.wallet.ui.base.dialogs.DialogListener;
+import com.wagerr.wallet.ui.base.dialogs.SimpleTextDialog;
+import com.wagerr.wallet.ui.tutorial_activity.TutorialActivity;
+import com.wagerr.wallet.ui.words_restore_activity.RestoreWordsActivity;
+import com.wagerr.wallet.utils.DialogsUtil;
+
 import org.apache.commons.codec.Charsets;
 
 import java.io.BufferedReader;
@@ -34,14 +42,7 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-import com.wagerr.wallet.R;
-import com.wagerr.wallet.module.WagerrContext;
-import com.wagerr.wallet.ui.base.BaseActivity;
-import com.wagerr.wallet.ui.base.dialogs.DialogListener;
-import com.wagerr.wallet.ui.base.dialogs.SimpleTextDialog;
-import com.wagerr.wallet.ui.tutorial_activity.TutorialActivity;
-import com.wagerr.wallet.ui.words_restore_activity.RestoreWordsActivity;
-import com.wagerr.wallet.utils.DialogsUtil;
+import global.WagerrCoreContext;
 import wallet.Crypto;
 import wallet.WalletUtils;
 import wallet.exceptions.CantRestoreEncryptedWallet;
@@ -113,7 +114,7 @@ public class RestoreActivity extends BaseActivity {
             @Override
             public View getDropDownView(int position, View row, ViewGroup parent) {
                 final File file = getItem(position);
-                final boolean isExternal = WagerrContext.Files.EXTERNAL_WALLET_BACKUP_DIR.equals(file.getParentFile());
+                final boolean isExternal = WagerrCoreContext.Files.EXTERNAL_WALLET_BACKUP_DIR.equals(file.getParentFile());
                 final boolean isEncrypted = Crypto.OPENSSL_FILE_FILTER.accept(file);
 
                 if (row == null)
@@ -139,8 +140,8 @@ public class RestoreActivity extends BaseActivity {
             }
         };
         final String path;
-        final String backupPath = WagerrContext.Files.EXTERNAL_WALLET_BACKUP_DIR.getAbsolutePath();
-        final String storagePath = WagerrContext.Files.EXTERNAL_STORAGE_DIR.getAbsolutePath();
+        final String backupPath = WagerrCoreContext.Files.EXTERNAL_WALLET_BACKUP_DIR.getAbsolutePath();
+        final String storagePath = WagerrCoreContext.Files.EXTERNAL_STORAGE_DIR.getAbsolutePath();
         if (backupPath.startsWith(storagePath))
             path = backupPath.substring(storagePath.length());
         else
@@ -168,7 +169,7 @@ public class RestoreActivity extends BaseActivity {
                 @Override
                 public void run() {
                     try {
-                        org.wagerrj.core.Context.propagate(WagerrContext.CONTEXT);
+                        org.wagerrj.core.Context.propagate(WagerrCoreContext.CONTEXT);
                         File file = (File) spinnerFiles.getSelectedItem();
                         if (WalletUtils.BACKUP_FILE_FILTER.accept(file)) {
                             wagerrModule.restoreWallet(file);
@@ -278,8 +279,8 @@ public class RestoreActivity extends BaseActivity {
         files.clear();
 
         // external storage
-        if (WagerrContext.Files.EXTERNAL_WALLET_BACKUP_DIR.exists() && WagerrContext.Files.EXTERNAL_WALLET_BACKUP_DIR.isDirectory()) {
-            File[] fileArray = WagerrContext.Files.EXTERNAL_WALLET_BACKUP_DIR.listFiles();
+        if (WagerrCoreContext.Files.EXTERNAL_WALLET_BACKUP_DIR.exists() && WagerrCoreContext.Files.EXTERNAL_WALLET_BACKUP_DIR.isDirectory()) {
+            File[] fileArray = WagerrCoreContext.Files.EXTERNAL_WALLET_BACKUP_DIR.listFiles();
             if (fileArray!=null) {
                 for (final File file : fileArray)
                     if (Crypto.OPENSSL_FILE_FILTER.accept(file))
@@ -288,7 +289,7 @@ public class RestoreActivity extends BaseActivity {
         }
         // internal storage
         for (final String filename : fileList())
-            if (filename.startsWith(WagerrContext.Files.WALLET_KEY_BACKUP_PROTOBUF + '.'))
+            if (filename.startsWith(WagerrCoreContext.Files.WALLET_KEY_BACKUP_PROTOBUF + '.'))
                 files.add(new File(getFilesDir(), filename));
 
         // sort
@@ -372,7 +373,7 @@ public class RestoreActivity extends BaseActivity {
             try {
                 if (file==null)return false;
                 reader = new BufferedReader(new InputStreamReader(new FileInputStream(file), Charsets.UTF_8));
-                WalletUtils.readKeys(reader, WagerrContext.NETWORK_PARAMETERS, WagerrContext.BACKUP_MAX_CHARS);
+                WalletUtils.readKeys(reader, WagerrCoreContext.NETWORK_PARAMETERS, WagerrCoreContext.BACKUP_MAX_CHARS);
                 return true;
             } catch (final IOException x) {
                 return false;

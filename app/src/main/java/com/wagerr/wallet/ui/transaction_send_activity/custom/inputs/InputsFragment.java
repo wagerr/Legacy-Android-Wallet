@@ -12,6 +12,11 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.wagerr.wallet.R;
+import com.wagerr.wallet.ui.base.BaseRecyclerFragment;
+import com.wagerr.wallet.ui.base.tools.adapter.BaseRecyclerAdapter;
+import com.wagerr.wallet.ui.base.tools.adapter.BaseRecyclerViewHolder;
+
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -19,11 +24,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import com.wagerr.wallet.R;
-import com.wagerr.wallet.module.WagerrContext;
-import com.wagerr.wallet.ui.base.BaseRecyclerFragment;
-import com.wagerr.wallet.ui.base.tools.adapter.BaseRecyclerAdapter;
-import com.wagerr.wallet.ui.base.tools.adapter.BaseRecyclerViewHolder;
+import global.WagerrCoreContext;
 import global.wrappers.InputWrapper;
 import wallet.exceptions.TxNotFoundException;
 
@@ -179,7 +180,7 @@ public class InputsFragment extends BaseRecyclerFragment<InputsFragment.InputSel
 
                     data.setSelected(found);
 
-                    inputHolder.txt_address.setText(data.getInputWrapper().getLabel(WagerrContext.NETWORK_PARAMETERS));
+                    inputHolder.txt_address.setText(data.getInputWrapper().getLabel(WagerrCoreContext.NETWORK_PARAMETERS));
                     inputHolder.txt_amount.setText(data.getInputWrapper().getUnspent().getValue().toFriendlyString());
                     inputHolder.txt_confirmations_amount.setText(data.getInputWrapper().getUnspent().getParentTransactionDepthInBlocks()+" "+getString(R.string.confimations));
                     inputHolder.txt_date.setText(simpleDateFormat.format(data.getInputWrapper().getUnspent().getParentTransaction().getUpdateTime()));

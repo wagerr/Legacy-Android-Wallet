@@ -8,17 +8,18 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.Toast;
 
-import java.util.List;
-import java.util.Random;
-
-import network.PeerGlobalData;
-import network.PeerData;
 import com.wagerr.wallet.R;
-import com.wagerr.wallet.module.WagerrContext;
 import com.wagerr.wallet.ui.backup_mnemonic_activity.MnemonicActivity;
 import com.wagerr.wallet.ui.base.BaseActivity;
 import com.wagerr.wallet.ui.settings_pincode_activity.KeyboardFragment;
 import com.wagerr.wallet.ui.start_activity.StartActivity;
+
+import java.util.List;
+import java.util.Random;
+
+import global.WagerrCoreContext;
+import network.PeerData;
+import network.PeerGlobalData;
 
 import static com.wagerr.wallet.ui.backup_mnemonic_activity.MnemonicActivity.INTENT_EXTRA_INIT_VIEW;
 
@@ -68,7 +69,7 @@ public class PincodeActivity extends BaseActivity implements KeyboardFragment.on
         if (wagerrApplication.getAppConf().getTrustedNode()==null){
             // select random trusted node
             List<PeerData> nodes;
-            if (WagerrContext.IS_TEST) {
+            if (WagerrCoreContext.IS_TEST) {
                 nodes = PeerGlobalData.listTrustedTestHosts();
             } else {
                 nodes = PeerGlobalData.listTrustedHosts();

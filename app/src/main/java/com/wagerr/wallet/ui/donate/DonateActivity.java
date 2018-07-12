@@ -8,17 +8,17 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import org.wagerrj.core.Coin;
-import org.wagerrj.core.InsufficientMoneyException;
-import org.wagerrj.core.Transaction;
-
 import com.wagerr.wallet.R;
-import com.wagerr.wallet.module.WagerrContext;
+import com.wagerr.wallet.module.WagerrAppContext;
 import com.wagerr.wallet.service.WagerrWalletService;
 import com.wagerr.wallet.ui.base.BaseDrawerActivity;
 import com.wagerr.wallet.ui.base.dialogs.SimpleTextDialog;
 import com.wagerr.wallet.utils.DialogsUtil;
 import com.wagerr.wallet.utils.NavigationUtils;
+
+import org.wagerrj.core.Coin;
+import org.wagerrj.core.InsufficientMoneyException;
+import org.wagerrj.core.Transaction;
 
 import static com.wagerr.wallet.service.IntentsConstants.ACTION_BROADCAST_TRANSACTION;
 import static com.wagerr.wallet.service.IntentsConstants.DATA_TRANSACTION_HASH;
@@ -56,7 +56,7 @@ public class DonateActivity extends BaseDrawerActivity {
     private void send() {
         try {
             // create the tx
-            String addressStr = WagerrContext.DONATE_ADDRESS;
+            String addressStr = WagerrAppContext.DONATE_ADDRESS;
             if (!wagerrModule.chechAddress(addressStr))
                 throw new IllegalArgumentException("Address not valid");
             String amountStr = edit_amount.getText().toString();

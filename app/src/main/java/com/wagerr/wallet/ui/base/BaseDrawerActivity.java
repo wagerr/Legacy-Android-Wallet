@@ -19,16 +19,16 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import chain.BlockchainState;
 import com.wagerr.wallet.BuildConfig;
 import com.wagerr.wallet.R;
+import com.wagerr.wallet.module.WagerrAppContext;
 import com.wagerr.wallet.ui.bet.event.BetEventActivity;
 import com.wagerr.wallet.ui.contacts_activity.ContactsActivity;
-import com.wagerr.wallet.ui.donate.DonateActivity;
 import com.wagerr.wallet.ui.settings_activity.SettingsActivity;
 import com.wagerr.wallet.ui.wallet_activity.WalletActivity;
 
-import static com.wagerr.wallet.module.WagerrContext.OUT_OF_SYNC_TIME;
+import chain.BlockchainState;
+
 import static com.wagerr.wallet.service.IntentsConstants.ACTION_NOTIFICATION;
 import static com.wagerr.wallet.service.IntentsConstants.INTENT_BROADCAST_DATA_BLOCKCHAIN_STATE;
 import static com.wagerr.wallet.service.IntentsConstants.INTENT_BROADCAST_DATA_PEER_CONNECTED;
@@ -100,7 +100,7 @@ public class BaseDrawerActivity extends WagerrActivity implements NavigationView
     private void checkState(){
         long now = System.currentTimeMillis();
         long lastBlockTime = wagerrApplication.getAppConf().getLastBestChainBlockTime();
-        if (lastBlockTime+OUT_OF_SYNC_TIME>now){
+        if (lastBlockTime+ WagerrAppContext.OUT_OF_SYNC_TIME>now){
             // check if i'm syncing or i'm synched
             long peerHeight = wagerrModule.getConnectedPeerHeight();
             if (peerHeight!=-1){

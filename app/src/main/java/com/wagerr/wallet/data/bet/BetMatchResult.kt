@@ -1,6 +1,5 @@
 package com.wagerr.wallet.data.bet
 
-import android.util.Log
 import com.wagerr.wallet.data.worldcup.model.WorldCupMatch
 import java.text.SimpleDateFormat
 import java.util.*

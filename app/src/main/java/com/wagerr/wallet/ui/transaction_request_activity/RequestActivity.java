@@ -16,18 +16,19 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.google.zxing.WriterException;
-
-import org.wagerrj.core.Coin;
-import org.wagerrj.core.NetworkParameters;
-import org.wagerrj.core.Transaction;
-import org.wagerrj.uri.WagerrURI;
-
 import com.wagerr.wallet.R;
 import com.wagerr.wallet.ui.base.BaseActivity;
 import com.wagerr.wallet.ui.base.dialogs.SimpleTextDialog;
 import com.wagerr.wallet.ui.transaction_send_activity.AmountInputFragment;
 import com.wagerr.wallet.utils.DialogsUtil;
 import com.wagerr.wallet.utils.NavigationUtils;
+
+import org.wagerrj.core.Coin;
+import org.wagerrj.core.NetworkParameters;
+import org.wagerrj.core.Transaction;
+import org.wagerrj.uri.WagerrURI;
+
+import global.WagerrCoreContext;
 
 import static android.graphics.Color.WHITE;
 import static com.wagerr.wallet.ui.qr_activity.MyAddressFragment.convertDpToPx;
@@ -111,7 +112,7 @@ public class RequestActivity extends BaseActivity implements View.OnClickListene
 
         addressStr = wagerrModule.getFreshNewAddress().toBase58();
 
-        NetworkParameters params = wagerrModule.getConf().getNetworkParams();
+        NetworkParameters params = WagerrCoreContext.NETWORK_PARAMETERS;
 
         String wagerrURI = WagerrURI.convertToBitcoinURI(
                 params,

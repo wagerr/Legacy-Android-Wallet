@@ -18,16 +18,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.common.collect.Lists;
-
-import org.wagerrj.crypto.MnemonicException;
-
-import java.io.IOException;
-import java.util.List;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-
 import com.wagerr.wallet.R;
-import com.wagerr.wallet.module.WagerrContext;
+import com.wagerr.wallet.module.WagerrAppContext;
 import com.wagerr.wallet.ui.base.BaseActivity;
 import com.wagerr.wallet.ui.base.dialogs.SimpleTwoButtonsDialog;
 import com.wagerr.wallet.ui.tutorial_activity.TutorialActivity;
@@ -36,7 +28,13 @@ import com.wagerr.wallet.utils.AnimationUtils;
 import com.wagerr.wallet.utils.CrashReporter;
 import com.wagerr.wallet.utils.DialogsUtil;
 
-import static com.wagerr.wallet.module.WagerrContext.WAGERR_ANDROID_REPO_FIRST_COMMIT_BY_LOOOR_TOR_TIME;
+import org.wagerrj.crypto.MnemonicException;
+
+import java.io.IOException;
+import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+
 
 /**
  * Created by Neoperol on 7/19/17.
@@ -213,7 +211,7 @@ public class RestoreWordsActivity extends BaseActivity {
 
                                             boolean isBip32 = check_bip32.isChecked();
 
-                                            wagerrModule.restoreWallet(mnemonic, WAGERR_ANDROID_REPO_FIRST_COMMIT_BY_LOOOR_TOR_TIME,!isBip32);
+                                            wagerrModule.restoreWallet(mnemonic, WagerrAppContext.WAGERR_ANDROID_REPO_FIRST_COMMIT_BY_LOOOR_TOR_TIME,!isBip32);
 
                                             message = getString(R.string.restore_mnemonic);
                                             result = true;
@@ -375,7 +373,7 @@ public class RestoreWordsActivity extends BaseActivity {
                 init(txtWord17,txtWord18,txtWord19,txtWord20,txtWord21,txtWord22,txtWord23,txtWord24);
                 txt_bip32_message = (TextView) root.findViewById(R.id.txt_bip32_message);
                 check_bip32 = (CheckBox) root.findViewById(R.id.check_bip32);
-                txt_bip32_message.setText(getString(R.string.restore_bip32_warning, WagerrContext.ENABLE_BIP44_APP_VERSION));
+                txt_bip32_message.setText(getString(R.string.restore_bip32_warning, WagerrAppContext.ENABLE_BIP44_APP_VERSION));
 
             }
 

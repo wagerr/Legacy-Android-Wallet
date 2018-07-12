@@ -4,37 +4,30 @@ import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
 import android.support.v4.content.ContextCompat
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-
-import org.wagerrj.core.Coin
-import org.wagerrj.core.TransactionOutput
-import org.wagerrj.utils.MonetaryFormat
-import org.slf4j.Logger
-import org.slf4j.LoggerFactory
-
-import java.math.BigDecimal
-import java.util.Collections
-import java.util.Comparator
-
+import bet.DRAW_SYMBOL
+import bet.isBetAction
+import bet.toBetAction
 import com.wagerr.wallet.R
-import global.WagerrRate
-
-import com.wagerr.wallet.data.bet.BetAction
-import com.wagerr.wallet.data.bet.*
 import com.wagerr.wallet.ui.base.BaseRecyclerFragment
 import com.wagerr.wallet.ui.base.tools.adapter.BaseRecyclerAdapter
 import com.wagerr.wallet.ui.base.tools.adapter.BaseRecyclerViewHolder
 import com.wagerr.wallet.ui.base.tools.adapter.ListItemListeners
 import com.wagerr.wallet.ui.bet_action_detail.BetActionDetailActivity
-import com.wagerr.wallet.ui.transaction_detail_activity.TransactionDetailActivity
-import global.wrappers.TransactionWrapper
-
 import com.wagerr.wallet.ui.transaction_detail_activity.FragmentTxDetail.IS_DETAIL
 import com.wagerr.wallet.ui.transaction_detail_activity.FragmentTxDetail.TX_WRAPPER
+import com.wagerr.wallet.ui.transaction_detail_activity.TransactionDetailActivity
 import com.wagerr.wallet.utils.TxUtils.getAddressOrContact
+import global.WagerrRate
+import global.wrappers.TransactionWrapper
+import org.slf4j.LoggerFactory
+import org.wagerrj.core.Coin
+import org.wagerrj.utils.MonetaryFormat
+import java.math.BigDecimal
+import java.util.Collections
+import java.util.Comparator
 
 /**
  * Created by furszy on 6/29/17.

@@ -1,10 +1,7 @@
 package com.wagerr.wallet.data.bet
 
 import android.text.TextUtils
-import com.wagerr.wallet.WagerrApplication
-import com.wagerr.wallet.module.WagerrContext
-import io.reactivex.Observable
-import io.reactivex.schedulers.Schedulers
+import global.WagerrCoreContext
 import org.apache.commons.codec.binary.Hex
 import org.wagerrj.core.Coin
 import org.wagerrj.core.Transaction
@@ -38,7 +35,7 @@ fun Transaction.toBetAction(): BetAction? {
 
 fun List<Transaction>.toBetActions(): List<BetAction>? {
     return this.filter {
-        it.updateTime.time > WagerrContext.ORACLE_BET_EVENT_START_TIME
+        it.updateTime.time > WagerrCoreContext.ORACLE_BET_EVENT_START_TIME
     }.mapNotNull {
         it.toBetAction()
     }

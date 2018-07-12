@@ -11,6 +11,13 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.wagerr.wallet.R;
+import com.wagerr.wallet.ui.base.BaseFragment;
+import com.wagerr.wallet.ui.base.tools.adapter.BaseRecyclerAdapter;
+import com.wagerr.wallet.ui.base.tools.adapter.BaseRecyclerViewHolder;
+import com.wagerr.wallet.ui.base.tools.adapter.ListItemListeners;
+import com.wagerr.wallet.utils.DialogsUtil;
+
 import org.wagerrj.core.Coin;
 import org.wagerrj.core.Transaction;
 import org.wagerrj.core.TransactionInput;
@@ -23,14 +30,9 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.wagerr.wallet.R;
 import global.AddressLabel;
-import com.wagerr.wallet.ui.base.BaseFragment;
-import com.wagerr.wallet.ui.base.tools.adapter.BaseRecyclerAdapter;
-import com.wagerr.wallet.ui.base.tools.adapter.BaseRecyclerViewHolder;
-import com.wagerr.wallet.ui.base.tools.adapter.ListItemListeners;
+import global.WagerrCoreContext;
 import global.wrappers.TransactionWrapper;
-import com.wagerr.wallet.utils.DialogsUtil;
 import wallet.exceptions.TxNotFoundException;
 
 import static com.wagerr.wallet.ui.transaction_send_activity.custom.inputs.InputsActivity.INTENT_NO_TOTAL_AMOUNT;
@@ -75,7 +77,7 @@ public class FragmentTxDetail extends BaseFragment implements View.OnClickListen
                 transactionWrapper.setTransaction(wagerrModule.getTx(transactionWrapper.getTxId()));
                 isTxDetail = true;
             }else {
-                transactionWrapper.setTransaction(new Transaction(wagerrModule.getConf().getNetworkParams(),intent.getByteArrayExtra(TX)));
+                transactionWrapper.setTransaction(new Transaction(WagerrCoreContext.NETWORK_PARAMETERS,intent.getByteArrayExtra(TX)));
                 if (intent.hasExtra(TX_MEMO)){
                     transactionWrapper.getTransaction().setMemo(intent.getStringExtra(TX_MEMO));
                 }
@@ -166,14 +168,14 @@ public class FragmentTxDetail extends BaseFragment implements View.OnClickListen
                         label = addressLabel.getName();
                     } else
                         //label = addressLabel.getAddresses().get(0);
-                        label = transactionOutput.getScriptPubKey().getToAddress(wagerrModule.getConf().getNetworkParams(),true).toBase58();
+                        label = transactionOutput.getScriptPubKey().getToAddress(WagerrCoreContext.NETWORK_PARAMETERS,true).toBase58();
                 }else {
-                    label = transactionOutput.getScriptPubKey().getToAddress(wagerrModule.getConf().getNetworkParams(),true).toBase58();
+                    label = transactionOutput.getScriptPubKey().getToAddress(WagerrCoreContext.NETWORK_PARAMETERS,true).toBase58();
                 }
             }else {
                 Script script = transactionOutput.getScriptPubKey();
                 if (script.isPayToScriptHash() || script.isSentToRawPubKey() || script.isSentToAddress()) {
-                    label = script.getToAddress(wagerrModule.getConf().getNetworkParams(), true).toBase58();
+                    label = script.getToAddress(WagerrCoreContext.NETWORK_PARAMETERS, true).toBase58();
                 } else if (script.isOpReturn()) {
                     label = script.toString();
                 } else {

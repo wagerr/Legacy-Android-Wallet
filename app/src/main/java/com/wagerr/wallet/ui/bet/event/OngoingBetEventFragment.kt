@@ -12,15 +12,19 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
 import com.wagerr.wallet.R
+import com.wagerr.wallet.data.bet.BetActionForSend
+import com.wagerr.wallet.data.bet.BetEvent
+import com.wagerr.wallet.data.bet.BetType
+import com.wagerr.wallet.data.bet.DRAW_SYMBOL
+import com.wagerr.wallet.data.bet.toBetTransactionData
 import com.wagerr.wallet.module.bet.BetEventFetcher
 import com.wagerr.wallet.ui.base.BaseFragment
-import io.reactivex.rxkotlin.plusAssign
-import kotlinx.android.synthetic.main.fragment_ongoing_bet_event.*
-import com.wagerr.wallet.data.bet.*
-import com.wagerr.wallet.module.WagerrContext
 import com.wagerr.wallet.ui.bet.result.BetEventDetailActivity
 import com.wagerr.wallet.utils.wrapContent
+import global.WagerrCoreContext
 import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.rxkotlin.plusAssign
+import kotlinx.android.synthetic.main.fragment_ongoing_bet_event.*
 
 
 class OngoingBetEventFragment : BaseFragment() {
@@ -58,7 +62,7 @@ class OngoingBetEventFragment : BaseFragment() {
 
             val betEvent = adapter.getItem(position)
             betEvent?.let {
-                if (it.timeStamp < System.currentTimeMillis() + WagerrContext.STOP_ACCEPT_BET_BEFORE_EVENT_TIME) {
+                if (it.timeStamp < System.currentTimeMillis() + WagerrCoreContext.STOP_ACCEPT_BET_BEFORE_EVENT_TIME) {
                     (activity as BetEventActivity).showErrorDialog(getString(R.string.warning_title),getString(R.string.bet_event_stop))
                     return@setOnItemChildClickListener
                 }
@@ -110,12 +114,13 @@ class OngoingBetEventFragment : BaseFragment() {
             }
         }
         betGo.setOnClickListener {
-            if (event.timeStamp < System.currentTimeMillis() + WagerrContext.STOP_ACCEPT_BET_BEFORE_EVENT_TIME) {
+            if (event.timeStamp < System.currentTimeMillis() + WagerrCoreContext.STOP_ACCEPT_BET_BEFORE_EVENT_TIME) {
                 (activity as BetEventActivity).showErrorDialog(getString(R.string.warning_title),getString(R.string.bet_event_stop))
                 dialog.dismiss()
                 return@setOnClickListener
             }
-            (activity as BetEventActivity).sendBetTransaction(betAmount.text.toString(), BetActionForSend(event.eventId, when (betType) {
+            (activity as BetEventActivity).sendBetTransaction(betAmount.text.toString(), BetActionForSend(
+                    event.eventId, when (betType) {
                 BetType.BetTypeHomeWin -> event.homeTeam
                 BetType.BetTypeDraw -> DRAW_SYMBOL
                 BetType.BetTypeAwayWin -> event.awayTeam

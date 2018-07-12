@@ -16,16 +16,17 @@ import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
-import java.io.File;
-import java.io.IOException;
-
 import com.wagerr.wallet.R;
-import com.wagerr.wallet.module.WagerrContext;
 import com.wagerr.wallet.module.wallet.WalletBackupHelper;
 import com.wagerr.wallet.ui.backup_mnemonic_activity.MnemonicActivity;
 import com.wagerr.wallet.ui.base.BaseActivity;
 import com.wagerr.wallet.ui.base.dialogs.SimpleTextDialog;
 import com.wagerr.wallet.utils.DialogsUtil;
+
+import java.io.File;
+import java.io.IOException;
+
+import global.WagerrCoreContext;
 
 /**
  * Created by Neoperol on 5/18/17.
@@ -66,7 +67,7 @@ public class SettingsBackupActivity extends BaseActivity {
         new Thread(new Runnable() {
             @Override
             public void run() {
-                org.wagerrj.core.Context.propagate(WagerrContext.CONTEXT);
+                org.wagerrj.core.Context.propagate(WagerrCoreContext.CONTEXT);
                 backup();
                 runOnUiThread(new Runnable() {
                     @Override

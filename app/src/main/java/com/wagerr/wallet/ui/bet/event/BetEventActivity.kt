@@ -2,42 +2,37 @@ package com.wagerr.wallet.ui.bet.event
 
 import android.app.Activity
 import android.content.Context
-import android.os.Bundle
-import android.view.ViewGroup
-
-import com.wagerr.wallet.R
-import com.wagerr.wallet.ui.base.BaseDrawerActivity
-
 import android.content.Intent
-import android.graphics.Color
-import android.graphics.drawable.ColorDrawable
 import android.net.ConnectivityManager
-import android.os.Build
+import android.os.Bundle
 import android.support.v4.content.ContextCompat
-import android.support.v7.app.AlertDialog
 import android.util.Log
-import android.widget.*
+import android.view.ViewGroup
+import android.widget.Toast
 import chain.BlockchainState
-import com.wagerr.wallet.data.bet.*
+import com.wagerr.wallet.R
 import com.wagerr.wallet.service.IntentsConstants.ACTION_BROADCAST_TRANSACTION
 import com.wagerr.wallet.service.IntentsConstants.DATA_TRANSACTION_HASH
 import com.wagerr.wallet.service.WagerrWalletService
+import com.wagerr.wallet.ui.base.BaseDrawerActivity
 import com.wagerr.wallet.ui.base.dialogs.SimpleTextDialog
-import com.wagerr.wallet.ui.base.dialogs.SimpleTwoButtonsDialog
-import com.wagerr.wallet.ui.transaction_detail_activity.FragmentTxDetail.*
+import com.wagerr.wallet.ui.transaction_detail_activity.FragmentTxDetail.TX
+import com.wagerr.wallet.ui.transaction_detail_activity.FragmentTxDetail.TX_WRAPPER
 import com.wagerr.wallet.ui.transaction_send_activity.SendTxDetailActivity
-import com.wagerr.wallet.utils.*
+import com.wagerr.wallet.utils.AnimationUtils
+import com.wagerr.wallet.utils.CrashReporter
+import com.wagerr.wallet.utils.DialogsUtil
+import com.wagerr.wallet.utils.NavigationUtils
+import global.WagerrCoreContext
 import global.exceptions.NoPeerConnectedException
 import global.wrappers.TransactionWrapper
 import kotlinx.android.synthetic.main.activity_bet_event.*
 import net.lucode.hackware.magicindicator.ViewPagerHelper
-import net.lucode.hackware.magicindicator.buildins.UIUtil
 import net.lucode.hackware.magicindicator.buildins.commonnavigator.CommonNavigator
 import net.lucode.hackware.magicindicator.buildins.commonnavigator.abs.CommonNavigatorAdapter
 import net.lucode.hackware.magicindicator.buildins.commonnavigator.abs.IPagerIndicator
 import net.lucode.hackware.magicindicator.buildins.commonnavigator.abs.IPagerTitleView
 import net.lucode.hackware.magicindicator.buildins.commonnavigator.indicators.LinePagerIndicator
-import net.lucode.hackware.magicindicator.buildins.commonnavigator.indicators.TriangularPagerIndicator
 import net.lucode.hackware.magicindicator.buildins.commonnavigator.titles.ColorTransitionPagerTitleView
 import org.wagerrj.core.Coin
 import org.wagerrj.core.InsufficientMoneyException
@@ -156,7 +151,7 @@ class BetEventActivity : BaseDrawerActivity() {
                 throw IllegalArgumentException("Incorrect bet amount. Please ensure your bet is beteen 1 - 10000 WGR inclusive.")
             if (amount.isGreaterThan(Coin.valueOf(wagerrModule.availableBalance)))
                 throw IllegalArgumentException("Insuficient balance")
-            val params = wagerrModule.conf.networkParams
+            val params = WagerrCoreContext.NETWORK_PARAMETERS
 
             transaction = Transaction(params)
             // then outputs
@@ -202,7 +197,7 @@ class BetEventActivity : BaseDrawerActivity() {
         super.onRestoreInstanceState(savedInstanceState)
         // todo: test this roting the screen..
         if (savedInstanceState.containsKey(TX)) {
-            transaction = Transaction(wagerrModule.conf.networkParams, savedInstanceState.getByteArray(TX))
+            transaction = Transaction(WagerrCoreContext.NETWORK_PARAMETERS, savedInstanceState.getByteArray(TX))
         }
     }
 

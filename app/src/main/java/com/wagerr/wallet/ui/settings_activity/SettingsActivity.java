@@ -8,17 +8,12 @@ import android.text.Html;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.CompoundButton;
-import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.io.IOException;
-import java.util.ArrayList;
-
 import com.wagerr.wallet.BuildConfig;
 import com.wagerr.wallet.R;
-import com.wagerr.wallet.module.WagerrContext;
+import com.wagerr.wallet.module.WagerrAppContext;
 import com.wagerr.wallet.ui.base.BaseDrawerActivity;
 import com.wagerr.wallet.ui.base.dialogs.SimpleTwoButtonsDialog;
 import com.wagerr.wallet.ui.export_account.ExportKeyActivity;
@@ -35,6 +30,11 @@ import com.wagerr.wallet.utils.DialogsUtil;
 import com.wagerr.wallet.utils.IntentsUtils;
 import com.wagerr.wallet.utils.NavigationUtils;
 import com.wagerr.wallet.utils.ReportIssueDialogBuilder;
+
+import java.io.IOException;
+import java.util.ArrayList;
+
+import global.WagerrCoreContext;
 
 import static com.wagerr.wallet.ui.tutorial_activity.TutorialActivity.INTENT_EXTRA_INFO_TUTORIAL;
 
@@ -128,7 +128,7 @@ public class SettingsActivity extends BaseDrawerActivity implements View.OnClick
         if (!isOnForeground)return;
         txt_network_info.setText(
                 Html.fromHtml(
-                        "Network<br><font color=#dd0000>"+wagerrModule.getConf().getNetworkParams().getId()+
+                        "Network<br><font color=#dd0000>"+ WagerrCoreContext.NETWORK_PARAMETERS.getId()+
                                 "</font><br>" +
                                 "Height<br><font color=#dd0000>"+wagerrModule.getChainHeight()+"</font><br>" +
                                 "Protocol Version<br><font color=#dd0000>"+
@@ -212,7 +212,7 @@ public class SettingsActivity extends BaseDrawerActivity implements View.OnClick
             @Nullable
             @Override
             protected CharSequence subject() {
-                return WagerrContext.REPORT_SUBJECT_ISSUE+" "+ wagerrApplication.getVersionName();
+                return WagerrAppContext.REPORT_SUBJECT_ISSUE+" "+ wagerrApplication.getVersionName();
             }
 
             @Nullable

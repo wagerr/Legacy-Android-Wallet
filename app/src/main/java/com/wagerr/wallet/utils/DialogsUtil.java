@@ -12,6 +12,11 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.wagerr.wallet.R;
+import com.wagerr.wallet.ui.address_add_activity.AddContactActivity;
+import com.wagerr.wallet.ui.base.dialogs.SimpleTextDialog;
+import com.wagerr.wallet.ui.base.dialogs.SimpleTwoButtonsDialog;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -21,12 +26,8 @@ import java.net.Socket;
 import java.net.SocketAddress;
 import java.util.concurrent.atomic.AtomicBoolean;
 
+import global.WagerrCoreContext;
 import network.PeerData;
-import com.wagerr.wallet.R;
-import com.wagerr.wallet.module.WagerrContext;
-import com.wagerr.wallet.ui.address_add_activity.AddContactActivity;
-import com.wagerr.wallet.ui.base.dialogs.SimpleTextDialog;
-import com.wagerr.wallet.ui.base.dialogs.SimpleTwoButtonsDialog;
 
 /**
  * Created by furszy on 7/5/17.
@@ -112,7 +113,7 @@ public class DialogsUtil {
                     final String host = editHost.getText().toString();
                     final String tcpPortStr = editTcp.getText().toString();
                     final String sslPortStr = editSsl.getText().toString();
-                    int tcpPort = WagerrContext.NETWORK_PARAMETERS.getPort();
+                    int tcpPort = WagerrCoreContext.NETWORK_PARAMETERS.getPort();
                     int sslPort = 0;
                     if (tcpPortStr.length() > 0) {
                         tcpPort = Integer.valueOf(tcpPortStr);

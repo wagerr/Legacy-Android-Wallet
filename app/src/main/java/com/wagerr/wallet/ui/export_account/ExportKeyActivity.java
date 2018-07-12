@@ -12,14 +12,14 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.zxing.WriterException;
-
-import org.wagerrj.crypto.DeterministicKey;
-
 import com.wagerr.wallet.R;
-import com.wagerr.wallet.module.WagerrContext;
 import com.wagerr.wallet.ui.base.BaseActivity;
 import com.wagerr.wallet.utils.AndroidUtils;
 import com.wagerr.wallet.utils.CrashReporter;
+
+import org.wagerrj.crypto.DeterministicKey;
+
+import global.WagerrCoreContext;
 
 import static android.graphics.Color.WHITE;
 import static com.wagerr.wallet.utils.QrUtils.encodeAsBitmap;
@@ -60,7 +60,7 @@ public class ExportKeyActivity extends BaseActivity implements View.OnClickListe
 
     private void initValues() throws WriterException {
         DeterministicKey deterministicKey = wagerrModule.getWatchingKey();
-        xpubKey = deterministicKey.serializePubB58(WagerrContext.NETWORK_PARAMETERS);
+        xpubKey = deterministicKey.serializePubB58(WagerrCoreContext.NETWORK_PARAMETERS);
         txt_title.setText(R.string.public_key);
         txt_key.setText(xpubKey);
         txt_key.setOnClickListener(this);

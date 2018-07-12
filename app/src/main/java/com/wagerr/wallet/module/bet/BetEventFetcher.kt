@@ -1,12 +1,10 @@
 package com.wagerr.wallet.module.bet
 
-import android.util.Log
 import com.wagerr.wallet.WagerrApplication
-import com.wagerr.wallet.data.bet.*
-import com.wagerr.wallet.module.WagerrContext
+import com.wagerr.wallet.data.bet.BetEvent
+import com.wagerr.wallet.data.bet.toBetEvents
+import global.WagerrCoreContext
 import io.reactivex.Observable
-import io.reactivex.Scheduler
-import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 
 class BetEventFetcher {
@@ -15,7 +13,7 @@ class BetEventFetcher {
         fun getCanBetBetEvents(): Observable<List<BetEvent>?> {
             return Observable.fromCallable {
                 WagerrApplication.getInstance().module.watchedSpent.toBetEvents()?.filter {
-                    it.timeStamp > System.currentTimeMillis() + WagerrContext.STOP_ACCEPT_BET_BEFORE_EVENT_TIME
+                    it.timeStamp > System.currentTimeMillis() + WagerrCoreContext.STOP_ACCEPT_BET_BEFORE_EVENT_TIME
                 }?.sortedByDescending { it.timeStamp }?.distinctBy { it.eventId }?.sortedBy { it.timeStamp }
             }.subscribeOn(Schedulers.io())
         }
@@ -23,7 +21,7 @@ class BetEventFetcher {
         fun getFinishedBetEvents(): Observable<List<BetEvent>?> {
             return Observable.fromCallable {
                 WagerrApplication.getInstance().module.watchedSpent.toBetEvents()?.filter {
-                    it.timeStamp < System.currentTimeMillis() + WagerrContext.STOP_ACCEPT_BET_BEFORE_EVENT_TIME
+                    it.timeStamp < System.currentTimeMillis() + WagerrCoreContext.STOP_ACCEPT_BET_BEFORE_EVENT_TIME
                 }?.sortedByDescending { it.timeStamp }?.distinctBy { it.eventId }?.sortedBy { it.timeStamp }
             }.subscribeOn(Schedulers.io())
         }

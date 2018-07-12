@@ -13,12 +13,13 @@ import com.google.common.base.Charsets;
 import com.google.common.base.Joiner;
 import com.google.common.base.Strings;
 import com.google.common.base.Throwables;
+import com.wagerr.wallet.WagerrApplication;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.wagerrj.core.Transaction;
 import org.wagerrj.core.TransactionOutput;
 import org.wagerrj.wallet.Wallet;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -38,9 +39,7 @@ import java.util.Locale;
 import java.util.Set;
 import java.util.TimeZone;
 
-import com.wagerr.wallet.WagerrApplication;
-import com.wagerr.wallet.module.WagerrContext;
-
+import global.WagerrCoreContext;
 
 public class CrashReporter {
 
@@ -234,7 +233,7 @@ public class CrashReporter {
 
 		report.append("Version: " + pi.versionName + " (" + pi.versionCode + ")\n");
 		report.append("Package: " + pi.packageName + "\n");
-		report.append("Test/Prod: " + (WagerrContext.IS_TEST ? "test" : "prod") + "\n");
+		report.append("Test/Prod: " + (WagerrCoreContext.IS_TEST ? "test" : "prod") + "\n");
 		report.append("Timezone: " + TimeZone.getDefault().getID() + "\n");
 		calendar.setTimeInMillis(System.currentTimeMillis());
 		report.append("Time: " + String.format(Locale.US, "%tF %tT %tZ", calendar, calendar, calendar) + "\n");
@@ -249,7 +248,7 @@ public class CrashReporter {
 		calendar.setTimeInMillis(lastBackupTime);
 		report.append(
 				"Time of backup: " + (lastBackupTime > 0 ? String.format(Locale.US, "%tF %tT %tZ", calendar, calendar, calendar) : "none") + "\n");
-		report.append("Network: " + WagerrContext.NETWORK_PARAMETERS.getId() + "\n");
+		report.append("Network: " + WagerrCoreContext.NETWORK_PARAMETERS.getId() + "\n");
 		final Wallet wallet = application.getModule().getWallet();
 		report.append("Encrypted: " + wallet.isEncrypted() + "\n");
 		report.append("Keychain size: " + wallet.getKeyChainGroupSize() + "\n");

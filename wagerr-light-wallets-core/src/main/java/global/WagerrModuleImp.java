@@ -2,9 +2,12 @@ package global;
 
 import com.google.common.util.concurrent.ListenableFuture;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.wagerrj.core.Address;
 import org.wagerrj.core.Coin;
 import org.wagerrj.core.InsufficientMoneyException;
+import org.wagerrj.core.NetworkParameters;
 import org.wagerrj.core.Peer;
 import org.wagerrj.core.ScriptException;
 import org.wagerrj.core.Sha256Hash;
@@ -20,8 +23,6 @@ import org.wagerrj.wallet.DeterministicKeyChain;
 import org.wagerrj.wallet.SendRequest;
 import org.wagerrj.wallet.Wallet;
 import org.wagerrj.wallet.listeners.WalletCoinsReceivedEventListener;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.io.IOException;
@@ -37,18 +38,20 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 import chain.BlockchainManager;
+import global.exceptions.CantSweepBalanceException;
+import global.exceptions.ContactAlreadyExistException;
+import global.exceptions.NoPeerConnectedException;
 import global.exceptions.UpgradeException;
 import global.store.ContactsStoreDao;
 import global.store.RateDbDao;
 import global.wagerr.DefaultCoinSelector;
 import global.wrappers.InputWrapper;
 import global.wrappers.TransactionWrapper;
-import global.exceptions.CantSweepBalanceException;
-import global.exceptions.ContactAlreadyExistException;
-import global.exceptions.NoPeerConnectedException;
+import wallet.WalletManager;
 import wallet.exceptions.InsufficientInputsException;
 import wallet.exceptions.TxNotFoundException;
-import wallet.WalletManager;
+
+import static global.WagerrCoreContext.NETWORK_PARAMETERS;
 
 /**
  * Created by mati on 18/04/17.
@@ -213,7 +216,7 @@ public class WagerrModuleImp implements WagerrModule {
     public boolean chechAddress(String addressBase58) {
         boolean result = false;
         try {
-            Address.fromBase58(walletConfiguration.getNetworkParams(), addressBase58);
+            Address.fromBase58(NETWORK_PARAMETERS, addressBase58);
             result = true;
         }catch (Exception e){
             // nothing..
@@ -227,7 +230,7 @@ public class WagerrModuleImp implements WagerrModule {
     }
     @Override
     public Transaction buildSendTx(String addressBase58, Coin amount,Coin feePerKb, String memo,Address changeAddress) throws InsufficientMoneyException{
-        Address address = Address.fromBase58(walletConfiguration.getNetworkParams(), addressBase58);
+        Address address = Address.fromBase58(WagerrCoreContext.NETWORK_PARAMETERS, addressBase58);
 
         SendRequest sendRequest = SendRequest.to(address,amount);
         sendRequest.memo = memo;
@@ -329,7 +332,7 @@ public class WagerrModuleImp implements WagerrModule {
 
     @Override
     public int getProtocolVersion() {
-        return blockchainManager.getProtocolVersion();
+        return WagerrCoreContext.NETWORK_PARAMETERS.getProtocolVersionNum(NetworkParameters.ProtocolVersion.CURRENT);
     }
 
     @Override
@@ -356,7 +359,7 @@ public class WagerrModuleImp implements WagerrModule {
                     Script script = transactionOutput.getScriptPubKey();
                     if (script.isSentToAddress() || script.isPayToScriptHash()) {
                         try {
-                            address = script.getToAddress(getConf().getNetworkParams(), true);
+                            address = script.getToAddress(WagerrCoreContext.NETWORK_PARAMETERS, true);
                             // if the tx is mine i know that the first output address is the sent and the second one is the change address
                             outputsLabeled.put(transactionOutput.getIndex(), contactsStore.getContact(address.toBase58()));
                         } catch (ScriptException e) {
@@ -365,7 +368,7 @@ public class WagerrModuleImp implements WagerrModule {
                         }
                     } else if (script.isSentToRawPubKey()) {
                         // is the staking reward
-                        address = script.getToAddress(getConf().getNetworkParams(), true);
+                        address = script.getToAddress(WagerrCoreContext.NETWORK_PARAMETERS, true);
                         // if the tx is mine i know that the first output address is the sent and the second one is the change address
                         outputsLabeled.put(transactionOutput.getIndex(), contactsStore.getContact(address.toBase58()));
                     } else {
@@ -494,7 +497,7 @@ public class WagerrModuleImp implements WagerrModule {
     public List<InputWrapper> listUnspentWrappers() {
         List<InputWrapper> inputWrappers = new ArrayList<>();
         for (TransactionOutput transactionOutput : walletManager.listUnspent()) {
-            Address address = transactionOutput.getScriptPubKey().getToAddress(getConf().getNetworkParams(),true);
+            Address address = transactionOutput.getScriptPubKey().getToAddress(WagerrCoreContext.NETWORK_PARAMETERS,true);
             AddressLabel addressLabel = contactsStore.getContact(address.toBase58());
             inputWrappers.add(
                     new InputWrapper(
@@ -515,7 +518,7 @@ public class WagerrModuleImp implements WagerrModule {
             if (transactionOutput==null){
                 transactionOutput = getUnspent(input.getOutpoint().getHash(), (int) input.getOutpoint().getIndex());
             }
-            Address address = transactionOutput.getScriptPubKey().getToAddress(getConf().getNetworkParams(),true);
+            Address address = transactionOutput.getScriptPubKey().getToAddress(WagerrCoreContext.NETWORK_PARAMETERS,true);
             AddressLabel addressLabel = contactsStore.getContact(address.toBase58());
             ret.add(
                     new InputWrapper(

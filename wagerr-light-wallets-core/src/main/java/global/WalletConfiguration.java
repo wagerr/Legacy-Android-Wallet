@@ -1,8 +1,5 @@
 package global;
 
-import org.wagerrj.core.Context;
-import org.wagerrj.core.NetworkParameters;
-
 /**
  * Created by furszy on 6/4/17.
  */
@@ -10,11 +7,7 @@ import org.wagerrj.core.NetworkParameters;
 public interface WalletConfiguration {
 
 
-    int getTrustedNodePort();
-
     String getTrustedNodeHost();
-
-    String getOracleAddress();
 
     void saveTrustedNode(String host,int port);
 
@@ -22,33 +15,5 @@ public interface WalletConfiguration {
 
     long getScheduledBLockchainService();
 
-    /**************   Constants   ***************/
 
-    String getMnemonicFilename();
-
-    String getWalletProtobufFilename();
-
-    NetworkParameters getNetworkParams();
-
-    String getKeyBackupProtobuf();
-
-    long getWalletAutosaveDelayMs();
-
-    Context getWalletContext();
-
-    String getBlockchainFilename();
-
-    String getCheckpointFilename();
-
-    int getPeerTimeoutMs();
-
-    long getPeerDiscoveryTimeoutMs();
-
-    int getMinMemoryNeeded();
-
-    long getBackupMaxChars();
-
-    boolean isTest();
-
-    int getProtocolVersion();
 }

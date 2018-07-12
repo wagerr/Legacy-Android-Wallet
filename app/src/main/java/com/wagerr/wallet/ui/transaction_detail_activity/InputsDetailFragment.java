@@ -6,17 +6,18 @@ import android.support.annotation.Nullable;
 import android.view.View;
 import android.widget.Toast;
 
+import com.wagerr.wallet.R;
+import com.wagerr.wallet.ui.base.BaseRecyclerFragment;
+import com.wagerr.wallet.ui.base.tools.adapter.BaseRecyclerAdapter;
+import com.wagerr.wallet.ui.base.tools.adapter.BaseRecyclerViewHolder;
+
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import com.wagerr.wallet.R;
-import com.wagerr.wallet.module.WagerrContext;
-import com.wagerr.wallet.ui.base.BaseRecyclerFragment;
-import com.wagerr.wallet.ui.base.tools.adapter.BaseRecyclerAdapter;
-import com.wagerr.wallet.ui.base.tools.adapter.BaseRecyclerViewHolder;
+import global.WagerrCoreContext;
 import global.wrappers.InputWrapper;
 import wallet.exceptions.TxNotFoundException;
 
@@ -78,7 +79,7 @@ public class InputsDetailFragment extends BaseRecyclerFragment<InputWrapper> {
             @Override
             protected void bindHolder(final FragmentTxDetail.DetailOutputHolder holder, final InputWrapper data, int position) {
                 holder.txt_num.setText("Position "+position);
-                holder.txt_address.setText(data.getLabel(WagerrContext.NETWORK_PARAMETERS));
+                holder.txt_address.setText(data.getLabel(WagerrCoreContext.NETWORK_PARAMETERS));
                 holder.txt_value.setText(data.getUnspent().getValue().toFriendlyString());
             }
         };

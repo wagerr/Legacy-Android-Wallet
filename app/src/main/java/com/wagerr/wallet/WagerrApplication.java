@@ -9,6 +9,16 @@ import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.support.v4.content.FileProvider;
 
+import com.wagerr.wallet.contacts.ContactsStore;
+import com.wagerr.wallet.module.WagerrAppContext;
+import com.wagerr.wallet.module.WalletConfImp;
+import com.wagerr.wallet.module.wallet.WalletBackupHelper;
+import com.wagerr.wallet.rate.db.RateDb;
+import com.wagerr.wallet.service.WagerrWalletService;
+import com.wagerr.wallet.utils.AppConf;
+import com.wagerr.wallet.utils.CentralFormats;
+import com.wagerr.wallet.utils.CrashReporter;
+
 import org.acra.ACRA;
 import org.acra.ReportingInteractionMode;
 import org.acra.annotation.ReportsCrashes;
@@ -32,22 +42,12 @@ import ch.qos.logback.classic.spi.ILoggingEvent;
 import ch.qos.logback.core.rolling.RollingFileAppender;
 import ch.qos.logback.core.rolling.TimeBasedRollingPolicy;
 import global.ContextWrapper;
+import global.WagerrModule;
+import global.WagerrModuleImp;
 import global.WalletConfiguration;
 import global.utils.Io;
 import network.NetworkConf;
 import network.PeerData;
-
-import com.wagerr.wallet.contacts.ContactsStore;
-import com.wagerr.wallet.module.WagerrContext;
-import com.wagerr.wallet.module.wallet.WalletBackupHelper;
-import global.WagerrModule;
-import global.WagerrModuleImp;
-import com.wagerr.wallet.module.WalletConfImp;
-import com.wagerr.wallet.rate.db.RateDb;
-import com.wagerr.wallet.service.WagerrWalletService;
-import com.wagerr.wallet.utils.AppConf;
-import com.wagerr.wallet.utils.CentralFormats;
-import com.wagerr.wallet.utils.CrashReporter;
 
 import static com.wagerr.wallet.service.IntentsConstants.ACTION_RESET_BLOCKCHAIN;
 import static com.wagerr.wallet.utils.AndroidUtils.shareText;
@@ -56,7 +56,7 @@ import static com.wagerr.wallet.utils.AndroidUtils.shareText;
  * Created by mati on 18/04/17.
  */
 @ReportsCrashes(
-        mailTo = WagerrContext.REPORT_EMAIL, // my email here
+        mailTo = WagerrAppContext.REPORT_EMAIL, // my email here
         mode = ReportingInteractionMode.TOAST,
         resToastText = R.string.crash_toast_text)
 public class WagerrApplication extends Application implements ContextWrapper {
@@ -233,7 +233,7 @@ public class WagerrApplication extends Application implements ContextWrapper {
     @Override
     public boolean isMemoryLow() {
         final int memoryClass = activityManager.getMemoryClass();
-        return memoryClass<=wagerrModule.getConf().getMinMemoryNeeded();
+        return memoryClass<=WagerrAppContext.MEMORY_CLASS_LOWEND;
     }
 
     @Override

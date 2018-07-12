@@ -1,10 +1,7 @@
 package com.wagerr.wallet.data.bet
 
 import android.text.TextUtils
-import com.wagerr.wallet.module.WagerrContext
-import com.wagerr.wallet.module.WagerrContext.ORACLE_BET_EVENT_START_TIME
-import io.reactivex.Observable
-import io.reactivex.schedulers.Schedulers
+import global.WagerrCoreContext.ORACLE_BET_EVENT_START_TIME
 import org.apache.commons.codec.binary.Hex
 import org.wagerrj.core.Transaction
 import java.nio.charset.Charset

@@ -21,7 +21,7 @@ import android.support.v4.content.LocalBroadcastManager;
 
 import com.wagerr.wallet.R;
 import com.wagerr.wallet.WagerrApplication;
-import com.wagerr.wallet.module.WagerrContext;
+import com.wagerr.wallet.module.WagerrAppContext;
 import com.wagerr.wallet.module.store.SnappyBlockchainStore;
 import com.wagerr.wallet.rate.CoinMarketCapApiClient;
 import com.wagerr.wallet.rate.RequestWagerrRateException;
@@ -56,11 +56,10 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import chain.BlockchainManager;
 import chain.BlockchainState;
 import chain.Impediment;
+import global.WagerrCoreContext;
 import global.WagerrModuleImp;
 import global.WagerrRate;
 
-import static com.wagerr.wallet.module.WagerrContext.CONTEXT;
-import static com.wagerr.wallet.service.IntentsConstants.ACTION_ADDRESS_BALANCE_CHANGE;
 import static com.wagerr.wallet.service.IntentsConstants.ACTION_BROADCAST_TRANSACTION;
 import static com.wagerr.wallet.service.IntentsConstants.ACTION_CANCEL_COINS_RECEIVED;
 import static com.wagerr.wallet.service.IntentsConstants.ACTION_NOTIFICATION;
@@ -74,6 +73,7 @@ import static com.wagerr.wallet.service.IntentsConstants.INTENT_BROADCAST_DATA_T
 import static com.wagerr.wallet.service.IntentsConstants.INTENT_EXTRA_BLOCKCHAIN_STATE;
 import static com.wagerr.wallet.service.IntentsConstants.NOT_BLOCKCHAIN_ALERT;
 import static com.wagerr.wallet.service.IntentsConstants.NOT_COINS_RECEIVED;
+import static global.WagerrCoreContext.CONTEXT;
 
 /**
  * Created by furszy on 6/12/17.
@@ -148,7 +148,7 @@ public class WagerrWalletService extends Service{
             log.info("Peer: " + peer + ", Block: " + block + ", left: " + blocksLeft);*/
 
 
-            /*if (WagerrContext.IS_TEST)
+            /*if (WagerrCoreContext.IS_TEST)
                 showBlockchainSyncNotification(blocksLeft);*/
 
                 //delayHandler.removeCallbacksAndMessages(null);
@@ -181,7 +181,7 @@ public class WagerrWalletService extends Service{
 
         @Override
         public void run() {
-            org.wagerrj.core.Context.propagate(WagerrContext.CONTEXT);
+            org.wagerrj.core.Context.propagate(WagerrCoreContext.CONTEXT);
             lastMessageTime = System.currentTimeMillis();
             broadcastBlockchainState(false);
         }
@@ -332,9 +332,9 @@ public class WagerrWalletService extends Service{
             peerConnectivityListener = new PeerConnectivityListener();
 
             File file = getDir("blockstore_v2",MODE_PRIVATE);
-            String filename = WagerrContext.Files.BLOCKCHAIN_FILENAME;
+            String filename = WagerrCoreContext.Files.BLOCKCHAIN_FILENAME;
             boolean fileExists = new File(file,filename).exists();
-            blockchainStore = new SnappyBlockchainStore(WagerrContext.CONTEXT,file,filename);
+            blockchainStore = new SnappyBlockchainStore(WagerrCoreContext.CONTEXT,file,filename);
             blockchainManager.init(
                     blockchainStore,
                     file,
@@ -480,7 +480,7 @@ public class WagerrWalletService extends Service{
     private void requestRateCoin(){
         final AppConf appConf = wagerrApplication.getAppConf();
         WagerrRate wagerrRate = module.getRate(appConf.getSelectedRateCoin());
-        if (wagerrRate == null || wagerrRate.getTimestamp() + WagerrContext.RATE_UPDATE_TIME < System.currentTimeMillis()){
+        if (wagerrRate == null || wagerrRate.getTimestamp() + WagerrAppContext.RATE_UPDATE_TIME < System.currentTimeMillis()){
             new Thread(new Runnable() {
                 @Override
                 public void run() {
