@@ -58,7 +58,6 @@
                 android:padding="8dp"
                 android:textIsSelectable="true"
                 android:background="@drawable/transaction_inputs"
-                android:text = "36 WGR"
                 android:textStyle="bold"
                 android:textColor = "@color/mainText"
                 android:textSize = "18sp" />
@@ -82,7 +81,6 @@
                 android:padding="8dp"
                 android:textIsSelectable="true"
                 android:background="@drawable/transaction_inputs"
-                android:text = "13 Mar 2017"
                 android:textColor = "@color/mainText"
                 android:textSize = "16sp" />
 
@@ -103,7 +101,6 @@
                 android:padding="8dp"
                 android:textIsSelectable="true"
                 android:background="@drawable/transaction_inputs"
-                android:text = "45"
                 android:textColor = "@color/mainText"
                 android:textSize = "16sp" />
 
