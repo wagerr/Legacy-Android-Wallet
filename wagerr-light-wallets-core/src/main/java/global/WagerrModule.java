@@ -25,6 +25,7 @@ import global.wrappers.TransactionWrapper;
 import global.exceptions.CantSweepBalanceException;
 import global.exceptions.ContactAlreadyExistException;
 import global.exceptions.NoPeerConnectedException;
+import wagerr.bet.BetManager;
 import wallet.exceptions.InsufficientInputsException;
 import wallet.exceptions.TxNotFoundException;
 import wallet.exceptions.CantRestoreEncryptedWallet;
@@ -111,7 +112,7 @@ public interface WagerrModule {
     Transaction buildSendTx(String addressBase58, Coin amount,Coin feePerKb, String memo,Address changeAddress) throws InsufficientMoneyException;
 
     WalletConfiguration getConf();
-
+    TransactionWrapper getTxWrapper(String txId);
     List<TransactionWrapper> listTx();
 
     Coin getValueSentFromMe(Transaction transaction, boolean excludeChangeAddress);
@@ -176,5 +177,7 @@ public interface WagerrModule {
     List<WagerrRate> listRates();
 
     List<String> getAvailableMnemonicWordsList();
+
+    BetManager getBetManager();
 
 }

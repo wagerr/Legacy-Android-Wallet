@@ -107,6 +107,7 @@
         </provider>
         <activity android:name=".ui.bet_action_detail.BetActionDetailActivity"/>
         <activity android:name=".ui.bet.result.BetEventDetailActivity"/>
+        <activity android:name=".ui.transaction_detail_activity.TransactionIdDetailActivity" />
 
     </application>
 

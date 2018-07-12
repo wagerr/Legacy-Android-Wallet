@@ -26,12 +26,14 @@ import java.util.*
  * Created by Neoperol on 6/9/17.
  */
 
+
 class BetActionDetailActivity : BaseActivity() {
+    val txId:String by lazy {
+        intent.getStringExtra(EXTRA_TX_ID)
+    }
 
     val transactionWrapper: TransactionWrapper by lazy {
-        (intent.getSerializableExtra(EXTRA_TX_WRAPPER) as TransactionWrapper).apply {
-            transaction = wagerrModule.getTx(txId)
-        }
+        wagerrModule.getTxWrapper(txId)
     }
 
     override fun onCreateView(savedInstanceState: Bundle?, container: ViewGroup) {
@@ -90,11 +92,11 @@ class BetActionDetailActivity : BaseActivity() {
 
 
     companion object {
-        val EXTRA_TX_WRAPPER = "EXTRA_TX_WRAPPER"
+        val EXTRA_TX_ID = "EXTRA_TX_ID"
 
-        fun enter(activity: Context, data: TransactionWrapper) {
+        fun enter(activity: Context, txId:String) {
             val bundle = Bundle()
-            bundle.putSerializable(EXTRA_TX_WRAPPER, data)
+            bundle.putString(EXTRA_TX_ID, txId)
             val intent = Intent(activity, BetActionDetailActivity::class.java)
             intent.putExtras(bundle)
             activity.startActivity(intent)

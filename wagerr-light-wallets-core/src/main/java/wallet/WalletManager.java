@@ -676,6 +676,17 @@ public class WalletManager {
         return candidates;
     }
 
+    public List<Transaction> getMineReceived() {
+        LinkedList<Transaction> candidates = Lists.newLinkedList();
+        for (Transaction tx : wallet.getTransactions(true)) {
+            if (!tx.isMature()) continue;
+            if (tx.getValueSentToMe(wallet,false).signum() > 0) {
+                candidates.add(tx);
+            }
+        }
+        return candidates;
+    }
+
     public boolean isTransactionOnlyRelatedToWatchedAddress(Transaction tx){
         return wallet.isTransactionRelevantToWatched(tx) && !wallet.isTransactionRelevantToMe(tx);
     }

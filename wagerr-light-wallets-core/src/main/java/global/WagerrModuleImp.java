@@ -47,6 +47,8 @@ import global.store.RateDbDao;
 import global.wagerr.DefaultCoinSelector;
 import global.wrappers.InputWrapper;
 import global.wrappers.TransactionWrapper;
+import wagerr.bet.BetActionKt;
+import wagerr.bet.BetManager;
 import wallet.WalletManager;
 import wallet.exceptions.InsufficientInputsException;
 import wallet.exceptions.TxNotFoundException;
@@ -67,6 +69,7 @@ public class WagerrModuleImp implements WagerrModule {
     private BlockchainManager blockchainManager;
     private ContactsStoreDao contactsStore;
     private RateDbDao rateDb;
+    private BetManager betManager;
 
     // cached balance --> todo: check this..
     private long availableBalance = 0;
@@ -83,6 +86,7 @@ public class WagerrModuleImp implements WagerrModule {
         this.backupHelper = backupHelper;
         walletManager = new WalletManager(contextWrapper,walletConfiguration);
         blockchainManager = new BlockchainManager(context,walletManager,walletConfiguration);
+        this.betManager = new BetManager(walletManager);
     }
 
     public void start() throws IOException{
@@ -346,6 +350,103 @@ public class WagerrModuleImp implements WagerrModule {
     }
 
     @Override
+    public  TransactionWrapper getTxWrapper(String txId){
+        Transaction transaction = getTx(Sha256Hash.wrap(txId));
+        boolean isSendFromMe = walletManager.isMine(transaction);
+        boolean isStaking = false;
+        Map<Integer, AddressLabel> outputsLabeled = new HashMap<>();
+        Map<Integer, AddressLabel> inputsLabeled = new HashMap<>();
+        Address address = null;
+        try {
+            for (TransactionOutput transactionOutput : transaction.getOutputs()) {
+                Script script = transactionOutput.getScriptPubKey();
+                if (script.isSentToAddress() || script.isPayToScriptHash()) {
+                    try {
+                        address = script.getToAddress(WagerrCoreContext.NETWORK_PARAMETERS, true);
+                        // if the tx is mine i know that the first output address is the sent and the second one is the change address
+                        outputsLabeled.put(transactionOutput.getIndex(), contactsStore.getContact(address.toBase58()));
+                    } catch (ScriptException e) {
+                        logger.warn("unknown tx output, " + script.toString() + ", is tx coinbase: " + transaction.isCoinBase());
+                        e.printStackTrace();
+                    }
+                } else if (script.isSentToRawPubKey()) {
+                    // is the staking reward
+                    address = script.getToAddress(WagerrCoreContext.NETWORK_PARAMETERS, true);
+                    // if the tx is mine i know that the first output address is the sent and the second one is the change address
+                    outputsLabeled.put(transactionOutput.getIndex(), contactsStore.getContact(address.toBase58()));
+                } else {
+                    logger.warn("unknown tx output, " + script.toString() + ", is tx coinbase: " + transaction.isCoinBase());
+                }
+            }
+
+                    /*for (TransactionInput transactionInput : transaction.getInputs()) {
+                        try {
+                            address = transactionInput.getScriptSig().getToAddress(getConf().getNetworkParams());
+                            // if the tx is mine i know that the first output address is the sent and the second one is the change address
+                            inputsLabeled.put((int) transactionInput.getOutpoint().getIndex(), contactsStore.getAddressLabel(address.toBase58()));
+                        }catch (ScriptException e){
+                            e.printStackTrace();
+                        }
+                    }*/
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            //swallow this for now..
+        }
+
+        TransactionWrapper wrapper;
+        if (transaction.isCoinStake()) {
+            if (transaction.getOutputs().get(1).isMine(getWallet())) {
+                wrapper = new TransactionWrapper(
+                        transaction,
+                        inputsLabeled,
+                        outputsLabeled,
+                        walletManager.getValueSentToMe(transaction),
+                        TransactionWrapper.TransactionUse.STAKE
+                );
+            } else {
+                //no masternode reward here
+                wrapper = new TransactionWrapper(
+                        transaction,
+                        inputsLabeled,
+                        outputsLabeled,
+                        walletManager.getValueSentToMe(transaction),
+                        TransactionWrapper.TransactionUse.BET_REWARD,
+                        betManager.getBetFullDataByRewardTransaction(transaction)
+                );
+            }
+
+        } else if (transaction.isZerocoinSpend()) {
+            wrapper = new TransactionWrapper(
+                    transaction,
+                    inputsLabeled,
+                    outputsLabeled,
+                    isSendFromMe ? getValueSentFromMe(transaction, true) : walletManager.getValueSentToMe(transaction),
+                    TransactionWrapper.TransactionUse.ZC_SPEND
+            );
+
+        } else if(BetActionKt.isBetAction(transaction)){
+            wrapper = new TransactionWrapper(
+                    transaction,
+                    inputsLabeled,
+                    outputsLabeled,
+                    getValueSentFromMe(transaction, true),
+                    TransactionWrapper.TransactionUse.BET_ACTION,
+                    betManager.getBetActionDataByActionTransaction(transaction)
+            );
+        }else{
+            wrapper = new TransactionWrapper(
+                    transaction,
+                    inputsLabeled,
+                    outputsLabeled,
+                    isSendFromMe ? getValueSentFromMe(transaction, true) : walletManager.getValueSentToMe(transaction),
+                    isSendFromMe ? TransactionWrapper.TransactionUse.SENT_SINGLE : TransactionWrapper.TransactionUse.RECEIVE
+            );
+        }
+        return wrapper;
+    }
+
+    @Override
     public List<TransactionWrapper> listTx() {
         List<TransactionWrapper> list = new ArrayList<>();
         for (Transaction transaction : walletManager.listTransactions()) {
@@ -408,7 +509,8 @@ public class WagerrModuleImp implements WagerrModule {
                             inputsLabeled,
                             outputsLabeled,
                             walletManager.getValueSentToMe(transaction),
-                            TransactionWrapper.TransactionUse.BET_REWARD
+                            TransactionWrapper.TransactionUse.BET_REWARD,
+                            betManager.getBetFullDataByRewardTransaction(transaction)
                     );
                 }
 
@@ -421,8 +523,16 @@ public class WagerrModuleImp implements WagerrModule {
                         TransactionWrapper.TransactionUse.ZC_SPEND
                 );
 
-            } else {
-
+            } else if(BetActionKt.isBetAction(transaction)){
+                wrapper = new TransactionWrapper(
+                        transaction,
+                        inputsLabeled,
+                        outputsLabeled,
+                        getValueSentFromMe(transaction, true),
+                        TransactionWrapper.TransactionUse.BET_ACTION,
+                        betManager.getBetActionDataByActionTransaction(transaction)
+                );
+            }else{
                 wrapper = new TransactionWrapper(
                         transaction,
                         inputsLabeled,
@@ -668,5 +778,10 @@ public class WagerrModuleImp implements WagerrModule {
 
     public void saveRate(WagerrRate wagerrRate){
         rateDb.insertOrUpdateIfExist(wagerrRate);
+    }
+
+    @Override
+    public BetManager getBetManager() {
+        return betManager;
     }
 }

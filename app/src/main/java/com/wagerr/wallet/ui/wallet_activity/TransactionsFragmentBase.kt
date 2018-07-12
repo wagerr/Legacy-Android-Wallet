@@ -7,14 +7,12 @@ import android.support.v4.content.ContextCompat
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import bet.DRAW_SYMBOL
-import bet.isBetAction
-import bet.toBetAction
 import com.wagerr.wallet.R
 import com.wagerr.wallet.ui.base.BaseRecyclerFragment
 import com.wagerr.wallet.ui.base.tools.adapter.BaseRecyclerAdapter
 import com.wagerr.wallet.ui.base.tools.adapter.BaseRecyclerViewHolder
 import com.wagerr.wallet.ui.base.tools.adapter.ListItemListeners
+import com.wagerr.wallet.ui.bet.result.BetEventDetailActivity
 import com.wagerr.wallet.ui.bet_action_detail.BetActionDetailActivity
 import com.wagerr.wallet.ui.transaction_detail_activity.FragmentTxDetail.IS_DETAIL
 import com.wagerr.wallet.ui.transaction_detail_activity.FragmentTxDetail.TX_WRAPPER
@@ -25,6 +23,8 @@ import global.wrappers.TransactionWrapper
 import org.slf4j.LoggerFactory
 import org.wagerrj.core.Coin
 import org.wagerrj.utils.MonetaryFormat
+import wagerr.bet.BetData
+import wagerr.bet.DRAW_SYMBOL
 import java.math.BigDecimal
 import java.util.Collections
 import java.util.Comparator
@@ -90,6 +90,8 @@ class TransactionsFragmentBase : BaseRecyclerFragment<TransactionWrapper>() {
                     holder.amountLocal.visibility = View.INVISIBLE
                 }
 
+                val memo = data.transaction.memo
+                holder.description.text = memo ?: "No description"
                 if (data.isSent) {
                     //holder.cv.setBackgroundColor(Color.RED);Color.GREEN
                     holder.imageView.setImageResource(R.drawable.ic_transaction_send)
@@ -97,9 +99,39 @@ class TransactionsFragmentBase : BaseRecyclerFragment<TransactionWrapper>() {
                 } else if (data.isZcSpend) {
                     holder.imageView.setImageResource(R.drawable.ic_transaction_incognito)
                     holder.amount.setTextColor(ContextCompat.getColor(context, R.color.green))
-                } else if(data.isBetReward){
+                } else if (data.isBetReward) {
+                    val betFullData = (data.betData as BetData.BetFullData)
+
+                    val betEvent =  betFullData.betEvents!![0]
+                    val betResult =  betFullData.betResult!!
+                    if (betResult.betResult == "DRW") {
+                        holder.description.text = "PAYOUT(${betEvent.homeTeam} VS ${betEvent.awayTeam}): DRAW"
+                    } else {
+                        holder.description.text = "PAYOUT(${betEvent.homeTeam} VS ${betEvent.awayTeam}): ${betResult.betResult} WIN"
+                    }
+
                     holder.imageView.setImageResource(R.drawable.ic_bet_reward)
                     holder.amount.setTextColor(ContextCompat.getColor(context, R.color.green))
+                } else if (data.isBetAction) {
+                    val betActionData = (data.betData as BetData.BetActionData)
+                    val betEvent = betActionData.betEvent
+                    val betAction = betActionData.betAction
+                    val betResult = betActionData.betResult
+                    betResult?.let {
+                        if (betAction.betChoose == DRAW_SYMBOL) {
+                            holder.description.text = "BET(${betEvent!!.homeTeam} VS ${betEvent!!.awayTeam}): DRAW"
+                        } else {
+                            holder.description.text = "BET(${betEvent!!.homeTeam} VS ${betEvent!!.awayTeam}): ${betAction.betChoose} WIN"
+                        }
+                    }?:run {
+                        if (betAction.betChoose == DRAW_SYMBOL) {
+                            holder.description.text = "BET(${betEvent!!.homeTeam} VS ${betEvent!!.awayTeam}): DRAW"
+                        } else {
+                            holder.description.text = "BET(${betEvent!!.homeTeam} VS ${betEvent!!.awayTeam}): ${betAction.betChoose} WIN"
+                        }
+                    }
+                    holder.amount.setTextColor(ContextCompat.getColor(context, R.color.red))
+                    holder.imageView.setImageResource(R.drawable.ic_transaction_bet)
                 }else if (!data.isStake) {
                     holder.imageView.setImageResource(R.drawable.ic_transaction_receive)
                     holder.amount.setTextColor(ContextCompat.getColor(context, R.color.green))
@@ -122,32 +154,25 @@ class TransactionsFragmentBase : BaseRecyclerFragment<TransactionWrapper>() {
                 }else {
                     holder.title.setText(data.getTransaction().getOutput(0).getScriptPubKey().getToAddress(wagerrModule.getConf().getNetworkParams()).toBase58());
                 }*/
-                val memo = data.transaction.memo
-                holder.description.text = memo ?: "No description"
-
-                data.transaction.toBetAction()?.let {
-                    holder.imageView.setImageResource(R.drawable.ic_transaction_bet)
-                    if (it.betChoose == DRAW_SYMBOL) {
-                        holder.description.text = "Bet DRAW"
-                    } else {
-                        holder.description.text = "Bet ${it.betChoose} WIN"
-                    }
-                }
 
 
             }
         }
         adapter.setListEventListener(object : ListItemListeners<TransactionWrapper> {
             override fun onItemClickListener(data: TransactionWrapper, position: Int) {
-                if (data.transaction.isBetAction()) {
-                    BetActionDetailActivity.enter(activity!!, data)
-                } else {
-                    val bundle = Bundle()
-                    bundle.putSerializable(TX_WRAPPER, data)
-                    bundle.putBoolean(IS_DETAIL, true)
-                    val intent = Intent(activity, TransactionDetailActivity::class.java)
-                    intent.putExtras(bundle)
-                    startActivity(intent)
+                when {
+                    data.isBetAction ->BetEventDetailActivity.enter(activity!!,
+                            (data.betData as BetData.BetActionData).betAction.eventId)
+                        data.isBetReward -> BetEventDetailActivity.enter(activity!!,
+                            (data.betData as BetData.BetFullData).betResult!!.eventId)
+                    else -> {
+                        val bundle = Bundle()
+                        bundle.putSerializable(TX_WRAPPER, data)
+                        bundle.putBoolean(IS_DETAIL, true)
+                        val intent = Intent(activity, TransactionDetailActivity::class.java)
+                        intent.putExtras(bundle)
+                        startActivity(intent)
+                    }
                 }
             }
 

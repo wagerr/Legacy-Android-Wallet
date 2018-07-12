@@ -1,25 +1,25 @@
 package com.wagerr.wallet.ui.bet.result
 
+import android.content.Intent
+
 import android.content.Context
 import android.os.Bundle
+import android.support.v4.content.ContextCompat
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.view.ViewGroup
-
 import com.wagerr.wallet.R
-
-import android.content.Intent
-import android.support.v4.content.ContextCompat
-
-
 import com.wagerr.wallet.WagerrApplication
-import com.wagerr.wallet.data.bet.*
+import com.wagerr.wallet.data.bet.getMatchResult
+import com.wagerr.wallet.data.bet.toEventSymbol
 import com.wagerr.wallet.data.worldcup.api.WorldCupApi
 import com.wagerr.wallet.module.bet.BetEventFetcher
 import com.wagerr.wallet.ui.base.BaseActivity
 import com.wagerr.wallet.ui.transaction_detail_activity.FragmentTxDetail
 import com.wagerr.wallet.ui.transaction_detail_activity.TransactionDetailActivity
-import com.wagerr.wallet.utils.*
+import com.wagerr.wallet.ui.transaction_detail_activity.TransactionIdDetailActivity
+import com.wagerr.wallet.ui.transaction_detail_activity.TransactionIdDetailFragment
+import com.wagerr.wallet.utils.formatToViewDateTimeDefaults
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.rxkotlin.plusAssign
@@ -27,10 +27,10 @@ import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_finished_bet_event_detail.*
 import org.wagerrj.core.Sha256Hash
 import wagerr.bet.DRAW_SYMBOL
-import wagerr.bet.getBetActionsByEventId
 import wagerr.bet.getBetEventsById
 import wagerr.bet.getBetResultByEventId
-import java.util.*
+import wagerr.bet.toBetActions
+import java.util.Date
 
 
 /**
@@ -65,19 +65,17 @@ class BetEventDetailActivity : BaseActivity() {
         bet_action_list.adapter = betActionsAdapter
         betActionsAdapter.bindToRecyclerView(bet_action_list)
         betActionsAdapter.setOnItemClickListener { adapter, view, position ->
+            val betAction = betActionsAdapter.getItem(position)!!.betAction!!
+            
             Observable.fromCallable {
-                WagerrApplication.getInstance().module.listTx().filter {
-                    it.txId == Sha256Hash.wrap(betActionsAdapter.getItem(position)!!.betAction!!.transaction.hashAsString)
-                }.first().apply {
-                    transaction = wagerrModule.getTx(txId)
-                }
+                WagerrApplication.getInstance().module.getTxWrapper(betAction.transaction.hashAsString)
             }.subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe({
                         val bundle = Bundle()
-                        bundle.putSerializable(FragmentTxDetail.TX_WRAPPER, it)
-                        bundle.putBoolean(FragmentTxDetail.IS_DETAIL, true)
-                        val intent = Intent(this, TransactionDetailActivity::class.java)
+                        bundle.putSerializable(TransactionIdDetailFragment.EXTRA_TX_ID, it.transaction.hashAsString)
+                        bundle.putBoolean(TransactionIdDetailFragment.IS_DETAIL, true)
+                        val intent = Intent(this, TransactionIdDetailActivity::class.java)
                         intent.putExtras(bundle)
                         startActivity(intent)
                     }, {})
@@ -87,6 +85,8 @@ class BetEventDetailActivity : BaseActivity() {
     }
 
     private fun load() {
+
+
         compositeDisposable += BetEventFetcher.getBetEventById(eventId).observeOn(AndroidSchedulers.mainThread())
                 .doOnNext {
                     it?.let {
@@ -144,25 +144,19 @@ class BetEventDetailActivity : BaseActivity() {
                     it.printStackTrace()
                 })
         Observable.fromCallable {
-            WagerrApplication.getInstance().module.watchedSpent to WagerrApplication.getInstance().module.mineSpent
-        }.subscribeOn(Schedulers.io())
-                .map {
-            val betEvents = it.first.getBetEventsById(eventId)
-            val betResult = it.first.getBetResultByEventId(eventId)
-            val betActions = it.second.getBetActionsByEventId(eventId)
-            return@map betActions?.map { betAction ->
-                BetEventDetailData(betEvents?.last { betEvent ->
-                    betAction.transaction.updateTime > betEvent.transaction.updateTime
-                }, betResult, betAction)
+            WagerrApplication.getInstance().module.mineSpent.toBetActions()?.filter {
+                it.eventId == eventId
+            }?.mapNotNull {
+                WagerrApplication.getInstance().module.betManager.getBetActionDataByActionTransaction(it.transaction)
             }
-        }.observeOn(AndroidSchedulers.mainThread())
+        }.subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({
-
                     swipe_refresh_layout.isRefreshing = false
                     if (it.orEmpty().isEmpty()) {
                         betActionsAdapter.setEmptyView(R.layout.layout_empty_bet_action)
                     } else {
-                        betActionsAdapter.setNewData(it?.sortedByDescending { it.betAction?.transaction?.updateTime })
+                        betActionsAdapter.setNewData(it?.sortedByDescending { it.betAction.transaction.updateTime })
                     }
                 }, {
                     swipe_refresh_layout.isRefreshing = false
