@@ -70,7 +70,7 @@ class BetEventDetailActivity : BaseActivity() {
         betActionsAdapter.bindToRecyclerView(bet_action_list)
         betActionsAdapter.setOnItemClickListener { adapter, view, position ->
             val betActionData = betActionsAdapter.getItem(position)!!
-            if (betActionData.betReward != null) {
+            if (betActionData.betReward != null && betActionData.betReward!!.rewards != null) {
                 showSelectDialog(betActionData)
             } else {
                 Observable.fromCallable {
