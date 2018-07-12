@@ -1,0 +1,40 @@
+apply plugin: 'java'
+
+buildscript {
+    repositories {
+        jcenter()
+    }
+}
+
+repositories {
+        jcenter()
+    maven {
+        url  "https://dl.bintray.com/looortor/wagerr/"
+    }
+}
+
+sourceSets{
+    test {
+        java.srcDirs = ['src/test']
+    }
+}
+
+dependencies {
+    compile files('lib/wagerrj-core-0.14.4.jar')
+    compile 'org.slf4j:slf4j-api:1.7.20'
+    compile 'com.google.protobuf:protobuf-java:2.6.1'
+    compile 'com.google.guava:guava:20.0'
+    compile 'com.squareup.okhttp:okhttp:2.7.5'
+    compile 'commons-codec:commons-codec:1.10'
+    compile 'com.madgag.spongycastle:core:1.54.0.0'
+    compile files('lib/furszy-non-blocking-client-0.0.1.jar')
+    compile 'commons-validator:commons-validator:1.6'
+    compile 'org.json:json:20170516'
+    compile 'com.lambdaworks:scrypt:1.4.0'
+    testCompile 'org.slf4j:slf4j-api:1.7.20'
+    testCompile 'junit:junit:4.12'
+    testCompile 'org.slf4j:slf4j-simple:1.7.5'
+}
+
+sourceCompatibility = "1.7"
+targetCompatibility = "1.7"
