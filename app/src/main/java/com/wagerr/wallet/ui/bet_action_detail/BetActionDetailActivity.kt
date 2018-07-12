@@ -1,39 +1,25 @@
 package com.wagerr.wallet.ui.bet_action_detail
 
-import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.support.v4.content.ContextCompat.startActivity
-import android.view.Menu
-import android.view.MenuItem
-import android.view.View
 import android.view.ViewGroup
 
 import com.wagerr.wallet.R
-import com.wagerr.wallet.WagerrApplication
 import com.wagerr.wallet.data.bet.*
 import com.wagerr.wallet.module.bet.BetEventFetcher
 import com.wagerr.wallet.ui.base.BaseActivity
 import com.wagerr.wallet.ui.transaction_detail_activity.FragmentTxDetail
 import com.wagerr.wallet.ui.transaction_detail_activity.FragmentTxDetail.TX_WRAPPER
 import com.wagerr.wallet.ui.transaction_detail_activity.TransactionDetailActivity
-import com.wagerr.wallet.utils.NavigationUtils
 import com.wagerr.wallet.utils.formatToViewDateTimeDefaults
 
-import org.wagerrj.script.Script
-
-import java.text.SimpleDateFormat
-
-import global.AddressLabel
 import global.wrappers.TransactionWrapper
-import io.reactivex.Observable
-import io.reactivex.Scheduler
 import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.rxkotlin.plusAssign
-import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_bet_action_detail.*
-import org.wagerrj.core.*
+import wagerr.bet.DRAW_SYMBOL
+import wagerr.bet.toBetAction
+import wagerr.bet.toBetActionAmount
 import java.util.*
 
 /**

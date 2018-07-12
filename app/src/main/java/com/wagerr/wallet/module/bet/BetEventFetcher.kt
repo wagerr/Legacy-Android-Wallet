@@ -1,11 +1,11 @@
 package com.wagerr.wallet.module.bet
 
 import com.wagerr.wallet.WagerrApplication
-import com.wagerr.wallet.data.bet.BetEvent
-import com.wagerr.wallet.data.bet.toBetEvents
 import global.WagerrCoreContext
 import io.reactivex.Observable
 import io.reactivex.schedulers.Schedulers
+import wagerr.bet.BetEvent
+import wagerr.bet.toBetEvents
 
 class BetEventFetcher {
     companion object Factory {

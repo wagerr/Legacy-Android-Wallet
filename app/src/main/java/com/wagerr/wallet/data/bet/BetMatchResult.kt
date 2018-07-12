@@ -1,8 +1,10 @@
 package com.wagerr.wallet.data.bet
 
 import com.wagerr.wallet.data.worldcup.model.WorldCupMatch
+import wagerr.bet.BetEvent
 import java.text.SimpleDateFormat
-import java.util.*
+import java.util.Date
+import java.util.TimeZone
 
 
 data class BetMatchResult(val eventId:String, val homeScore: Int?, val awayScore: Int?)

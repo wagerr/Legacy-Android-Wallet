@@ -1,4 +1,4 @@
-package com.wagerr.wallet.data.bet
+package wagerr.bet
 
 import android.text.TextUtils
 import global.WagerrCoreContext.ORACLE_BET_EVENT_START_TIME
@@ -36,7 +36,8 @@ fun Transaction.toBetEvent(): BetEvent? {
             drawOdds = items[10].toDouble()
         }
 
-        return BetEvent(TxType.TxTypeEvent, items[1], items[2], items[3].toLong() * 1000, items[4], items[5],
+        return BetEvent(TxType.TxTypeEvent, items[1], items[2], items[3].toLong() * 1000,
+                items[4], items[5],
                 items[6], items[7], homeOdds, awayOdds, drawOdds, this)
     } else {
         return null

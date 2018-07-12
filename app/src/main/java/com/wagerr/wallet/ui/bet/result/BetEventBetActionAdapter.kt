@@ -3,8 +3,8 @@ package com.wagerr.wallet.ui.bet.result
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.BaseViewHolder
 import com.wagerr.wallet.R
-import com.wagerr.wallet.data.bet.DRAW_SYMBOL
-import com.wagerr.wallet.data.bet.toBetActionAmount
+import wagerr.bet.DRAW_SYMBOL
+import wagerr.bet.toBetActionAmount
 
 class BetEventBetActionAdapter : BaseQuickAdapter<BetEventDetailData, BaseViewHolder>(R.layout.item_finished_bet_event_bet_action) {
 

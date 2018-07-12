@@ -1,13 +1,11 @@
 package com.wagerr.wallet.ui.bet.event
 
-import android.view.View.GONE
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.BaseViewHolder
 import com.wagerr.wallet.R
-import com.wagerr.wallet.data.bet.BetEvent
+import wagerr.bet.BetEvent
 import com.wagerr.wallet.data.bet.toEventSymbol
 import com.wagerr.wallet.utils.formatToViewDateTimeDefaults
-import java.text.SimpleDateFormat
 import java.util.*
 
 class OngoingBetEventAdapter : BaseQuickAdapter<BetEvent, BaseViewHolder>(R.layout.item_bet_event) {

@@ -1,4 +1,4 @@
-package com.wagerr.wallet.data.bet
+package wagerr.bet
 
 import android.text.TextUtils
 import global.WagerrCoreContext

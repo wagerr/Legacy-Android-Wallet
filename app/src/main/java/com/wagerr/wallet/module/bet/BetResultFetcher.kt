@@ -1,12 +1,10 @@
 package com.wagerr.wallet.module.bet
 
-import android.util.Log
 import com.wagerr.wallet.WagerrApplication
-import com.wagerr.wallet.data.bet.*
 import io.reactivex.Observable
-import io.reactivex.Scheduler
-import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
+import wagerr.bet.BetResult
+import wagerr.bet.toBetResults
 
 class BetResultFetcher {
     companion object Factory {

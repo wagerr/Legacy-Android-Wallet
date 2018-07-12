@@ -1,4 +1,4 @@
-package com.wagerr.wallet.data.bet
+package wagerr.bet
 
 import android.text.TextUtils
 import global.WagerrCoreContext
@@ -6,7 +6,6 @@ import org.apache.commons.codec.binary.Hex
 import org.wagerrj.core.Transaction
 import java.nio.charset.Charset
 
-const val DRAW_SYMBOL = "DRW"
 
 //3|1.0|#453|RUS
 data class BetResult(val txType: TxType, val protocolVersion: String, val eventId: String,

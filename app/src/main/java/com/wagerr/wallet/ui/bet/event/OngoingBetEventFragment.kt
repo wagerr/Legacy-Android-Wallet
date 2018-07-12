@@ -12,11 +12,11 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
 import com.wagerr.wallet.R
-import com.wagerr.wallet.data.bet.BetActionForSend
-import com.wagerr.wallet.data.bet.BetEvent
-import com.wagerr.wallet.data.bet.BetType
-import com.wagerr.wallet.data.bet.DRAW_SYMBOL
-import com.wagerr.wallet.data.bet.toBetTransactionData
+import wagerr.bet.BetActionForSend
+import wagerr.bet.BetEvent
+import wagerr.bet.BetType
+import wagerr.bet.DRAW_SYMBOL
+import wagerr.bet.toBetTransactionData
 import com.wagerr.wallet.module.bet.BetEventFetcher
 import com.wagerr.wallet.ui.base.BaseFragment
 import com.wagerr.wallet.ui.bet.result.BetEventDetailActivity

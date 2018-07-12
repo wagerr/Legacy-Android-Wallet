@@ -16,8 +16,6 @@ import com.wagerr.wallet.WagerrApplication
 import com.wagerr.wallet.data.bet.*
 import com.wagerr.wallet.data.worldcup.api.WorldCupApi
 import com.wagerr.wallet.module.bet.BetEventFetcher
-import com.wagerr.wallet.module.bet.BetEventFetcher.Factory.getBetEventsById
-import com.wagerr.wallet.module.bet.BetResultFetcher.Factory.getBetResultByEventId
 import com.wagerr.wallet.ui.base.BaseActivity
 import com.wagerr.wallet.ui.transaction_detail_activity.FragmentTxDetail
 import com.wagerr.wallet.ui.transaction_detail_activity.TransactionDetailActivity
@@ -28,6 +26,10 @@ import io.reactivex.rxkotlin.plusAssign
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_finished_bet_event_detail.*
 import org.wagerrj.core.Sha256Hash
+import wagerr.bet.DRAW_SYMBOL
+import wagerr.bet.getBetActionsByEventId
+import wagerr.bet.getBetEventsById
+import wagerr.bet.getBetResultByEventId
 import java.util.*
 
 
