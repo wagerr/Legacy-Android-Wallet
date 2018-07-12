@@ -11,8 +11,8 @@ import android.widget.Toast;
 import java.util.List;
 import java.util.Random;
 
-import global.PivtrumGlobalData;
-import pivtrum.PivtrumPeerData;
+import network.PeerGlobalData;
+import network.PeerData;
 import com.wagerr.wallet.R;
 import com.wagerr.wallet.module.WagerrContext;
 import com.wagerr.wallet.ui.backup_mnemonic_activity.MnemonicActivity;
@@ -67,11 +67,11 @@ public class PincodeActivity extends BaseActivity implements KeyboardFragment.on
     private void goNext() {
         if (wagerrApplication.getAppConf().getTrustedNode()==null){
             // select random trusted node
-            List<PivtrumPeerData> nodes;
+            List<PeerData> nodes;
             if (WagerrContext.IS_TEST) {
-                nodes = PivtrumGlobalData.listTrustedTestHosts();
+                nodes = PeerGlobalData.listTrustedTestHosts();
             } else {
-                nodes = PivtrumGlobalData.listTrustedHosts();
+                nodes = PeerGlobalData.listTrustedHosts();
 
             }
             Random random = new Random();

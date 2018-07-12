@@ -34,8 +34,9 @@ import ch.qos.logback.core.rolling.TimeBasedRollingPolicy;
 import global.ContextWrapper;
 import global.WalletConfiguration;
 import global.utils.Io;
-import pivtrum.NetworkConf;
-import pivtrum.PivtrumPeerData;
+import network.NetworkConf;
+import network.PeerData;
+
 import com.wagerr.wallet.contacts.ContactsStore;
 import com.wagerr.wallet.module.WagerrContext;
 import com.wagerr.wallet.module.wallet.WalletBackupHelper;
@@ -255,7 +256,7 @@ public class WagerrApplication extends Application implements ContextWrapper {
      *
      * @param trustedServer
      */
-    public void setTrustedServer(PivtrumPeerData trustedServer) {
+    public void setTrustedServer(PeerData trustedServer) {
         networkConf.setTrustedServer(trustedServer);
         wagerrModule.getConf().saveTrustedNode(trustedServer.getHost(),0);
         appConf.saveTrustedNode(trustedServer);

@@ -1,23 +1,26 @@
-apply plugin: 'java'
+apply plugin: 'com.android.library'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-android-extensions'
 
-buildscript {
-    repositories {
-        jcenter()
+android {
+    compileSdkVersion 27
+    buildToolsVersion '27.0.3'
+
+    defaultConfig {
+        minSdkVersion 21
+        targetSdkVersion 25
+        versionCode 1
+        versionName "1.0"
+        multiDexEnabled true
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+    }
+    flavorDimensions "env"
+    productFlavors {
+        wgrprod {dimension "env" }
+        wgrtest {dimension "env" }
     }
 }
 
-repositories {
-        jcenter()
-    maven {
-        url  "https://dl.bintray.com/looortor/wagerr/"
-    }
-}
-
-sourceSets{
-    test {
-        java.srcDirs = ['src/test']
-    }
-}
 
 dependencies {
     compile files('lib/wagerrj-core-0.14.4.jar')
@@ -29,7 +32,6 @@ dependencies {
     compile 'com.madgag.spongycastle:core:1.54.0.0'
     compile files('lib/furszy-non-blocking-client-0.0.1.jar')
     compile 'commons-validator:commons-validator:1.6'
-    compile 'org.json:json:20170516'
     compile 'com.lambdaworks:scrypt:1.4.0'
     testCompile 'org.slf4j:slf4j-api:1.7.20'
     testCompile 'junit:junit:4.12'

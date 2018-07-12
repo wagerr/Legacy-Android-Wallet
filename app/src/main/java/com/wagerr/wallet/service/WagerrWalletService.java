@@ -19,6 +19,18 @@ import android.support.v4.app.NotificationCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.content.LocalBroadcastManager;
 
+import com.wagerr.wallet.R;
+import com.wagerr.wallet.WagerrApplication;
+import com.wagerr.wallet.module.WagerrContext;
+import com.wagerr.wallet.module.store.SnappyBlockchainStore;
+import com.wagerr.wallet.rate.CoinMarketCapApiClient;
+import com.wagerr.wallet.rate.RequestWagerrRateException;
+import com.wagerr.wallet.ui.wallet_activity.WalletActivity;
+import com.wagerr.wallet.utils.AppConf;
+import com.wagerr.wallet.utils.CrashReporter;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.wagerrj.core.Block;
 import org.wagerrj.core.Coin;
 import org.wagerrj.core.FilteredBlock;
@@ -32,8 +44,6 @@ import org.wagerrj.core.listeners.PeerDisconnectedEventListener;
 import org.wagerrj.core.listeners.TransactionConfidenceEventListener;
 import org.wagerrj.wallet.Wallet;
 import org.wagerrj.wallet.listeners.WalletCoinsReceivedEventListener;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.math.BigDecimal;
@@ -46,19 +56,8 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import chain.BlockchainManager;
 import chain.BlockchainState;
 import chain.Impediment;
-import pivtrum.listeners.AddressListener;
-import com.wagerr.wallet.WagerrApplication;
-import com.wagerr.wallet.R;
-import com.wagerr.wallet.module.WagerrContext;
 import global.WagerrModuleImp;
-
-import com.wagerr.wallet.module.store.SnappyBlockchainStore;
-import com.wagerr.wallet.rate.CoinMarketCapApiClient;
-import com.wagerr.wallet.rate.RequestWagerrRateException;
 import global.WagerrRate;
-import com.wagerr.wallet.ui.wallet_activity.WalletActivity;
-import com.wagerr.wallet.utils.AppConf;
-import com.wagerr.wallet.utils.CrashReporter;
 
 import static com.wagerr.wallet.module.WagerrContext.CONTEXT;
 import static com.wagerr.wallet.service.IntentsConstants.ACTION_ADDRESS_BALANCE_CHANGE;
@@ -121,13 +120,6 @@ public class WagerrWalletService extends Service{
         return new WagerrBinder();
     }
 
-    private AddressListener addressListener = new AddressListener() {
-        @Override
-        public void onBalanceChange(String address, long confirmed, long unconfirmed,int numConfirmations) {
-            Intent intent = new Intent(ACTION_ADDRESS_BALANCE_CHANGE);
-            broadcastManager.sendBroadcast(intent);
-        }
-    };
 
     private final class PeerConnectivityListener implements PeerConnectedEventListener, PeerDisconnectedEventListener{
 

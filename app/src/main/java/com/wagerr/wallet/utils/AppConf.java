@@ -2,7 +2,7 @@ package com.wagerr.wallet.utils;
 
 import android.content.SharedPreferences;
 
-import pivtrum.PivtrumPeerData;
+import network.PeerData;
 
 import static com.wagerr.wallet.module.WagerrContext.DEFAULT_RATE_COIN;
 
@@ -46,17 +46,17 @@ public class AppConf extends Configurations {
         return getString(PINCODE,null);
     }
 
-    public void saveTrustedNode(PivtrumPeerData pivtrumPeerData){
-        save(TRUSTED_NODE_HOST,pivtrumPeerData.getHost());
-        save(TRUSTED_NODE_TCP,pivtrumPeerData.getTcpPort());
-        save(TRUSTED_NODE_SSL,pivtrumPeerData.getSslPort());
+    public void saveTrustedNode(PeerData peerData){
+        save(TRUSTED_NODE_HOST, peerData.getHost());
+        save(TRUSTED_NODE_TCP, peerData.getTcpPort());
+        save(TRUSTED_NODE_SSL, peerData.getSslPort());
     }
-    public PivtrumPeerData getTrustedNode(){
+    public PeerData getTrustedNode(){
         String host = getString(TRUSTED_NODE_HOST,null);
         if (host!=null){
             int tcp = getInt(TRUSTED_NODE_TCP,-1);
             int ssl = getInt(TRUSTED_NODE_TCP,-1);
-            return new PivtrumPeerData(host,tcp,ssl);
+            return new PeerData(host,tcp,ssl);
         }else
             return null;
     }

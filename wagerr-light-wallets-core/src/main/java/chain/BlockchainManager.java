@@ -23,7 +23,6 @@ import org.wagerrj.params.TestNet3Params;
 import org.wagerrj.store.BlockStore;
 import org.wagerrj.store.BlockStoreException;
 import org.wagerrj.store.LevelDBBlockStore;
-import org.wagerrj.store.SPVBlockStore;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -39,9 +38,9 @@ import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
 import global.ContextWrapper;
-import global.PivtrumGlobalData;
+import network.PeerGlobalData;
 import global.WalletConfiguration;
-import pivtrum.PivtrumPeerData;
+import network.PeerData;
 import wallet.WalletManager;
 
 
@@ -286,12 +285,12 @@ public class BlockchainManager {
                                 }*/
                         } else {
                             if (conf.isTest()) {
-                                for (PivtrumPeerData pivtrumPeerData : PivtrumGlobalData.listTrustedTestHosts()) {
-                                    peers.add(new InetSocketAddress(pivtrumPeerData.getHost(), pivtrumPeerData.getTcpPort()));
+                                for (PeerData peerData : PeerGlobalData.listTrustedTestHosts()) {
+                                    peers.add(new InetSocketAddress(peerData.getHost(), peerData.getTcpPort()));
                                 }
                             } else {
-                                for (PivtrumPeerData pivtrumPeerData : PivtrumGlobalData.listTrustedHosts()) {
-                                    peers.add(new InetSocketAddress(pivtrumPeerData.getHost(), pivtrumPeerData.getTcpPort()));
+                                for (PeerData peerData : PeerGlobalData.listTrustedHosts()) {
+                                    peers.add(new InetSocketAddress(peerData.getHost(), peerData.getTcpPort()));
                                 }
                             }
 

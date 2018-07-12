@@ -1,17 +1,17 @@
-package pivtrum;
+package network;
 
 /**
  * Created by furszy on 6/13/17.
  */
 
-public class PivtrumPeerData {
+public class PeerData {
 
     private String host;
     private int tcpPort;
     private int sslPort;
     private long prunningLimit;
 
-    public PivtrumPeerData(String host, int tcpPort, int sslPort) {
+    public PeerData(String host, int tcpPort, int sslPort) {
         this.host = host;
         this.tcpPort = tcpPort;
         this.sslPort = sslPort;
@@ -31,8 +31,8 @@ public class PivtrumPeerData {
 
     @Override
     public boolean equals(Object o) {
-        if (!(o instanceof PivtrumPeerData)) return false;
-        PivtrumPeerData other = (PivtrumPeerData) o;
+        if (!(o instanceof PeerData)) return false;
+        PeerData other = (PeerData) o;
         if (!this.host.equals(other.getHost())){
             return false;
         }
@@ -44,7 +44,7 @@ public class PivtrumPeerData {
 
     @Override
     public String toString() {
-        return "PivtrumPeerData{" +
+        return "PeerData{" +
                 "host='" + host + '\'' +
                 ", tcpPort=" + tcpPort +
                 ", sslPort=" + sslPort +

@@ -21,8 +21,7 @@ import java.net.Socket;
 import java.net.SocketAddress;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-import global.PivtrumGlobalData;
-import pivtrum.PivtrumPeerData;
+import network.PeerData;
 import com.wagerr.wallet.R;
 import com.wagerr.wallet.module.WagerrContext;
 import com.wagerr.wallet.ui.address_add_activity.AddContactActivity;
@@ -91,7 +90,7 @@ public class DialogsUtil {
 
 
     public interface TrustedNodeDialogListener{
-        void onNodeSelected(PivtrumPeerData pivtrumPeerData);
+        void onNodeSelected(PeerData peerData);
     }
 
     public static DialogBuilder buildtrustedNodeDialog(final Activity context, final TrustedNodeDialogListener trustedNodeDialogListener){
@@ -134,7 +133,7 @@ public class DialogsUtil {
                                 public void run() {
                                     if(check){
                                         trustedNodeDialogListener.onNodeSelected(
-                                                new PivtrumPeerData(
+                                                new PeerData(
                                                         host,
                                                         finalTcpPort,
                                                         finalSslPort)

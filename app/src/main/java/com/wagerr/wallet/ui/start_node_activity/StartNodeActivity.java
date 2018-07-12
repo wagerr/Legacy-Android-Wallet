@@ -18,8 +18,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
-import global.PivtrumGlobalData;
-import pivtrum.PivtrumPeerData;
+import network.PeerGlobalData;
+import network.PeerData;
+
 import com.wagerr.wallet.R;
 import com.wagerr.wallet.module.WagerrContext;
 import com.wagerr.wallet.ui.base.BaseActivity;
@@ -28,7 +29,7 @@ import com.wagerr.wallet.ui.wallet_activity.WalletActivity;
 import com.wagerr.wallet.utils.DialogBuilder;
 import com.wagerr.wallet.utils.DialogsUtil;
 
-import static global.PivtrumGlobalData.listTrustedHosts;
+import static network.PeerGlobalData.listTrustedHosts;
 
 /**
  * Created by Neoperol on 6/27/17.
@@ -42,7 +43,7 @@ public class StartNodeActivity extends BaseActivity {
     private ArrayAdapter<String> adapter;
     private List<String> hosts = new ArrayList<>();
 
-    private static final List<PivtrumPeerData> trustedNodes = WagerrContext.IS_TEST?PivtrumGlobalData.listTrustedTestHosts():listTrustedHosts();
+    private static final List<PeerData> trustedNodes = WagerrContext.IS_TEST? PeerGlobalData.listTrustedTestHosts():listTrustedHosts();
 
     @Override
     protected void onCreateView(Bundle savedInstanceState, ViewGroup container) {
@@ -58,13 +59,13 @@ public class StartNodeActivity extends BaseActivity {
             public void onClick(View view) {
                 DialogBuilder dialogBuilder = DialogsUtil.buildtrustedNodeDialog(StartNodeActivity.this, new DialogsUtil.TrustedNodeDialogListener() {
                     @Override
-                    public void onNodeSelected(PivtrumPeerData pivtrumPeerData) {
+                    public void onNodeSelected(PeerData pivtrumPeerData) {
                         if(!trustedNodes.contains(pivtrumPeerData)) {
                             dropdown.setAdapter(null);
                             adapter.clear();
                             hosts = new ArrayList<String>();
                             trustedNodes.add(pivtrumPeerData);
-                            for (PivtrumPeerData trustedNode : trustedNodes) {
+                            for (PeerData trustedNode : trustedNodes) {
                                     hosts.add(trustedNode.getHost());
                             }
                             adapter.addAll(hosts);
@@ -101,7 +102,7 @@ public class StartNodeActivity extends BaseActivity {
             @Override
             public void onClick(View v) {
                 int selected = dropdown.getSelectedItemPosition();
-                PivtrumPeerData selectedNode = trustedNodes.get(selected);
+                PeerData selectedNode = trustedNodes.get(selected);
                 boolean isStarted = wagerrApplication.getAppConf().getTrustedNode()!=null;
                 wagerrApplication.setTrustedServer(selectedNode);
 
@@ -123,7 +124,7 @@ public class StartNodeActivity extends BaseActivity {
         dropdown = (Spinner)findViewById(R.id.spinner);
 
         // add connected node if it's not on the list
-        PivtrumPeerData pivtrumPeer = wagerrApplication.getAppConf().getTrustedNode();
+        PeerData pivtrumPeer = wagerrApplication.getAppConf().getTrustedNode();
         if (pivtrumPeer!=null && !trustedNodes.contains(pivtrumPeer)){
             trustedNodes.add(pivtrumPeer);
         }
@@ -131,7 +132,7 @@ public class StartNodeActivity extends BaseActivity {
         int selectionPos = 0;
 
         for (int i=0;i<trustedNodes.size();i++){
-            PivtrumPeerData trustedNode = trustedNodes.get(i);
+            PeerData trustedNode = trustedNodes.get(i);
             if (pivtrumPeer!=null && pivtrumPeer.getHost().equals(trustedNode.getHost())){
                 selectionPos = i;
             }
