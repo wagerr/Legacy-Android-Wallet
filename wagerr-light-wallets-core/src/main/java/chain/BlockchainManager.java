@@ -253,7 +253,7 @@ public class BlockchainManager {
                 final boolean hasTrustedPeer = trustedPeerHost != null;
 
                 final boolean connectTrustedPeerOnly = true;//hasTrustedPeer && config.getTrustedPeerOnly();
-                peerGroup.setMaxConnections(connectTrustedPeerOnly ? 1 : maxConnectedPeers);
+                peerGroup.setMaxConnections(1);
                 peerGroup.setConnectTimeoutMillis(PEER_TIMEOUT_MS);
                 peerGroup.setPeerDiscoveryTimeoutMillis(PEER_DISCOVERY_TIMEOUT_MS);
 
@@ -300,9 +300,6 @@ public class BlockchainManager {
                             }
 
                         }
-
-                        if (!connectTrustedPeerOnly)
-                            peers.addAll(Arrays.asList(normalPeerDiscovery.getPeers(services, timeoutValue, timeoutUnit)));
 
                         // workaround because PeerGroup will shuffle peers
                         if (needsTrimPeersWorkaround)
