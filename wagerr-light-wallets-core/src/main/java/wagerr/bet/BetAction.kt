@@ -1,6 +1,7 @@
 package wagerr.bet
 
 import android.text.TextUtils
+import com.google.gson.Gson
 import global.WagerrCoreContext
 import org.apache.commons.codec.binary.Hex
 import org.wagerrj.core.Coin
@@ -93,4 +94,13 @@ fun String.isValidBetActionSource(): Boolean {
         }
     }
     return true
+}
+
+fun List<BetAction>.toListBets(): String {
+    val listBets = mutableListOf<ListBet>()
+    for (betAction in this) {
+        listBets.add(ListBet(betAction.transaction.hashAsString, betAction.eventId,
+                betAction.betChoose, (betAction.transaction.toBetActionAmount()!!.toPlainString()).toFloat()))
+    }
+    return Gson().toJson(listBets)
 }

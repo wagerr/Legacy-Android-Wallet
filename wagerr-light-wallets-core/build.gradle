@@ -36,6 +36,7 @@ dependencies {
     compile 'commons-validator:commons-validator:1.6'
     compile 'com.lambdaworks:scrypt:1.4.0'
     testCompile 'org.slf4j:slf4j-api:1.7.20'
+    implementation 'com.google.code.gson:gson:2.8.5'
     testCompile 'junit:junit:4.12'
     testCompile 'org.slf4j:slf4j-simple:1.7.5'
     compile "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$versions.kotlin"
