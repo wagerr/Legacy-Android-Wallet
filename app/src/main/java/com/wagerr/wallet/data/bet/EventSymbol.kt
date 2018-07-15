@@ -1,10 +1,13 @@
 package com.wagerr.wallet.data.bet
 
 import com.wagerr.wallet.R
+import com.wagerr.wallet.data.bet.EventSymbol.WorldCupSymbol.EVENT_INFO_MAP
+import com.wagerr.wallet.data.bet.EventSymbol.WorldCupSymbol.TEAM_IMAGE_MAP
+import com.wagerr.wallet.data.bet.EventSymbol.WorldCupSymbol.TEAM_MAP
 
 sealed class EventSymbol {
     abstract fun getFullEventInfo(eventInfoSymbol: String): String
-    abstract fun getFullEventLeague(): String
+    abstract fun getFullEventLeague(eventLeague: String): String
     abstract fun getFullTeam(teamSymbol: String): String
     abstract fun getTeamImage(teamSymbol: String): Int?
 
@@ -96,7 +99,7 @@ sealed class EventSymbol {
             return EVENT_INFO_MAP[eventInfoSymbol] ?: eventInfoSymbol
         }
 
-        override fun getFullEventLeague(): String {
+        override fun getFullEventLeague(eventLeague: String): String {
             return "World Cup"
         }
 
@@ -109,11 +112,31 @@ sealed class EventSymbol {
         }
 
     }
+
+    object DefaultSymbol : EventSymbol() {
+
+        override fun getFullEventInfo(eventInfoSymbol: String): String {
+            return eventInfoSymbol
+        }
+
+        override fun getFullEventLeague(eventLeague: String): String {
+            return eventLeague
+        }
+
+        override fun getFullTeam(teamSymbol: String): String {
+            return teamSymbol
+        }
+
+        override fun getTeamImage(teamSymbol: String): Int? {
+            return null
+        }
+
+    }
 }
 
 fun String.toEventSymbol(): EventSymbol {
     return when (this) {
         "WCUP" -> EventSymbol.WorldCupSymbol
-        else -> EventSymbol.WorldCupSymbol
+        else -> EventSymbol.DefaultSymbol
     }
 }

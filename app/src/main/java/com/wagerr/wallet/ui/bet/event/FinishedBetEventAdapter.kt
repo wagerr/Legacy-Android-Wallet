@@ -14,7 +14,7 @@ class FinishedBetEventAdapter : BaseQuickAdapter<FinishedBetData, BaseViewHolder
     override fun convert(helper: BaseViewHolder, item: FinishedBetData) {
 
         val eventSymbol = item.betEvent.eventLeague.toEventSymbol()
-        helper.setText(R.id.text_event_league, eventSymbol.getFullEventLeague())
+        helper.setText(R.id.text_event_league, eventSymbol.getFullEventLeague(item.betEvent.eventLeague))
         helper.setText(R.id.text_event_info, eventSymbol.getFullEventInfo(item.betEvent.eventInfo))
         helper.setText(R.id.text_time, Date(item.betEvent.timeStamp).formatToViewDateTimeDefaults())
         helper.setText(R.id.text_home_team, eventSymbol.getFullTeam(item.betEvent.homeTeam))

@@ -90,11 +90,7 @@ fun String.isValidBetEventSource(): Boolean {
     if (this.split("|").size != 11) {
         return false
     }
-    try {
-        Integer.parseInt(this.split("|")[2].replace("#", ""))
-    } catch (e: NumberFormatException) {
-        return false
-    }
+
 
     for (s in this.split("|")) {
         if (TextUtils.isEmpty(s)) {

@@ -13,7 +13,7 @@ class OngoingBetEventAdapter : BaseQuickAdapter<BetEvent, BaseViewHolder>(R.layo
     override fun convert(helper: BaseViewHolder, item: BetEvent) {
 
         val eventSymbol = item.eventLeague.toEventSymbol()
-        helper.setText(R.id.text_event_league,eventSymbol.getFullEventLeague())
+        helper.setText(R.id.text_event_league,eventSymbol.getFullEventLeague(item.eventLeague))
         helper.setText(R.id.text_event_info, eventSymbol.getFullEventInfo(item.eventInfo))
         helper.setText(R.id.text_time, Date(item.timeStamp).formatToViewDateTimeDefaults())
         helper.setText(R.id.text_home_team, eventSymbol.getFullTeam(item.homeTeam))

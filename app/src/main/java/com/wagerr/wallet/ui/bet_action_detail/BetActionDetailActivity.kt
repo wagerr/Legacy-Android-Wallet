@@ -60,7 +60,7 @@ class BetActionDetailActivity : BaseActivity() {
                     .subscribe({
                         it?.let {
                             val eventSymbol = it.eventLeague.toEventSymbol()
-                            text_event_league.text = eventSymbol.getFullEventLeague()
+                            text_event_league.text = eventSymbol.getFullEventLeague(it.eventLeague)
                             text_event_info.text = eventSymbol.getFullEventInfo(it.eventInfo)
                             text_time.text = Date(it.timeStamp).formatToViewDateTimeDefaults()
                             eventSymbol.getTeamImage(it.homeTeam)?.let {
