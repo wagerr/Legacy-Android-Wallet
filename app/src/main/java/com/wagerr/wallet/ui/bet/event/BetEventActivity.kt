@@ -1,31 +1,41 @@
 package com.wagerr.wallet.ui.bet.event
 
 import android.app.Activity
+import android.content.ClipData
+import android.content.ClipData.newPlainText
+import android.content.ClipboardManager
 import android.content.Context
 import android.content.Intent
 import android.net.ConnectivityManager
+import android.os.Build
 import android.os.Bundle
 import android.support.v4.content.ContextCompat
 import android.util.Log
+import android.view.Menu
+import android.view.MenuItem
 import android.view.ViewGroup
 import android.widget.Toast
 import chain.BlockchainState
 import com.wagerr.wallet.R
+import com.wagerr.wallet.R.id.container_bet_event_syncing
+import com.wagerr.wallet.WagerrApplication
+import com.wagerr.wallet.module.bet.BetActionFetcher
 import com.wagerr.wallet.service.IntentsConstants.ACTION_BROADCAST_TRANSACTION
 import com.wagerr.wallet.service.IntentsConstants.DATA_TRANSACTION_HASH
 import com.wagerr.wallet.service.WagerrWalletService
 import com.wagerr.wallet.ui.base.BaseDrawerActivity
 import com.wagerr.wallet.ui.base.dialogs.SimpleTextDialog
+import com.wagerr.wallet.ui.qr_activity.QrActivity
 import com.wagerr.wallet.ui.transaction_detail_activity.FragmentTxDetail.TX
 import com.wagerr.wallet.ui.transaction_detail_activity.FragmentTxDetail.TX_WRAPPER
 import com.wagerr.wallet.ui.transaction_send_activity.SendTxDetailActivity
-import com.wagerr.wallet.utils.AnimationUtils
-import com.wagerr.wallet.utils.CrashReporter
-import com.wagerr.wallet.utils.DialogsUtil
-import com.wagerr.wallet.utils.NavigationUtils
+import com.wagerr.wallet.utils.*
+import com.wagerr.wallet.utils.scanner.ScanActivity
 import global.WagerrCoreContext
 import global.exceptions.NoPeerConnectedException
 import global.wrappers.TransactionWrapper
+import io.reactivex.Observable
+import io.reactivex.android.schedulers.AndroidSchedulers
 import kotlinx.android.synthetic.main.activity_bet_event.*
 import net.lucode.hackware.magicindicator.ViewPagerHelper
 import net.lucode.hackware.magicindicator.buildins.commonnavigator.CommonNavigator
@@ -40,6 +50,8 @@ import org.wagerrj.core.Transaction
 import org.wagerrj.script.ScriptBuilder
 import org.wagerrj.script.ScriptOpCodes
 import org.wagerrj.wallet.Wallet
+import wagerr.bet.toBetActions
+import wagerr.bet.toListBets
 import wallet.exceptions.InsufficientInputsException
 import java.io.IOException
 
@@ -204,7 +216,7 @@ class BetEventActivity : BaseDrawerActivity() {
 
     private fun checkConnectivity(amountStr: String, betActionStr: String): Boolean {
         if (!isOnline()) {
-            showErrorDialog( getString(R.string.error_no_connectivity_title),  getString(R.string.error_no_connectivity_body))
+            showErrorDialog(getString(R.string.error_no_connectivity_title), getString(R.string.error_no_connectivity_body))
             return false
         }
         return true
@@ -222,7 +234,7 @@ class BetEventActivity : BaseDrawerActivity() {
         errorDialog.show(fragmentManager, resources.getString(R.string.send_error_dialog_tag))
     }
 
-    fun showErrorDialog(title:String, message: String?) {
+    fun showErrorDialog(title: String, message: String?) {
         errorDialog.setTitle(title)
         errorDialog.setBody(message)
         errorDialog.show(fragmentManager, resources.getString(R.string.send_error_dialog_tag))
@@ -273,6 +285,27 @@ class BetEventActivity : BaseDrawerActivity() {
         Toast.makeText(this, R.string.sending_tx, Toast.LENGTH_LONG).show()
         finish()
         NavigationUtils.goBackToHome(this)
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        menuInflater.inflate(R.menu.bet, menu)
+        return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        if (item.itemId == R.id.action_listbets) {
+            Observable.fromCallable {
+                WagerrApplication.getInstance().module.listTx().map { it.transaction }
+                        .toBetActions()?.toListBets()
+            }.observeOn(AndroidSchedulers.mainThread())
+                    .subscribe({
+                        AndroidUtils.copyToClipboard(this, it)
+                        Toast.makeText(this,"Pasted",Toast.LENGTH_SHORT).show()
+                    }, {})
+            return true
+        }
+        return super.onOptionsItemSelected(item)
     }
 
     override fun onBlockchainStateChange() {
