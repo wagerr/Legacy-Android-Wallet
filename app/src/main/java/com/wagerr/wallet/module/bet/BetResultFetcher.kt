@@ -11,7 +11,7 @@ class BetResultFetcher {
         fun getBetResults(): Observable<List<BetResult>?> {
             return Observable.fromCallable {
                 return@fromCallable WagerrApplication.getInstance().module.watchedSpent.toBetResults()?.sortedBy {
-                    it.eventId.replace("#", "").toInt()
+                    it.transaction.updateTime
                 }
             }.subscribeOn(Schedulers.io())
         }

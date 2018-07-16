@@ -1,7 +1,6 @@
 package wagerr.bet
 
 import global.WagerrCoreContext
-import org.wagerrj.core.Address
 import org.wagerrj.core.Transaction
 import wallet.WalletManager
 
@@ -52,7 +51,7 @@ class BetManager(val walletManager: WalletManager) {
 
     fun getBetResults(): List<BetResult>? {
         return walletManager.watchedSpent.toBetResults()?.sortedBy {
-            it.eventId.replace("#", "").toInt()
+            it.transaction.updateTime
         }
     }
 
