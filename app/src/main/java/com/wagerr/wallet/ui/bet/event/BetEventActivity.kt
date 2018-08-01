@@ -32,6 +32,8 @@ import com.wagerr.wallet.ui.transaction_send_activity.SendTxDetailActivity
 import com.wagerr.wallet.utils.*
 import com.wagerr.wallet.utils.scanner.ScanActivity
 import global.WagerrCoreContext
+import global.WagerrCoreContext.MAX_BET_AMOUNT
+import global.WagerrCoreContext.MIN_BET_AMOUNT
 import global.exceptions.NoPeerConnectedException
 import global.wrappers.TransactionWrapper
 import io.reactivex.Observable
@@ -159,7 +161,7 @@ class BetEventActivity : BaseDrawerActivity() {
             val amount = Coin.parseCoin(amountStr)
             if (amount.isZero) throw IllegalArgumentException("Amount zero, please correct it")
             if (amount.isLessThan(Transaction.MIN_NONDUST_OUTPUT)) throw IllegalArgumentException("Amount must be greater than the minimum amount accepted from miners, " + Transaction.MIN_NONDUST_OUTPUT.toFriendlyString())
-            if (amount.isLessThan(Coin.parseCoin("1")) || amount.isGreaterThan(Coin.parseCoin("10000")))
+            if (amount.isLessThan(MIN_BET_AMOUNT) || amount.isGreaterThan(MAX_BET_AMOUNT))
                 throw IllegalArgumentException("Incorrect bet amount. Please ensure your bet is beteen 1 - 10000 WGR inclusive.")
             if (amount.isGreaterThan(Coin.valueOf(wagerrModule.availableBalance)))
                 throw IllegalArgumentException("Insuficient balance")

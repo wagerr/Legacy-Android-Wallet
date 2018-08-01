@@ -5,6 +5,7 @@ import android.text.format.DateUtils;
 
 import com.wagerr.wallet.core.BuildConfig;
 
+import org.wagerrj.core.Coin;
 import org.wagerrj.core.Context;
 import org.wagerrj.core.NetworkParameters;
 import org.wagerrj.params.MainNetParams;
@@ -31,6 +32,10 @@ public class WagerrCoreContext {
     public static final long STOP_ACCEPT_BET_BEFORE_EVENT_TIME = (20+1)*60*1000; //+1 for safety
 
     public static final long ORACLE_BET_EVENT_START_TIME = IS_TEST? 1528539485000L :1528539485000L;
+
+    public static final Coin MIN_BET_AMOUNT = Coin.parseCoin("50");
+    public static final Coin MAX_BET_AMOUNT = Coin.parseCoin("10000");
+
 
 
     public static final class Files{
