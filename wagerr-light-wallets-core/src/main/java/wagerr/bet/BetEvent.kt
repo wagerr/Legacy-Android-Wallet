@@ -91,11 +91,5 @@ fun String.isValidBetEventSource(): Boolean {
         return false
     }
 
-
-    for (s in this.split("|")) {
-        if (TextUtils.isEmpty(s)) {
-            return false
-        }
-    }
     return true
 }
