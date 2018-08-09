@@ -8,11 +8,13 @@ import android.support.v4.content.ContextCompat
 import android.support.v7.app.AlertDialog
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
+import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
 import com.wagerr.wallet.R
+import com.wagerr.wallet.R.id.*
 import com.wagerr.wallet.WagerrApplication
 import com.wagerr.wallet.data.bet.getMatchResult
 import com.wagerr.wallet.data.bet.toEventSymbol
@@ -144,9 +146,13 @@ class BetEventDetailActivity : BaseActivity() {
                         text_time.text = Date(it.timeStamp).formatToViewDateTimeDefaults()
                         eventSymbol.getTeamImage(it.homeTeam)?.let {
                             image_home_team.setImageResource(it)
+                        }?: run {
+                            image_home_team.visibility = View.GONE
                         }
                         eventSymbol.getTeamImage(it.awayTeam)?.let {
                             image_away_team.setImageResource(it)
+                        }?: run {
+                            image_away_team.visibility = View.GONE
                         }
                         text_home_team.text = eventSymbol.getFullTeam(it.homeTeam)
                         text_away_team.text = eventSymbol.getFullTeam(it.awayTeam)

@@ -47,6 +47,7 @@
         android:layout_marginLeft="36dp"
         android:layout_marginTop="16dp"
         android:background="@color/bgBlack30"
+        tools:visibility="gone"
         android:padding="0.5dp"
         android:scaleType="fitXY"
         app:layout_constraintLeft_toLeftOf="parent"
@@ -62,9 +63,24 @@
         android:background="@color/bgBlack30"
         android:padding="0.5dp"
         android:scaleType="fitXY"
+        tools:visibility="gone"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/text_event_league"
         tools:src="@drawable/img_flag_arg" />
+
+    <android.support.constraint.Guideline
+        android:id="@+id/guide_line_home"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_begin="156dp" />
+
+    <android.support.constraint.Guideline
+        android:id="@+id/guide_line_away"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_end="156dp" />
 
     <TextView
         android:id="@+id/text_vs"
@@ -73,20 +89,20 @@
         android:text="VS"
         android:textColor="@color/bgBlackX"
         android:textSize="16sp"
-        app:layout_constraintBottom_toBottomOf="@+id/image_away_team"
+        app:layout_constraintBottom_toTopOf="@id/button_status"
         app:layout_constraintLeft_toLeftOf="@+id/image_home_team"
         app:layout_constraintRight_toRightOf="@+id/image_away_team"
-        app:layout_constraintTop_toTopOf="@+id/image_home_team" />
+        app:layout_constraintTop_toBottomOf="@+id/text_time" />
 
     <TextView
         android:id="@+id/text_home_team"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
         android:textColor="@color/bgBlackX"
         android:textSize="14sp"
-        app:layout_constraintLeft_toLeftOf="@+id/image_home_team"
-        app:layout_constraintRight_toRightOf="@+id/image_home_team"
+        app:layout_constraintBottom_toTopOf="@id/button_status"
+        app:layout_constraintLeft_toLeftOf="@+id/button_status"
+        app:layout_constraintRight_toLeftOf="@+id/guide_line_home"
         app:layout_constraintTop_toBottomOf="@+id/image_home_team"
         tools:text="Switzerland" />
 
@@ -95,13 +111,14 @@
         android:id="@+id/text_away_team"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
         android:textColor="@color/bgBlackX"
         android:textSize="14sp"
-        app:layout_constraintLeft_toLeftOf="@+id/image_away_team"
-        app:layout_constraintRight_toRightOf="@+id/image_away_team"
+        app:layout_constraintBottom_toTopOf="@id/button_status"
+        app:layout_constraintLeft_toRightOf="@+id/guide_line_away"
+        app:layout_constraintRight_toRightOf="@+id/button_status"
         app:layout_constraintTop_toBottomOf="@+id/image_home_team"
         tools:text="Korean Republic" />
+
     <Button
         android:id="@+id/button_status"
         style="@style/WgrHintButtonWithBorder"
@@ -119,10 +136,11 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
         android:layout_marginLeft="16dp"
+        android:text="YOUR BET"
         android:textSize="14sp"
-        app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintBottom_toTopOf="@id/top_panel_divier"
-        android:text="YOUR BET" />
+        app:layout_constraintLeft_toLeftOf="parent" />
+
     <View
         android:id="@+id/top_panel_divier"
         android:layout_width="match_parent"
