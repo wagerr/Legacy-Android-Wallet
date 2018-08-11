@@ -257,7 +257,6 @@ public class WagerrApplication extends Application implements ContextWrapper {
      * @param trustedServer
      */
     public void setTrustedServer(PeerData trustedServer) {
-        networkConf.setTrustedServer(trustedServer);
         wagerrModule.getConf().saveTrustedNode(trustedServer.getHost(),0);
         appConf.saveTrustedNode(trustedServer);
     }
