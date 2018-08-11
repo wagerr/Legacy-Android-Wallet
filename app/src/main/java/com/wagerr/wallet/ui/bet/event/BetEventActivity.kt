@@ -175,6 +175,9 @@ class BetEventActivity : BaseDrawerActivity() {
 
             transaction = wagerrModule.completeTx(transaction)
 
+            if (transaction?.outputs?.size != 2) {
+                throw IllegalArgumentException("Bet transaction needs to have a change address. Please try with larger or smaller bet amount.")
+            }
 
             Log.i("APP", "tx: " + transaction.toString())
 
