@@ -26,9 +26,13 @@ class BetEventBetActionAdapter :
             }
             helper.setText(R.id.text_amount, item.betAction.transaction.toBetActionAmount()?.toFriendlyString())
             if (item.betResult != null) {
-                item.betReward?.rewards?.let {
-                    helper.setText(R.id.text_reward, "WIN ${it[0].amount.toFriendlyString()}")
-                } ?: run {
+                if (item.betAction.betChoose == item.betResult!!.betResult) {
+                    item.betReward?.rewards?.let {
+                        helper.setText(R.id.text_reward, "WIN ${it[0].amount.toFriendlyString()}")
+                    } ?: run {
+                        helper.setText(R.id.text_reward, "WIN (NOT PAID)")
+                    }
+                } else {
                     helper.setText(R.id.text_reward, "LOSE")
                 }
             } else {

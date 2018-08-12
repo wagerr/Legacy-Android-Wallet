@@ -1,6 +1,7 @@
 package wagerr.bet
 
 import global.WagerrCoreContext
+import org.wagerrj.core.Coin
 import org.wagerrj.core.Transaction
 import wallet.WalletManager
 
@@ -87,7 +88,7 @@ class BetManager(val walletManager: WalletManager) {
         val betResult = getBetResultByEventId(betAction.eventId) ?: return null
         val rewardTransaction = walletManager.mineReceived?.filter {
             it.isCoinStake && it.updateTime > betResult.transaction.updateTime // no need to check for pos
-        }?.sortedBy { it.updateTime }?.first() ?: return null
+        }?.sortedBy { it.updateTime }?.firstOrNull() ?: return null
 
         if (betAction.betChoose != betResult.betResult) {
             return BetReward(rewardTransaction, null)
@@ -102,16 +103,16 @@ class BetManager(val walletManager: WalletManager) {
         } else {
             odds = betEvent.drawOdds
         }
-        val expectReward = (betAmount * odds - betAmount * 0.06).toLong()
+
+        val expectReward = (betAmount * odds - (betAmount * odds - betAmount) * 0.06).toLong()
 
         for (output in rewardTransaction.outputs) {
             if (output.isMine(walletManager.wallet)) {
-                if (output.value.value == expectReward) {
-                    val addressFromP2SH = output.getAddressFromP2PKHScript(WagerrCoreContext.NETWORK_PARAMETERS)
-                    if (addressFromP2SH != null) {
-                        rewardOutpoints.add(BetRewardOutpoint(addressFromP2SH, output.value))
-                        break
-                    }
+                val actionChangeAddress = betAction.transaction.getOutput(1).getAddressFromP2PKHScript(WagerrCoreContext.NETWORK_PARAMETERS)
+                val rewardAddress = output.getAddressFromP2PKHScript(WagerrCoreContext.NETWORK_PARAMETERS)
+                if (actionChangeAddress != null && rewardAddress != null && actionChangeAddress == rewardAddress) {
+                    rewardOutpoints.add(BetRewardOutpoint(rewardAddress, Coin.valueOf(expectReward)))
+                    break
                 }
             }
         }
@@ -119,7 +120,8 @@ class BetManager(val walletManager: WalletManager) {
             return BetReward(rewardTransaction, null)
         } else {
             return BetReward(rewardTransaction, rewardOutpoints)
-        }    }
+        }
+    }
 
     fun getBetFullDataByEventId(eventId: String): BetData.BetFullData {
         return BetData.BetFullData(getBetEventsById(eventId), getBetActionsByEventId(eventId),
@@ -143,6 +145,6 @@ class BetManager(val walletManager: WalletManager) {
             betAction.transaction.updateTime > betEvent.transaction.updateTime
         }
         return BetData.BetActionData(betEvent, betAction,
-                getBetResultByEventId(betAction.eventId), getBetRewardByBetActionAndEvent(betAction,betEvent!!))
+                getBetResultByEventId(betAction.eventId), getBetRewardByBetActionAndEvent(betAction, betEvent!!))
     }
 }
