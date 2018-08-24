@@ -6,8 +6,8 @@ import android.os.Bundle
 import android.view.ViewGroup
 
 import com.wagerr.wallet.R
-import com.wagerr.wallet.data.bet.*
-import com.wagerr.wallet.module.bet.BetEventFetcher
+import com.wagerr.wallet.WagerrApplication
+import com.wagerr.wallet.data.bet.toEventSymbol
 import com.wagerr.wallet.ui.base.BaseActivity
 import com.wagerr.wallet.ui.transaction_detail_activity.FragmentTxDetail
 import com.wagerr.wallet.ui.transaction_detail_activity.FragmentTxDetail.TX_WRAPPER
@@ -15,8 +15,11 @@ import com.wagerr.wallet.ui.transaction_detail_activity.TransactionDetailActivit
 import com.wagerr.wallet.utils.formatToViewDateTimeDefaults
 
 import global.wrappers.TransactionWrapper
+import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_bet_action_detail.*
+import wagerr.bet.BetEvent
 import wagerr.bet.DRAW_SYMBOL
 import wagerr.bet.toBetAction
 import wagerr.bet.toBetActionAmount
@@ -52,10 +55,16 @@ class BetActionDetailActivity : BaseActivity() {
         loadTx()
     }
 
+    private fun getBetEventByIdAndTime(eventId: String, betTimeInMillis: Long):Observable<BetEvent?> {
+        return Observable.fromCallable {
+            return@fromCallable WagerrApplication.getInstance().module.betManager.getBetEventByIdAndTime(eventId,betTimeInMillis)
+        }.subscribeOn(Schedulers.io())
+    }
+
     private fun loadTx() {
         val betAction = transactionWrapper.transaction.toBetAction()
         betAction?.let {
-            BetEventFetcher.getBetEventByIdAndTime(it.eventId, transactionWrapper.transaction.updateTime.time)
+            getBetEventByIdAndTime(it.eventId, transactionWrapper.transaction.updateTime.time)
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe({
                         it?.let {

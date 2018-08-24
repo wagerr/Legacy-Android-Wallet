@@ -10,31 +10,22 @@ import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
-import android.widget.EditText
 import android.widget.TextView
 import com.wagerr.wallet.R
-import com.wagerr.wallet.R.id.*
 import com.wagerr.wallet.WagerrApplication
 import com.wagerr.wallet.data.bet.getMatchResult
 import com.wagerr.wallet.data.bet.toEventSymbol
 import com.wagerr.wallet.data.worldcup.api.WorldCupApi
-import com.wagerr.wallet.module.bet.BetEventFetcher
 import com.wagerr.wallet.ui.base.BaseActivity
-import com.wagerr.wallet.ui.bet.event.BetEventActivity
-import com.wagerr.wallet.ui.transaction_detail_activity.FragmentTxDetail
-import com.wagerr.wallet.ui.transaction_detail_activity.TransactionDetailActivity
 import com.wagerr.wallet.ui.transaction_detail_activity.TransactionIdDetailActivity
 import com.wagerr.wallet.ui.transaction_detail_activity.TransactionIdDetailFragment
 import com.wagerr.wallet.utils.formatToViewDateTimeDefaults
 import com.wagerr.wallet.utils.wrapContent
-import global.WagerrCoreContext
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.rxkotlin.plusAssign
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_finished_bet_event_detail.*
-import org.wagerrj.core.Sha256Hash
 import wagerr.bet.*
 import java.util.Date
 
@@ -134,10 +125,14 @@ class BetEventDetailActivity : BaseActivity() {
         dialog.wrapContent()
     }
 
+    private fun getBetEventById(eventId: String):Observable<BetEvent?> {
+        return Observable.fromCallable {
+            return@fromCallable WagerrApplication.getInstance().module.betManager.getBetEventById(eventId)
+        }.subscribeOn(Schedulers.io())
+    }
+
     private fun load() {
-
-
-        compositeDisposable += BetEventFetcher.getBetEventById(eventId).observeOn(AndroidSchedulers.mainThread())
+        compositeDisposable += getBetEventById(eventId).observeOn(AndroidSchedulers.mainThread())
                 .doOnNext {
                     it?.let {
                         val eventSymbol = it.eventLeague.toEventSymbol()

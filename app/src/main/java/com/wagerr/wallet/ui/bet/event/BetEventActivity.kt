@@ -1,13 +1,9 @@
 package com.wagerr.wallet.ui.bet.event
 
 import android.app.Activity
-import android.content.ClipData
-import android.content.ClipData.newPlainText
-import android.content.ClipboardManager
 import android.content.Context
 import android.content.Intent
 import android.net.ConnectivityManager
-import android.os.Build
 import android.os.Bundle
 import android.support.v4.content.ContextCompat
 import android.util.Log
@@ -17,20 +13,16 @@ import android.view.ViewGroup
 import android.widget.Toast
 import chain.BlockchainState
 import com.wagerr.wallet.R
-import com.wagerr.wallet.R.id.container_bet_event_syncing
 import com.wagerr.wallet.WagerrApplication
-import com.wagerr.wallet.module.bet.BetActionFetcher
 import com.wagerr.wallet.service.IntentsConstants.ACTION_BROADCAST_TRANSACTION
 import com.wagerr.wallet.service.IntentsConstants.DATA_TRANSACTION_HASH
 import com.wagerr.wallet.service.WagerrWalletService
 import com.wagerr.wallet.ui.base.BaseDrawerActivity
 import com.wagerr.wallet.ui.base.dialogs.SimpleTextDialog
-import com.wagerr.wallet.ui.qr_activity.QrActivity
 import com.wagerr.wallet.ui.transaction_detail_activity.FragmentTxDetail.TX
 import com.wagerr.wallet.ui.transaction_detail_activity.FragmentTxDetail.TX_WRAPPER
 import com.wagerr.wallet.ui.transaction_send_activity.SendTxDetailActivity
 import com.wagerr.wallet.utils.*
-import com.wagerr.wallet.utils.scanner.ScanActivity
 import global.WagerrCoreContext
 import global.WagerrCoreContext.MAX_BET_AMOUNT
 import global.WagerrCoreContext.MIN_BET_AMOUNT

@@ -12,18 +12,20 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
 import com.wagerr.wallet.R
+import com.wagerr.wallet.WagerrApplication
 import wagerr.bet.BetActionForSend
 import wagerr.bet.BetEvent
 import wagerr.bet.BetType
 import wagerr.bet.DRAW_SYMBOL
 import wagerr.bet.toBetTransactionData
-import com.wagerr.wallet.module.bet.BetEventFetcher
 import com.wagerr.wallet.ui.base.BaseFragment
 import com.wagerr.wallet.ui.bet.result.BetEventDetailActivity
 import com.wagerr.wallet.utils.wrapContent
 import global.WagerrCoreContext
+import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.rxkotlin.plusAssign
+import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.fragment_ongoing_bet_event.*
 
 
@@ -139,7 +141,7 @@ class OngoingBetEventFragment : BaseFragment() {
 
     private fun load() {
         // add loading..
-        compositeDisposable += BetEventFetcher.getCanBetBetEvents()
+        compositeDisposable += getCanBetBetEvents()
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({
                     swipe_refresh_layout.isRefreshing = false
@@ -149,5 +151,11 @@ class OngoingBetEventFragment : BaseFragment() {
                         adapter.setNewData(it)
                     }
                 }, {})
+    }
+
+    private fun getCanBetBetEvents(): Observable<List<BetEvent>?> {
+        return Observable.fromCallable {
+            return@fromCallable WagerrApplication.getInstance().module.betManager.getCanBetBetEvents()
+        }.subscribeOn(Schedulers.io())
     }
 }

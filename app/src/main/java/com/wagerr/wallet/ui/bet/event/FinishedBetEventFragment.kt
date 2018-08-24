@@ -8,15 +8,19 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.wagerr.wallet.R
+import com.wagerr.wallet.WagerrApplication
 import com.wagerr.wallet.data.bet.getMatchResult
 import com.wagerr.wallet.data.worldcup.api.WorldCupApi
-import com.wagerr.wallet.module.bet.BetEventFetcher
 import com.wagerr.wallet.module.bet.BetResultFetcher
 import com.wagerr.wallet.ui.base.BaseFragment
 import com.wagerr.wallet.ui.bet.result.BetEventDetailActivity
+import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.rxkotlin.Observables
+import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.fragment_finished_bet_event.*
+import wagerr.bet.BetEvent
+import wagerr.bet.BetResult
 
 class FinishedBetEventFragment : BaseFragment() {
 
@@ -58,8 +62,8 @@ class FinishedBetEventFragment : BaseFragment() {
 
     private fun load() {
         // add loading..
-        Observables.zip(BetEventFetcher.getFinishedBetEvents(), WorldCupApi.getWorldCupMatchData(),
-                BetResultFetcher.getBetResults()) { finishedBetEvents, worldCupMatches, betResults ->
+        Observables.zip(getFinishedBetEvents(), WorldCupApi.getWorldCupMatchData(),
+                getBetResults()) { finishedBetEvents, worldCupMatches, betResults ->
             return@zip finishedBetEvents?.map { event ->
                 return@map FinishedBetData(event, betResults?.firstOrNull() {
                     event.eventId == it.eventId
@@ -76,5 +80,15 @@ class FinishedBetEventFragment : BaseFragment() {
                 }, { it.printStackTrace() })
     }
 
+    private fun getFinishedBetEvents(): Observable<List<BetEvent>?> {
+        return Observable.fromCallable {
+            return@fromCallable WagerrApplication.getInstance().module.betManager.getFinishedBetEvents()
+        }.subscribeOn(Schedulers.io())
+    }
 
+    private fun getBetResults(): Observable<List<BetResult>?> {
+        return Observable.fromCallable {
+            return@fromCallable  WagerrApplication.getInstance().module.betManager.getBetResults()
+        }.subscribeOn(Schedulers.io())
+    }
 }
