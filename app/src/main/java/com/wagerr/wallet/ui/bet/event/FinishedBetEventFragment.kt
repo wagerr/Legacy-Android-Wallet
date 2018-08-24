@@ -9,8 +9,6 @@ import android.view.View
 import android.view.ViewGroup
 import com.wagerr.wallet.R
 import com.wagerr.wallet.WagerrApplication
-import com.wagerr.wallet.data.bet.getMatchResult
-import com.wagerr.wallet.data.worldcup.api.WorldCupApi
 import com.wagerr.wallet.ui.base.BaseFragment
 import com.wagerr.wallet.ui.bet.result.BetEventDetailActivity
 import io.reactivex.Observable
@@ -61,12 +59,12 @@ class FinishedBetEventFragment : BaseFragment() {
 
     private fun load() {
         // add loading..
-        Observables.zip(getFinishedBetEvents(), WorldCupApi.getWorldCupMatchData(),
-                getBetResults()) { finishedBetEvents, worldCupMatches, betResults ->
+        Observables.zip(getFinishedBetEvents(),
+                getBetResults()) { finishedBetEvents, betResults ->
             return@zip finishedBetEvents?.map { event ->
                 return@map FinishedBetData(event, betResults?.firstOrNull() {
                     event.eventId == it.eventId
-                }, worldCupMatches.getMatchResult(event))
+                })
             }
         }.observeOn(AndroidSchedulers.mainThread())
                 .subscribe({

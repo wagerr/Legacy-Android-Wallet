@@ -32,11 +32,6 @@ class FinishedBetEventAdapter : BaseQuickAdapter<FinishedBetData, BaseViewHolder
         }?: run {
             helper.setVisible(R.id.image_away_team, false)
         }
-        item.betMatchResult?.homeScore?.let {
-            helper.setText(R.id.text_score, "${item.betMatchResult.homeScore}:${item.betMatchResult.awayScore}")
-        } ?: run {
-            helper.setText(R.id.text_score, "VS")
-        }
 
         item.betResult?.let {
             if (item.betResult.isRefund()) {

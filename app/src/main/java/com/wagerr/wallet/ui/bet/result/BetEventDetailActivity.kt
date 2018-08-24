@@ -13,9 +13,7 @@ import android.view.ViewGroup
 import android.widget.TextView
 import com.wagerr.wallet.R
 import com.wagerr.wallet.WagerrApplication
-import com.wagerr.wallet.data.bet.getMatchResult
 import com.wagerr.wallet.data.bet.toEventSymbol
-import com.wagerr.wallet.data.worldcup.api.WorldCupApi
 import com.wagerr.wallet.ui.base.BaseActivity
 import com.wagerr.wallet.ui.transaction_detail_activity.TransactionIdDetailActivity
 import com.wagerr.wallet.ui.transaction_detail_activity.TransactionIdDetailFragment
@@ -133,7 +131,8 @@ class BetEventDetailActivity : BaseActivity() {
 
     private fun load() {
         compositeDisposable += getBetEventById(eventId).observeOn(AndroidSchedulers.mainThread())
-                .doOnNext {
+                .observeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread()).subscribe({
                     it?.let {
                         val eventSymbol = it.eventLeague.toEventSymbol()
                         text_event_league.text = eventSymbol.getFullEventLeague(it.eventLeague)
@@ -151,16 +150,6 @@ class BetEventDetailActivity : BaseActivity() {
                         }
                         text_home_team.text = eventSymbol.getFullTeam(it.homeTeam)
                         text_away_team.text = eventSymbol.getFullTeam(it.awayTeam)
-                    }
-                }
-                .observeOn(Schedulers.io())
-                .flatMap { betEvent ->
-                    WorldCupApi.getWorldCupMatchData().map { it.getMatchResult(betEvent) }
-                }.observeOn(AndroidSchedulers.mainThread()).subscribe({ matchResult ->
-                    matchResult?.homeScore?.let {
-                        text_vs.text = "${matchResult.homeScore}:${matchResult.awayScore}"
-                    } ?: run {
-                        text_vs.text = "VS"
                     }
                 }, {})
         Observable.fromCallable {
