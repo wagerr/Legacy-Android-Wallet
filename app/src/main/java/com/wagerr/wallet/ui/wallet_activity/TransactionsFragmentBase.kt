@@ -25,6 +25,7 @@ import org.wagerrj.core.Coin
 import org.wagerrj.utils.MonetaryFormat
 import wagerr.bet.BetData
 import wagerr.bet.DRAW_SYMBOL
+import wagerr.bet.isRefund
 import java.math.BigDecimal
 import java.util.Collections
 import java.util.Comparator
@@ -104,7 +105,9 @@ class TransactionsFragmentBase : BaseRecyclerFragment<TransactionWrapper>() {
 
                     val betEvent =  betFullData.betEvents!![0]
                     val betResult =  betFullData.betResult!!
-                    if (betResult.betResult == "DRW") {
+                    if (betResult.isRefund()) {
+                        holder.description.text = "REFUND"
+                    } else if (betResult.betResult == "DRW") {
                         holder.description.text = "PAYOUT(${betEvent.homeTeam} VS ${betEvent.awayTeam}): DRAW"
                     } else {
                         holder.description.text = "PAYOUT(${betEvent.homeTeam} VS ${betEvent.awayTeam}): ${betResult.betResult} WIN"

@@ -11,11 +11,18 @@ import java.nio.charset.Charset
 data class BetResult(val txType: TxType, val protocolVersion: String, val eventId: String,
                      val betResult: String, val transaction: Transaction)
 
+fun BetResult.isRefund(): Boolean {
+    return this.txType == TxType.TxTypeRefund
+}
 
 fun Transaction.toBetResult(): BetResult? {
     if (this.isBetResult()) {
         val items = this.getBetResultString().split("|")
-        return BetResult(TxType.TxTypeBet, items[1], items[2], items[3], this)
+        if (items[0] == "3") {
+            return BetResult(TxType.TxTypeResult, items[1], items[2], items[3], this)
+        } else {
+            return BetResult(TxType.TxTypeRefund, items[1], items[2], items[3], this)
+        }
     } else {
         return null
     }
@@ -31,8 +38,8 @@ fun List<Transaction>.toBetResults(): List<BetResult>? {
 
 fun List<Transaction>.getBetResultByEventId(eventId: String): BetResult? {
     return this.toBetResults()?.firstOrNull {
-                it.eventId == eventId
-            }
+        it.eventId == eventId
+    }
 }
 
 fun Transaction.isBetResult(): Boolean {
@@ -59,7 +66,7 @@ fun String.isValidBetResultSource(): Boolean {
     if (this.contains(",")) {
         return false
     }
-    if (!this.startsWith("3")) {
+    if (!this.startsWith("3") || !this.startsWith("4")) {
         return false
     }
 
@@ -70,3 +77,4 @@ fun String.isValidBetResultSource(): Boolean {
     }
     return true
 }
+

@@ -11,7 +11,6 @@ import com.wagerr.wallet.R
 import com.wagerr.wallet.WagerrApplication
 import com.wagerr.wallet.data.bet.getMatchResult
 import com.wagerr.wallet.data.worldcup.api.WorldCupApi
-import com.wagerr.wallet.module.bet.BetResultFetcher
 import com.wagerr.wallet.ui.base.BaseFragment
 import com.wagerr.wallet.ui.bet.result.BetEventDetailActivity
 import io.reactivex.Observable

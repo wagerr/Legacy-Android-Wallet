@@ -6,6 +6,7 @@ import com.wagerr.wallet.R
 import com.wagerr.wallet.WagerrApplication
 import wagerr.bet.BetData
 import wagerr.bet.DRAW_SYMBOL
+import wagerr.bet.isRefund
 import wagerr.bet.toBetActionAmount
 
 class BetEventBetActionAdapter :
@@ -26,7 +27,9 @@ class BetEventBetActionAdapter :
             }
             helper.setText(R.id.text_amount, item.betAction.transaction.toBetActionAmount()?.toFriendlyString())
             if (item.betResult != null) {
-                if (item.betAction.betChoose == item.betResult!!.betResult) {
+                if (item.betResult!!.isRefund()) {
+                    helper.setText(R.id.text_reward, "REFUND ${item.betAction.transaction.getOutput(0).value.toFriendlyString()}")
+                } else if (item.betAction.betChoose == item.betResult!!.betResult) {
                     item.betReward?.rewards?.let {
                         helper.setText(R.id.text_reward, "WIN ${it[0].amount.toFriendlyString()}")
                     } ?: run {

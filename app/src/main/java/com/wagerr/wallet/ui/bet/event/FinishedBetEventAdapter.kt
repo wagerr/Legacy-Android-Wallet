@@ -7,6 +7,7 @@ import com.wagerr.wallet.R
 import wagerr.bet.DRAW_SYMBOL
 import com.wagerr.wallet.data.bet.toEventSymbol
 import com.wagerr.wallet.utils.formatToViewDateTimeDefaults
+import wagerr.bet.isRefund
 import java.util.*
 
 class FinishedBetEventAdapter : BaseQuickAdapter<FinishedBetData, BaseViewHolder>(R.layout.item_finished_bet_event) {
@@ -38,7 +39,9 @@ class FinishedBetEventAdapter : BaseQuickAdapter<FinishedBetData, BaseViewHolder
         }
 
         item.betResult?.let {
-            if (item.betResult.betResult == DRAW_SYMBOL) {
+            if (item.betResult.isRefund()) {
+                helper.setText(R.id.button_status, "REFUND")
+            } else if (item.betResult.betResult == DRAW_SYMBOL) {
                 helper.setText(R.id.button_status, "DRAW")
             } else {
                 helper.setText(R.id.button_status, "${item.betResult.betResult} WIN")

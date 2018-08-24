@@ -174,7 +174,9 @@ class BetEventDetailActivity : BaseActivity() {
                 }.observeOn(AndroidSchedulers.mainThread())
                 .subscribe({
                     it.second?.let {
-                        if (it.betResult == DRAW_SYMBOL) {
+                        if (it.isRefund()) {
+                            button_status.text = "REFUND"
+                        } else if (it.betResult == DRAW_SYMBOL) {
                             button_status.text = "DRAW"
                         } else {
                             button_status.text = "${it.betResult} WIN"
