@@ -66,7 +66,7 @@ fun String.isValidBetResultSource(): Boolean {
     if (this.contains(",")) {
         return false
     }
-    if (!this.startsWith("3") || !this.startsWith("4")) {
+    if (!(this.startsWith("3") || this.startsWith("4"))) {
         return false
     }
 
