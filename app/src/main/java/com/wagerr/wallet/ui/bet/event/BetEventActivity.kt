@@ -166,11 +166,7 @@ class BetEventActivity : BaseDrawerActivity() {
             transaction?.addOutput(amount, script) //bo BTC will be destroyed
 
             transaction = wagerrModule.completeTx(transaction)
-
-            if (transaction?.outputs?.size != 2) {
-                throw IllegalArgumentException("Bet transaction needs to have a change address. Please try with larger or smaller bet amount.")
-            }
-
+            
             Log.i("APP", "tx: " + transaction.toString())
 
             val transactionWrapper = TransactionWrapper(transaction, null, null, amount, TransactionWrapper.TransactionUse.SENT_SINGLE)
