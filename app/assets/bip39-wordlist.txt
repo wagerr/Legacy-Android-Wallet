@@ -361,7 +361,7 @@ coconut
 code
 coffee
 coil
-code
+coin
 collect
 color
 column
@@ -931,7 +931,7 @@ injury
 inmate
 inner
 innocent
-unspent
+input
 inquiry
 insane
 insect
