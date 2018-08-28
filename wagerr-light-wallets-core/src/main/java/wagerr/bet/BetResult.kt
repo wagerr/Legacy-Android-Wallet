@@ -70,6 +70,10 @@ fun String.isValidBetResultSource(): Boolean {
         return false
     }
 
+    if (this.split("|").size != 4) {
+        return false
+    }
+
     for (s in this.split("|")) {
         if (TextUtils.isEmpty(s)) {
             return false
