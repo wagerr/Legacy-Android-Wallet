@@ -238,7 +238,7 @@ public class BaseDrawerActivity extends WagerrActivity implements NavigationView
                     imgSrc = 0;
                     break;
                 case SYNCING:
-                    text = getString(R.string.syncing)+" "+progress+"%";
+                    text = getString(R.string.syncing)+" "+progress+"%, Height "+ wagerrModule.getChainHeight();
                     color = Color.parseColor("#f6a623");
                     imgSrc = R.drawable.ic_header_unsynced;
                     break;
