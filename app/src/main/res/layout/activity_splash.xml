@@ -6,8 +6,8 @@ android:background="@color/white">
 
 
     <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="300dp"
+        android:layout_height="150dp"
         android:src="@drawable/ig_wagerr_splash"
         android:layout_centerInParent="true"
         />
