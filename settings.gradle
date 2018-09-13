@@ -1,2 +1,3 @@
-include ':app', ':wagerr-light-wallets-core'
+include ':wagerrj', ':app', ':wagerr-light-wallets-core'
+project(':wagerrj').projectDir = new File('wagerrj/core')
 

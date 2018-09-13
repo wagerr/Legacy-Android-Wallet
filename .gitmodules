@@ -1,0 +1,4 @@
+[submodule "wagerrj"]
+	path = wagerrj
+	url = https://github.com/LooorTor/wagerrj.git
+	branch = master
