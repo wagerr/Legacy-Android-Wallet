@@ -41,9 +41,11 @@ public class PincodeActivity extends BaseActivity implements KeyboardFragment.on
 
     @Override
     protected void onCreateView(Bundle savedInstanceState, ViewGroup container) {
+        setTitle("Create Pin");
 
         if (getIntent()!=null && getIntent().hasExtra(CHECK_PIN)){
             checkPin = true;
+            setTitle("Check Pin");
         }
 
         if (wagerrApplication.getAppConf().getPincode()!=null && !checkPin){
@@ -52,7 +54,6 @@ public class PincodeActivity extends BaseActivity implements KeyboardFragment.on
         }
 
         getLayoutInflater().inflate(R.layout.fragment_pincode, container);
-        setTitle("Create Pin");
         getSupportActionBar().setHomeButtonEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
