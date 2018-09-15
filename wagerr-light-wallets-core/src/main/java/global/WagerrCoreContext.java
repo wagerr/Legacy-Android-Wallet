@@ -36,6 +36,7 @@ public class WagerrCoreContext {
     public static final Coin MIN_BET_AMOUNT = Coin.parseCoin("50");
     public static final Coin MAX_BET_AMOUNT = Coin.parseCoin("10000");
 
+    public static final String URL_BLOCK_EXPLORER = IS_TEST? "https://explorer2.wagerr.com": "https://explorer.wagerr.com";
 
 
     public static final class Files{

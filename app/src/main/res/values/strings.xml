@@ -63,6 +63,7 @@
     <string name="select">Select a Node</string>
     <string name="text_version">Version</string>
     <string name="network_monitor">Network monitor</string>
+    <string name="block_explorer">Block explorer</string>
     <string name="settings_report">Report issue</string>
     <string name="send_message">Transaction details:</string>
     <string name="save_message">Do you want to save the address?</string>

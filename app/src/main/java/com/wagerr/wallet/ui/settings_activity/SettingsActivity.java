@@ -37,6 +37,7 @@ import java.util.ArrayList;
 import global.WagerrCoreContext;
 
 import static com.wagerr.wallet.ui.tutorial_activity.TutorialActivity.INTENT_EXTRA_INFO_TUTORIAL;
+import static global.WagerrCoreContext.URL_BLOCK_EXPLORER;
 
 /**
  * Created by Neoperol on 5/11/17.
@@ -50,6 +51,7 @@ public class SettingsActivity extends BaseDrawerActivity implements View.OnClick
     private Button buttonChange;
     private Button btn_change_node;
     private Button btn_reset_blockchain;
+    private Button btn_blockexplorer;
     private Button btn_report;
     private Button btn_support;
     private Button buttonTutorial;
@@ -101,6 +103,9 @@ public class SettingsActivity extends BaseDrawerActivity implements View.OnClick
         // Open Network Monitor
         buttonChange = (Button) findViewById(R.id.btn_network);
         buttonChange.setOnClickListener(this);
+
+        btn_blockexplorer = (Button) findViewById(R.id.btn_blockexplorer);
+        btn_blockexplorer.setOnClickListener(this);
 
         btn_report = (Button) findViewById(R.id.btn_report);
         btn_report.setOnClickListener(this);
@@ -156,6 +161,11 @@ public class SettingsActivity extends BaseDrawerActivity implements View.OnClick
             startActivity(myIntent);
         }else if (id == R.id.btn_network){
             startActivity(new Intent(v.getContext(),SettingsNetworkActivity.class));
+        }else if (id == R.id.btn_blockexplorer){
+            Intent intent = new Intent();
+            intent.setData(Uri.parse(URL_BLOCK_EXPLORER));//Url 就是你要打开的网址
+            intent.setAction(Intent.ACTION_VIEW);
+            this.startActivity(intent);
         }else if(id == R.id.btn_change_node) {
             startActivity(new Intent(v.getContext(), StartNodeActivity.class));
         }else if(id == R.id.btn_reset_blockchain){
