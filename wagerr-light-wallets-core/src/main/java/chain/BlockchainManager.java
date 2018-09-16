@@ -256,10 +256,8 @@ public class BlockchainManager {
                 peerGroup.setMaxConnections(1);
                 peerGroup.setConnectTimeoutMillis(PEER_TIMEOUT_MS);
                 peerGroup.setPeerDiscoveryTimeoutMillis(PEER_DISCOVERY_TIMEOUT_MS);
+                peerGroup.setMinBroadcastConnections(1);
 
-                if (WagerrCoreContext.IS_TEST) {
-                    peerGroup.setMinBroadcastConnections(1);
-                }
 
                 peerGroup.addPeerDiscovery(new PeerDiscovery() {
 
