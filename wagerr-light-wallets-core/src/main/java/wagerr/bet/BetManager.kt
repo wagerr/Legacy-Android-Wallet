@@ -116,9 +116,9 @@ class BetManager(val walletManager: WalletManager) {
 
         for (output in rewardTransaction.outputs) {
             if (output.isMine(walletManager.wallet)) {
-                val actionChangeAddress = betAction.transaction.getOutput(1).getAddressFromP2PKHScript(WagerrCoreContext.NETWORK_PARAMETERS)
+                val betRewardAddress = betAction.transaction.getInput(0).getFromAddress()
                 val rewardAddress = output.getAddressFromP2PKHScript(WagerrCoreContext.NETWORK_PARAMETERS)
-                if (actionChangeAddress != null && rewardAddress != null && actionChangeAddress == rewardAddress) {
+                if (betRewardAddress != null && rewardAddress != null && betRewardAddress == rewardAddress) {
                     rewardOutpoints.add(BetRewardOutpoint(rewardAddress, Coin.valueOf(expectReward)))
                     break
                 }
