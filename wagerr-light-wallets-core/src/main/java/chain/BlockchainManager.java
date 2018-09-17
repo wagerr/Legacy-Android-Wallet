@@ -31,7 +31,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.InetSocketAddress;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
@@ -395,6 +394,9 @@ public class BlockchainManager {
         return blockChain!=null? blockChain.getChainHead().getHeight():0;
     }
 
+    public StoredBlock getChainHead() {
+        return blockChain!=null? blockChain.getChainHead():null;
+    }
 
     public void removeBlockchainDownloadListener(PeerDataEventListener blockchainDownloadListener) {
         if (peerGroup!=null)

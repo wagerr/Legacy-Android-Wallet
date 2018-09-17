@@ -5,6 +5,7 @@ import org.wagerrj.core.Coin;
 import org.wagerrj.core.InsufficientMoneyException;
 import org.wagerrj.core.Peer;
 import org.wagerrj.core.Sha256Hash;
+import org.wagerrj.core.StoredBlock;
 import org.wagerrj.core.Transaction;
 import org.wagerrj.core.TransactionInput;
 import org.wagerrj.core.TransactionOutput;
@@ -19,16 +20,16 @@ import java.math.BigDecimal;
 import java.util.List;
 import java.util.Set;
 
-import global.exceptions.UpgradeException;
-import global.wrappers.InputWrapper;
-import global.wrappers.TransactionWrapper;
 import global.exceptions.CantSweepBalanceException;
 import global.exceptions.ContactAlreadyExistException;
 import global.exceptions.NoPeerConnectedException;
+import global.exceptions.UpgradeException;
+import global.wrappers.InputWrapper;
+import global.wrappers.TransactionWrapper;
 import wagerr.bet.BetManager;
+import wallet.exceptions.CantRestoreEncryptedWallet;
 import wallet.exceptions.InsufficientInputsException;
 import wallet.exceptions.TxNotFoundException;
-import wallet.exceptions.CantRestoreEncryptedWallet;
 
 /**
  * Created by mati on 18/04/17.
@@ -122,6 +123,8 @@ public interface WagerrModule {
     List<Peer> listConnectedPeers();
 
     int getChainHeight();
+
+    StoredBlock getChainHead();
 
     WagerrRate getRate(String selectedRateCoin);
 

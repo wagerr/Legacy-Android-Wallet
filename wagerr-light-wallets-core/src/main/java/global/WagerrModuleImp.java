@@ -11,6 +11,7 @@ import org.wagerrj.core.NetworkParameters;
 import org.wagerrj.core.Peer;
 import org.wagerrj.core.ScriptException;
 import org.wagerrj.core.Sha256Hash;
+import org.wagerrj.core.StoredBlock;
 import org.wagerrj.core.Transaction;
 import org.wagerrj.core.TransactionConfidence;
 import org.wagerrj.core.TransactionInput;
@@ -573,6 +574,10 @@ public class WagerrModuleImp implements WagerrModule {
         return blockchainManager.getChainHeadHeight();
     }
 
+    @Override
+    public StoredBlock getChainHead() {
+        return blockchainManager.getChainHead();
+    }
 
     public BlockchainManager getBlockchainManager() {
         return blockchainManager;

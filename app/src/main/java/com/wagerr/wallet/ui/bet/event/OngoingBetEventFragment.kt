@@ -13,11 +13,6 @@ import android.widget.EditText
 import android.widget.TextView
 import com.wagerr.wallet.R
 import com.wagerr.wallet.WagerrApplication
-import wagerr.bet.BetActionForSend
-import wagerr.bet.BetEvent
-import wagerr.bet.BetType
-import wagerr.bet.DRAW_SYMBOL
-import wagerr.bet.toBetTransactionData
 import com.wagerr.wallet.ui.base.BaseFragment
 import com.wagerr.wallet.ui.bet.result.BetEventDetailActivity
 import com.wagerr.wallet.utils.wrapContent
@@ -27,10 +22,13 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.rxkotlin.plusAssign
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.fragment_ongoing_bet_event.*
-
+import wagerr.bet.BetActionForSend
+import wagerr.bet.BetEvent
+import wagerr.bet.BetType
+import wagerr.bet.DRAW_SYMBOL
+import wagerr.bet.toBetTransactionData
 
 class OngoingBetEventFragment : BaseFragment() {
-
 
     private lateinit var adapter: OngoingBetEventAdapter
     private lateinit var emptyView: View
@@ -49,7 +47,8 @@ class OngoingBetEventFragment : BaseFragment() {
         swipe_refresh_layout.setOnRefreshListener {
             load()
         }
-        emptyView = layoutInflater.inflate(R.layout.layout_empty_view, ongoing_bet_event_list.getParent() as ViewGroup, false)
+        emptyView = layoutInflater.inflate(R.layout.layout_empty_view, ongoing_bet_event_list.getParent() as ViewGroup,
+                false)
 
         ongoing_bet_event_list.setHasFixedSize(true)
         layoutManager = LinearLayoutManager(activity)
@@ -65,7 +64,8 @@ class OngoingBetEventFragment : BaseFragment() {
             val betEvent = adapter.getItem(position)
             betEvent?.let {
                 if (it.timeStamp < System.currentTimeMillis() + WagerrCoreContext.STOP_ACCEPT_BET_BEFORE_EVENT_TIME) {
-                    (activity as BetEventActivity).showErrorDialog(getString(R.string.warning_title),getString(R.string.bet_event_stop))
+                    (activity as BetEventActivity).showErrorDialog(getString(R.string.warning_title),
+                            getString(R.string.bet_event_stop))
                     return@setOnItemChildClickListener
                 }
                 when (view.id) {
@@ -116,8 +116,24 @@ class OngoingBetEventFragment : BaseFragment() {
             }
         }
         betGo.setOnClickListener {
-            if (event.timeStamp < System.currentTimeMillis() + WagerrCoreContext.STOP_ACCEPT_BET_BEFORE_EVENT_TIME) {
-                (activity as BetEventActivity).showErrorDialog(getString(R.string.warning_title),getString(R.string.bet_event_stop))
+            if (!WagerrApplication.getInstance().module.isAnyPeerConnected ||  WagerrApplication.getInstance().module.connectedPeerHeight == -1L) {
+                (activity as BetEventActivity).showErrorDialog(getString(R.string.warning_title),
+                        getString(R.string.bet_event_not_connect_peer))
+                dialog.dismiss()
+                return@setOnClickListener
+            }
+            if (WagerrApplication.getInstance().module.chainHeight.toLong() != WagerrApplication.getInstance().module.connectedPeerHeight) {
+                val behindBlocks = WagerrApplication.getInstance().module.connectedPeerHeight - WagerrApplication.getInstance().module.chainHeight.toLong()
+                (activity as BetEventActivity).showErrorDialog(getString(R.string.warning_title),
+                            "${getString(R.string.bet_event_not_sync)} ${behindBlocks.toInt()} blocks behind. ")
+                dialog.dismiss()
+                return@setOnClickListener
+            }
+            if (event.timeStamp < System.currentTimeMillis() + WagerrCoreContext.STOP_ACCEPT_BET_BEFORE_EVENT_TIME ||
+                    event.timeStamp < WagerrApplication.getInstance().module.chainHead?.header?.timeSeconds!! * 1000
+                    + WagerrCoreContext.STOP_ACCEPT_BET_BEFORE_EVENT_TIME) {
+                (activity as BetEventActivity).showErrorDialog(getString(R.string.warning_title),
+                        getString(R.string.bet_event_stop))
                 dialog.dismiss()
                 return@setOnClickListener
             }

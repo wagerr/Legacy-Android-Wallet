@@ -29,7 +29,7 @@ public class WagerrCoreContext {
 
     public static final String ORACLE_ADDRESS = IS_TEST ? "TCQyQ6dm6GKfpeVvHWHzcRAjtKsJ3hX4AJ":"WWxqQtNnkYkde5UkmjF42VK7aGtkANPt4K";
 
-    public static final long STOP_ACCEPT_BET_BEFORE_EVENT_TIME = (20+1)*60*1000; //+1 for safety
+    public static final long STOP_ACCEPT_BET_BEFORE_EVENT_TIME = (20+5)*60*1000; //+5 for safety
 
     public static final long ORACLE_BET_EVENT_START_TIME = IS_TEST? 1528539485000L :1528539485000L;
 
