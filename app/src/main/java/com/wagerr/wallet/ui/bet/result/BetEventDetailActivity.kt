@@ -1,8 +1,7 @@
 package com.wagerr.wallet.ui.bet.result
 
-import android.content.Intent
-
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.support.v4.content.ContextCompat
 import android.support.v7.app.AlertDialog
@@ -24,7 +23,11 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.rxkotlin.plusAssign
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_finished_bet_event_detail.*
-import wagerr.bet.*
+import wagerr.bet.BetData
+import wagerr.bet.BetEvent
+import wagerr.bet.DRAW_SYMBOL
+import wagerr.bet.isRefund
+import wagerr.bet.toBetActions
 import java.util.Date
 
 
@@ -153,14 +156,11 @@ class BetEventDetailActivity : BaseActivity() {
                     }
                 }, {})
         Observable.fromCallable {
-            WagerrApplication.getInstance().module.watchedSpent
+            val betEvents =   WagerrApplication.getInstance().module.betManager.getBetEventsById(eventId)
+            val betResult = WagerrApplication.getInstance().module.betManager.getBetResultByEventId(eventId)
+             betEvents to betResult
         }.subscribeOn(Schedulers.io())
-                .map {
-                    val betEvents = it.getBetEventsById(eventId)
-                    val betResult = it.getBetResultByEventId(eventId)
-
-                    return@map betEvents to betResult
-                }.observeOn(AndroidSchedulers.mainThread())
+               .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({
                     it.second?.let {
                         if (it.isRefund()) {

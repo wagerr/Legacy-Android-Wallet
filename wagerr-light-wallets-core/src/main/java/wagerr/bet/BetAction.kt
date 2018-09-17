@@ -42,13 +42,6 @@ fun List<Transaction>.toBetActions(): List<BetAction>? {
     }
 }
 
-fun List<Transaction>.getBetActionsByEventId(eventId: String): List<BetAction>? {
-    return this.toBetActions()
-            ?.filter {
-                eventId == it.eventId
-            }
-}
-
 fun Transaction.toBetActionAmount(): Coin? {
     if (this.isBetAction()) {
         val item = this.outputs.filter {

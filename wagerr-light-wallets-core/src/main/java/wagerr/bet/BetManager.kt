@@ -20,13 +20,13 @@ class BetManager(val walletManager: WalletManager) {
         return walletManager.watchedSpent.toBetEvents()?.filter {
             it.timeStamp > System.currentTimeMillis() + WagerrCoreContext.STOP_ACCEPT_BET_BEFORE_EVENT_TIME &&
                     !(it.homeOdds.compareTo(0) == 0 && it.drawOdds.compareTo(0) == 0 && it.awayOdds.compareTo(0) == 0)
-        }?.sortedByDescending { it.timeStamp }?.distinctBy { it.eventId }?.sortedBy { it.timeStamp }
+        }?.sortedByDescending { it.transaction.updateTime.time }?.distinctBy { it.eventId }
     }
 
     fun getFinishedBetEvents(): List<BetEvent>? {
         return walletManager.watchedSpent.toBetEvents()?.filter {
             it.timeStamp < System.currentTimeMillis() + WagerrCoreContext.STOP_ACCEPT_BET_BEFORE_EVENT_TIME
-        }?.sortedByDescending { it.timeStamp }?.distinctBy { it.eventId }?.sortedBy { it.timeStamp }
+        }?.sortedByDescending { it.transaction.updateTime.time }?.distinctBy { it.eventId }
     }
 
     //get bet event exact before the bet action with match odds
@@ -35,20 +35,20 @@ class BetManager(val walletManager: WalletManager) {
             betTimeInMillis > it.updateTime.time
         }.toBetEvents()?.filter {
             it.eventId == eventId
-        }?.sortedBy { it.timeStamp }?.last()
+        }?.sortedBy { it.transaction.updateTime.time }?.last()
     }
 
     //get bet event exact before the bet action with match odds
     fun getBetEventsById(eventId: String): List<BetEvent>? {
         return walletManager.watchedSpent.toBetEvents()?.filter {
             it.eventId == eventId
-        }?.sortedBy { it.timeStamp }
+        }?.sortedBy { it.transaction.updateTime.time }
     }
 
     fun getBetEventById(eventId: String): BetEvent? {
         return walletManager.watchedSpent.toBetEvents()?.filter {
             it.eventId == eventId
-        }?.sortedBy { it.timeStamp }?.first()
+        }?.sortedBy { it.transaction.updateTime.time }?.first()
     }
 
     fun getBetResults(): List<BetResult>? {

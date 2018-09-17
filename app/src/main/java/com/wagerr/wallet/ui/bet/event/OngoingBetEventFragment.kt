@@ -155,7 +155,7 @@ class OngoingBetEventFragment : BaseFragment() {
 
     private fun getCanBetBetEvents(): Observable<List<BetEvent>?> {
         return Observable.fromCallable {
-            return@fromCallable WagerrApplication.getInstance().module.betManager.getCanBetBetEvents()
+            return@fromCallable WagerrApplication.getInstance().module.betManager.getCanBetBetEvents()?.sortedBy { it.timeStamp }
         }.subscribeOn(Schedulers.io())
     }
 }

@@ -36,12 +36,6 @@ fun List<Transaction>.toBetResults(): List<BetResult>? {
     }
 }
 
-fun List<Transaction>.getBetResultByEventId(eventId: String): BetResult? {
-    return this.toBetResults()?.firstOrNull {
-        it.eventId == eventId
-    }
-}
-
 fun Transaction.isBetResult(): Boolean {
     return this.getBetResultString().isValidBetResultSource()
 }

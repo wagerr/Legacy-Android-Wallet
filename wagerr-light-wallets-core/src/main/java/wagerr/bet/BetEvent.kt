@@ -44,13 +44,6 @@ fun Transaction.toBetEvent(): BetEvent? {
     }
 }
 
-
-fun List<Transaction>.getBetEventsById(eventId: String): List<BetEvent>? {
-    return this.toBetEvents()?.filter {
-        it.eventId == eventId
-    }?.sortedBy { it.timeStamp }
-}
-
 fun List<Transaction>.toBetEvents(): List<BetEvent>? {
     return this.filter {
         it.updateTime.time > ORACLE_BET_EVENT_START_TIME

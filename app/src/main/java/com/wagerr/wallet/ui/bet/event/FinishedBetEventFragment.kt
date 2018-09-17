@@ -79,7 +79,7 @@ class FinishedBetEventFragment : BaseFragment() {
 
     private fun getFinishedBetEvents(): Observable<List<BetEvent>?> {
         return Observable.fromCallable {
-            return@fromCallable WagerrApplication.getInstance().module.betManager.getFinishedBetEvents()
+            return@fromCallable WagerrApplication.getInstance().module.betManager.getFinishedBetEvents()?.sortedBy { it.timeStamp }
         }.subscribeOn(Schedulers.io())
     }
 
