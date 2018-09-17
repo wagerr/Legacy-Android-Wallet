@@ -18,9 +18,10 @@ class BetManager(val walletManager: WalletManager) {
     //get all the bet events with newest odds, filter out the duplicate old one
     fun getCanBetBetEvents(): List<BetEvent>? {
         return walletManager.watchedSpent.toBetEvents()?.filter {
-            it.timeStamp > System.currentTimeMillis() + WagerrCoreContext.STOP_ACCEPT_BET_BEFORE_EVENT_TIME &&
-                    !(it.homeOdds.compareTo(0) == 0 && it.drawOdds.compareTo(0) == 0 && it.awayOdds.compareTo(0) == 0)
-        }?.sortedByDescending { it.transaction.updateTime.time }?.distinctBy { it.eventId }
+            it.timeStamp > System.currentTimeMillis() + WagerrCoreContext.STOP_ACCEPT_BET_BEFORE_EVENT_TIME
+        }?.sortedByDescending { it.transaction.updateTime.time }?.distinctBy { it.eventId }?.filter {
+            !(it.homeOdds.compareTo(0) == 0 && it.drawOdds.compareTo(0) == 0 && it.awayOdds.compareTo(0) == 0)
+        }
     }
 
     fun getFinishedBetEvents(): List<BetEvent>? {
@@ -49,6 +50,12 @@ class BetManager(val walletManager: WalletManager) {
         return walletManager.watchedSpent.toBetEvents()?.filter {
             it.eventId == eventId
         }?.sortedBy { it.transaction.updateTime.time }?.first()
+    }
+
+    fun getLatestBetEventById(eventId: String): BetEvent? {
+        return walletManager.watchedSpent.toBetEvents()?.filter {
+            it.eventId == eventId
+        }?.sortedByDescending { it.transaction.updateTime.time }?.first()
     }
 
     fun getBetResults(): List<BetResult>? {

@@ -62,12 +62,8 @@ class OngoingBetEventFragment : BaseFragment() {
             adapter as OngoingBetEventAdapter
 
             val betEvent = adapter.getItem(position)
+
             betEvent?.let {
-                if (it.timeStamp < System.currentTimeMillis() + WagerrCoreContext.STOP_ACCEPT_BET_BEFORE_EVENT_TIME) {
-                    (activity as BetEventActivity).showErrorDialog(getString(R.string.warning_title),
-                            getString(R.string.bet_event_stop))
-                    return@setOnItemChildClickListener
-                }
                 when (view.id) {
                     R.id.button_home_odds -> {
                         showBetDialog(it, BetType.BetTypeHomeWin)
@@ -134,6 +130,13 @@ class OngoingBetEventFragment : BaseFragment() {
                     + WagerrCoreContext.STOP_ACCEPT_BET_BEFORE_EVENT_TIME) {
                 (activity as BetEventActivity).showErrorDialog(getString(R.string.warning_title),
                         getString(R.string.bet_event_stop))
+                dialog.dismiss()
+                return@setOnClickListener
+            }
+            if (WagerrApplication.getInstance().module.betManager.getLatestBetEventById(event.eventId)?.transaction?.updateTime
+                    !== event.transaction.updateTime) {
+                (activity as BetEventActivity).showErrorDialog(getString(R.string.warning_title),
+                        getString(R.string.bet_event_odds_change))
                 dialog.dismiss()
                 return@setOnClickListener
             }
