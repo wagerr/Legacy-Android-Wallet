@@ -49,6 +49,7 @@
         android:layout_height="wrap_content"
         android:id="@+id/txt_body"
         android:gravity="center"
+        android:autoLink="web"
         android:paddingLeft="20dp"
         android:paddingRight="20dp"
         android:textAlignment="center"

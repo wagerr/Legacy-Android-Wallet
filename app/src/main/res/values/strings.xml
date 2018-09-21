@@ -399,4 +399,7 @@
     <string name="bet_event_odds_change">Bet event odds change, please refresh the bet list!</string>
     <string name="warning_title">WARNING!!!</string>
 
+    <string name="update_dialog_title">Update</string>
+    <string name="update_dialog_content">There is a new version %s, please visit <a href="https://github.com/LooorTor/wagerr-android/releases">https://github.com/LooorTor/wagerr-android/releases</a> to update</string>
+
 </resources>
