@@ -2,60 +2,30 @@ package wallet;
 
 import com.google.common.base.Charsets;
 import com.google.common.collect.Lists;
-
+import global.ContextWrapper;
+import global.WagerrCoreContext;
+import global.WalletConfiguration;
+import global.utils.Io;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.wagerrj.core.Address;
-import org.wagerrj.core.BlockChain;
-import org.wagerrj.core.Coin;
-import org.wagerrj.core.InsufficientMoneyException;
-import org.wagerrj.core.PeerGroup;
-import org.wagerrj.core.Sha256Hash;
-import org.wagerrj.core.Transaction;
-import org.wagerrj.core.TransactionInput;
-import org.wagerrj.core.TransactionOutput;
-import org.wagerrj.core.Utils;
+import org.wagerrj.core.*;
 import org.wagerrj.core.listeners.TransactionConfidenceEventListener;
 import org.wagerrj.crypto.DeterministicKey;
 import org.wagerrj.crypto.LinuxSecureRandom;
 import org.wagerrj.crypto.MnemonicCode;
 import org.wagerrj.crypto.MnemonicException;
-import org.wagerrj.wallet.DeterministicKeyChain;
-import org.wagerrj.wallet.DeterministicSeed;
-import org.wagerrj.wallet.Protos;
-import org.wagerrj.wallet.SendRequest;
-import org.wagerrj.wallet.UnreadableWalletException;
-import org.wagerrj.wallet.Wallet;
-import org.wagerrj.wallet.WalletFiles;
-import org.wagerrj.wallet.WalletProtobufSerializer;
+import org.wagerrj.wallet.*;
 import org.wagerrj.wallet.listeners.WalletCoinsReceivedEventListener;
+import wallet.exceptions.InsufficientInputsException;
+import wallet.exceptions.TxNotFoundException;
 
-import java.io.BufferedReader;
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.OutputStream;
-import java.io.OutputStreamWriter;
-import java.io.Writer;
+import java.io.*;
 import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
-
-import global.ContextWrapper;
-import global.WagerrCoreContext;
-import global.WalletConfiguration;
-import global.utils.Io;
-import wallet.exceptions.InsufficientInputsException;
-import wallet.exceptions.TxNotFoundException;
 
 import static global.WagerrCoreContext.Files.WALLET_FILENAME_PROTOBUF;
 
@@ -576,7 +546,7 @@ public class WalletManager {
     }
 
     public List<TransactionOutput> listUnspent() {
-        return wallet.getUnspents();
+        return wallet.calculateAllSpendCandidates();
     }
 
     public List<String> getMnemonic() {
@@ -608,7 +578,7 @@ public class WalletManager {
     public List<TransactionOutput> getRandomListUnspentNotInListToFullCoins(List<TransactionInput> inputs, Coin amount) throws InsufficientInputsException {
         List<TransactionOutput> list = new ArrayList<>();
         Coin total = Coin.ZERO;
-        for (TransactionOutput transactionOutput : wallet.getUnspents()) {
+        for (TransactionOutput transactionOutput : wallet.calculateAllSpendCandidates()) {
             boolean found = false;
             if (inputs != null) {
                 for (TransactionInput input : inputs) {
