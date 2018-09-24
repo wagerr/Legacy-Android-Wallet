@@ -1,6 +1,7 @@
 package com.wagerr.wallet.data.api
 
 import com.wagerr.wallet.BuildConfig
+import com.wagerr.wallet.data.model.GithubUpdateRsp
 import io.reactivex.Observable
 import io.reactivex.schedulers.Schedulers
 import okhttp3.OkHttpClient
@@ -9,7 +10,6 @@ import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.GET
-import com.wagerr.wallet.data.model.GithubUpdateRsp
 
 class GithubUpdateApi {
     companion object Factory {
@@ -28,7 +28,7 @@ class GithubUpdateApi {
                 .build()
         private val githubUpdateService = retrofit.create(GithubUpdateService::class.java)
 
-        fun getWorldCupMatchData(): Observable<GithubUpdateRsp> {
+        fun getGithubUpdateData(): Observable<GithubUpdateRsp> {
             return githubUpdateService.getGithubUpdateData().subscribeOn(Schedulers.io())
         }
 

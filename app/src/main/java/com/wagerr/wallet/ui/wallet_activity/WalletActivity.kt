@@ -1,5 +1,7 @@
 package com.wagerr.wallet.ui.wallet_activity
 
+import android.Manifest.permission.CAMERA
+import android.app.Activity
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
@@ -16,20 +18,11 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import android.widget.Toast
-
-import com.github.clans.fab.FloatingActionMenu
-
-import org.wagerrj.core.Coin
-import org.wagerrj.core.Transaction
-import org.wagerrj.uri.WagerrURI
-
-import java.math.BigDecimal
-import java.util.ArrayList
-
 import chain.BlockchainState
+import com.github.clans.fab.FloatingActionMenu
 import com.wagerr.wallet.R
-import global.exceptions.NoPeerConnectedException
-import global.WagerrRate
+import com.wagerr.wallet.data.api.GithubUpdateApi
+import com.wagerr.wallet.service.IntentsConstants.*
 import com.wagerr.wallet.ui.base.BaseDrawerActivity
 import com.wagerr.wallet.ui.base.dialogs.SimpleTextDialog
 import com.wagerr.wallet.ui.base.dialogs.SimpleTwoButtonsDialog
@@ -37,27 +30,21 @@ import com.wagerr.wallet.ui.qr_activity.QrActivity
 import com.wagerr.wallet.ui.settings_backup_activity.SettingsBackupActivity
 import com.wagerr.wallet.ui.transaction_request_activity.RequestActivity
 import com.wagerr.wallet.ui.transaction_send_activity.SendActivity
+import com.wagerr.wallet.ui.transaction_send_activity.SendActivity.*
 import com.wagerr.wallet.ui.upgrade.UpgradeWalletActivity
 import com.wagerr.wallet.utils.AnimationUtils
 import com.wagerr.wallet.utils.DialogsUtil
 import com.wagerr.wallet.utils.scanner.ScanActivity
-
-import android.Manifest.permission.CAMERA
-import android.app.Activity
-import android.util.Log
-import com.wagerr.wallet.BuildConfig
-import com.wagerr.wallet.data.api.GithubUpdateApi
-import com.wagerr.wallet.service.IntentsConstants.ACTION_NOTIFICATION
-import com.wagerr.wallet.service.IntentsConstants.INTENT_BROADCAST_DATA_ON_COIN_RECEIVED
-import com.wagerr.wallet.service.IntentsConstants.INTENT_BROADCAST_DATA_TYPE
-import com.wagerr.wallet.ui.transaction_send_activity.SendActivity.INTENT_ADDRESS
-import com.wagerr.wallet.ui.transaction_send_activity.SendActivity.INTENT_EXTRA_TOTAL_AMOUNT
-import com.wagerr.wallet.ui.transaction_send_activity.SendActivity.INTENT_MEMO
 import com.wagerr.wallet.utils.scanner.ScanActivity.INTENT_EXTRA_RESULT
 import com.wagerr.wallet.utils.versionCompare
 import global.WagerrCoreContext
+import global.WagerrRate
+import global.exceptions.NoPeerConnectedException
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.rxkotlin.plusAssign
+import org.wagerrj.core.Transaction
+import org.wagerrj.uri.WagerrURI
+import java.math.BigDecimal
 
 /**
  * Created by Neoperol on 5/11/17.
@@ -218,9 +205,9 @@ class WalletActivity : BaseDrawerActivity() {
 
     private fun checkUpdate(){
         if (!WagerrCoreContext.IS_TEST) {
-            compositeDisposable += GithubUpdateApi.getWorldCupMatchData().observeOn(AndroidSchedulers.mainThread())
+            compositeDisposable += GithubUpdateApi.getGithubUpdateData().observeOn(AndroidSchedulers.mainThread())
                     .subscribe({
-                        if (versionCompare(it.tagName, wagerrApplication.versionName) > 0) {
+                        if (it.prerelease == false && versionCompare(it.tagName, wagerrApplication.versionName) > 0) {
                             showUpdateDialog(it.tagName)
                         }
                     }, { it.printStackTrace() })
