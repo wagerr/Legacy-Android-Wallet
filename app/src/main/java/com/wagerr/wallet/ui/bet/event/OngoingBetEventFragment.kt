@@ -99,15 +99,15 @@ class OngoingBetEventFragment : BaseFragment() {
         when (betType) {
             BetType.BetTypeHomeWin -> {
                 textChoose.text = "${event.homeTeam} WIN"
-                textOdds.text = "(${event.homeOdds})"
+                textOdds.text = "${event.homeOdds} (return ${DecimalFormat("0.0000").format((event.homeOdds-1)*0.94+1)})"
             }
             BetType.BetTypeDraw -> {
                 textChoose.text = "DRAW"
-                textOdds.text = "(${event.drawOdds})"
+                textOdds.text = "${event.drawOdds} (return ${DecimalFormat("0.0000").format((event.drawOdds-1)*0.94+1)})"
             }
             BetType.BetTypeAwayWin -> {
                 textChoose.text = "${event.awayTeam} WIN"
-                textOdds.text = "(${event.awayOdds})"
+                textOdds.text = "${event.awayOdds} (return ${DecimalFormat("0.0000").format((event.awayOdds-1)*0.94+1)})"
             }
         }
         betGo.setOnClickListener {
