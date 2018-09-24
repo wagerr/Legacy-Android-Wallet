@@ -12,6 +12,8 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
 import com.wagerr.wallet.R
+import com.wagerr.wallet.R.id.ongoing_bet_event_list
+import com.wagerr.wallet.R.id.swipe_refresh_layout
 import com.wagerr.wallet.WagerrApplication
 import com.wagerr.wallet.ui.base.BaseFragment
 import com.wagerr.wallet.ui.bet.result.BetEventDetailActivity
@@ -22,11 +24,8 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.rxkotlin.plusAssign
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.fragment_ongoing_bet_event.*
-import wagerr.bet.BetActionForSend
-import wagerr.bet.BetEvent
-import wagerr.bet.BetType
-import wagerr.bet.DRAW_SYMBOL
-import wagerr.bet.toBetTransactionData
+import wagerr.bet.*
+import java.text.DecimalFormat
 
 class OngoingBetEventFragment : BaseFragment() {
 
@@ -140,7 +139,7 @@ class OngoingBetEventFragment : BaseFragment() {
                 dialog.dismiss()
                 return@setOnClickListener
             }
-            (activity as BetEventActivity).sendBetTransaction(betAmount.text.toString(), BetActionForSend(
+            (activity as BetEventActivity).sendBetTransaction(event.transaction.updateTime.time, betAmount.text.toString(), BetActionForSend(
                     event.eventId, when (betType) {
                 BetType.BetTypeHomeWin -> event.homeTeam
                 BetType.BetTypeDraw -> DRAW_SYMBOL

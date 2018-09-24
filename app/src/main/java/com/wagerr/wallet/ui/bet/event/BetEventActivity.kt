@@ -44,6 +44,7 @@ import org.wagerrj.core.Transaction
 import org.wagerrj.script.ScriptBuilder
 import org.wagerrj.script.ScriptOpCodes
 import org.wagerrj.wallet.Wallet
+import wagerr.bet.toBetAction
 import wagerr.bet.toBetActions
 import wagerr.bet.toListBets
 import wallet.exceptions.InsufficientInputsException
@@ -62,6 +63,7 @@ class BetEventActivity : BaseDrawerActivity() {
     }
     val pagerTitleList = listOf("Ongoing", "Finished")
     private var transaction: Transaction? = null
+    private var lastBetEventTime = 0L
 
     private val REQ_CODE_SEND_DETAIL = 8990
 
@@ -113,9 +115,10 @@ class BetEventActivity : BaseDrawerActivity() {
         ViewPagerHelper.bind(magic_indicator, view_pager)
     }
 
-    fun sendBetTransaction(amountStr: String, betActionStr: String) {
+    fun sendBetTransaction(eventTime: Long, amountStr: String, betActionStr: String) {
         try {
             if (checkConnectivity(amountStr, betActionStr)) {
+                lastBetEventTime = eventTime
                 send(false, amountStr, betActionStr)
             }
         } catch (e: IllegalArgumentException) {
@@ -154,7 +157,7 @@ class BetEventActivity : BaseDrawerActivity() {
             if (amount.isZero) throw IllegalArgumentException("Amount zero, please correct it")
             if (amount.isLessThan(Transaction.MIN_NONDUST_OUTPUT)) throw IllegalArgumentException("Amount must be greater than the minimum amount accepted from miners, " + Transaction.MIN_NONDUST_OUTPUT.toFriendlyString())
             if (amount.isLessThan(MIN_BET_AMOUNT) || amount.isGreaterThan(MAX_BET_AMOUNT))
-                throw IllegalArgumentException("Incorrect bet amount. Please ensure your bet is beteen ${WagerrCoreContext.MIN_BET_AMOUNT.toFriendlyString()} - ${WagerrCoreContext.MAX_BET_AMOUNT.toFriendlyString()} WGR inclusive.")
+                throw IllegalArgumentException("Incorrect bet amount. Please ensure your bet is between ${WagerrCoreContext.MIN_BET_AMOUNT.toFriendlyString()} - ${WagerrCoreContext.MAX_BET_AMOUNT.toFriendlyString()} WGR inclusive.")
             if (amount.isGreaterThan(Coin.valueOf(wagerrModule.availableBalance)))
                 throw IllegalArgumentException("Insuficient balance")
             val params = WagerrCoreContext.NETWORK_PARAMETERS
@@ -268,6 +271,23 @@ class BetEventActivity : BaseDrawerActivity() {
             }
 
             showErrorDialog(getString(R.string.commit_tx_fail))
+            return
+        }
+        if (!WagerrApplication.getInstance().module.isAnyPeerConnected ||  WagerrApplication.getInstance().module.connectedPeerHeight == -1L) {
+            showErrorDialog(getString(R.string.warning_title),
+                    getString(R.string.bet_event_not_connect_peer))
+            return
+        }
+        if (WagerrApplication.getInstance().module.chainHeight.toLong() != WagerrApplication.getInstance().module.connectedPeerHeight) {
+            val behindBlocks = WagerrApplication.getInstance().module.connectedPeerHeight - WagerrApplication.getInstance().module.chainHeight.toLong()
+            showErrorDialog(getString(R.string.warning_title),
+                    "${getString(R.string.bet_event_not_sync)} ${behindBlocks.toInt()} blocks behind. ")
+            return
+        }
+        val betAction = transaction!!.toBetAction()
+        if (WagerrApplication.getInstance().module.betManager.getLatestBetEventById(betAction!!.eventId)?.transaction?.updateTime!!.time != lastBetEventTime ) {
+            showErrorDialog(getString(R.string.warning_title),
+                    getString(R.string.bet_event_odds_change))
             return
         }
         wagerrModule.commitTx(transaction)

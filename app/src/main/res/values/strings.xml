@@ -393,7 +393,7 @@
     <string name="no_transactions">You don\'t have any transfers yet.</string>
     <string name="sync_in_progress">The wallet is out of sync, some transactions may be missing.\nPlease wait until the sync process finishes to see your current balance.</string>
     <string name="bet_event_sync_in_progress">The wallet is out of sync, some bet event may be missing.\nPlease wait until the sync process finishes to see what you can bet.</string>
-    <string name="bet_event_stop">Betting closes 20 minutes before event start time. Any bets placed after this time will be invalid and will not be paid out!</string>
+    <string name="bet_event_stop">Betting closes 20 minutes before event start time. Any bets placed after this time will be invalid and will not be paid out! And android wallet is 25min to ensure your bet is valid</string>
     <string name="bet_event_not_sync">Please wait until sync to place bet!</string>
     <string name="bet_event_not_connect_peer">Please wait until connect to peer to place bet!</string>
     <string name="bet_event_odds_change">Bet event odds change, please refresh the bet list!</string>
