@@ -2,6 +2,7 @@ package wagerr.bet
 
 import global.WagerrCoreContext
 import org.wagerrj.core.Transaction
+import org.wagerrj.core.TransactionConfidence
 import wallet.WalletManager
 
 class BetManager(val walletManager: WalletManager) {
@@ -108,7 +109,7 @@ class BetManager(val walletManager: WalletManager) {
     private fun getBetRewardByBetActionAndEventAndResult(betAction: BetAction, betEvent: BetEvent, betResult: BetResult?): BetReward? {
         betResult ?: return null
         val rewardTransaction = walletManager.mineReceived?.firstOrNull {
-            it.isCoinStake && it.confidence.appearedAtChainHeight == betResult.transaction.confidence.appearedAtChainHeight + 1 // no need to check for pos
+            it.isCoinStake && it.confidence.confidenceType == TransactionConfidence.ConfidenceType.BUILDING && it.confidence.appearedAtChainHeight == betResult.transaction.confidence.appearedAtChainHeight + 1 // no need to check for pos
         } ?: return null
 
         if (betAction.betChoose != betResult.betResult) {
