@@ -1,7 +1,6 @@
 package wagerr.bet
 
 import global.WagerrCoreContext
-import org.wagerrj.core.Coin
 import org.wagerrj.core.Transaction
 import wallet.WalletManager
 
@@ -46,6 +45,15 @@ class BetManager(val walletManager: WalletManager) {
         }?.sortedBy { it.transaction.updateTime.time }
     }
 
+    fun getBetEventByBetAction(betAction: BetAction): BetEvent? {
+        return walletManager.watchedSpent.toBetEvents()?.filter {
+            it.eventId == betAction.eventId
+        }?.sortedBy { it.transaction.updateTime.time }?.last { betEvent ->
+            betAction.transaction.updateTime.time >
+                    betEvent.transaction.updateTime.time
+        }
+    }
+
     fun getBetEventById(eventId: String): BetEvent? {
         return walletManager.watchedSpent.toBetEvents()?.filter {
             it.eventId == eventId
@@ -71,11 +79,16 @@ class BetManager(val walletManager: WalletManager) {
                 }
     }
 
-    fun getBetRewardByEventId(eventId: String): BetReward? {
-        val betResult = getBetResultByEventId(eventId) ?: return null
-        val transaction = walletManager.mineReceived?.filter {
-            it.isCoinStake && it.updateTime > betResult.transaction.updateTime // no need to check for pos
-        }?.sortedBy { it.updateTime }?.first() ?: return null
+    // won't be multiple betresult in same block
+    fun getBetResultByRewardTransaction(transaction: Transaction): BetResult? {
+        return walletManager.watchedSpent.toBetResults()?.firstOrNull {
+            //update time is not correct, we use block height here
+            it.transaction.confidence.appearedAtChainHeight ==
+                    transaction.confidence.appearedAtChainHeight - 1
+        }
+    }
+
+    private fun getBetRewardByRewardTransaction(transaction: Transaction): BetReward? {
         val rewardOutpoints = mutableListOf<BetRewardOutpoint>()
         for (output in transaction.outputs) {
             if (output.isMine(walletManager.wallet)) {
@@ -92,17 +105,17 @@ class BetManager(val walletManager: WalletManager) {
         }
     }
 
-    fun getBetRewardByBetActionAndEvent(betAction: BetAction, betEvent: BetEvent): BetReward? {
-        val betResult = getBetResultByEventId(betAction.eventId) ?: return null
-        val rewardTransaction = walletManager.mineReceived?.filter {
-            it.isCoinStake && it.updateTime > betResult.transaction.updateTime // no need to check for pos
-        }?.sortedBy { it.updateTime }?.firstOrNull() ?: return null
+    private fun getBetRewardByBetActionAndEventAndResult(betAction: BetAction, betEvent: BetEvent, betResult: BetResult?): BetReward? {
+        betResult ?: return null
+        val rewardTransaction = walletManager.mineReceived?.firstOrNull {
+            it.isCoinStake && it.confidence.appearedAtChainHeight == betResult.transaction.confidence.appearedAtChainHeight + 1 // no need to check for pos
+        } ?: return null
 
         if (betAction.betChoose != betResult.betResult) {
             return BetReward(rewardTransaction, null)
         }
         var rewardOutpoints = mutableListOf<BetRewardOutpoint>()
-        val betAmount = betAction.transaction.getOutput(0).value.value
+        val betAmount = betAction.transaction.getOutput(0).value
         var odds: Double
         if (betAction.betChoose == betEvent.homeTeam) {
             odds = betEvent.homeOdds
@@ -112,14 +125,16 @@ class BetManager(val walletManager: WalletManager) {
             odds = betEvent.drawOdds
         }
 
-        val expectReward = (betAmount * odds - (betAmount * odds - betAmount) * 0.06).toLong()
+        val expectReward = betAmount.multiply((odds*10000).toLong()).div(10000).multiply(94).div(100)
+                .plus(betAmount.multiply(6).div(100))
 
         for (output in rewardTransaction.outputs) {
             if (output.isMine(walletManager.wallet)) {
                 val betRewardAddress = betAction.transaction.getInput(0).getFromAddress()
                 val rewardAddress = output.getAddressFromP2PKHScript(WagerrCoreContext.NETWORK_PARAMETERS)
-                if (betRewardAddress != null && rewardAddress != null && betRewardAddress == rewardAddress) {
-                    rewardOutpoints.add(BetRewardOutpoint(rewardAddress, Coin.valueOf(expectReward)))
+                if (betRewardAddress != null && rewardAddress != null && betRewardAddress == rewardAddress
+                        && expectReward == output.value) {
+                    rewardOutpoints.add(BetRewardOutpoint(rewardAddress,output.value))
                     break
                 }
             }
@@ -131,28 +146,26 @@ class BetManager(val walletManager: WalletManager) {
         }
     }
 
-    fun getBetFullDataByEventId(eventId: String): BetData.BetFullData {
-        return BetData.BetFullData(getBetEventsById(eventId), getBetActionsByEventId(eventId),
-                getBetResultByEventId(eventId), getBetRewardByEventId(eventId))
-    }
-
     fun getBetFullDataByRewardTransaction(transaction: Transaction): BetData.BetFullData? {
-        val betResult = getBetResults()?.filter {
-            it.transaction.updateTime < transaction.updateTime
-        }?.sortedBy { it.transaction.updateTime }?.last()
-        return if (betResult == null) {
-            null
+        val betResult = getBetResultByRewardTransaction(transaction)
+        if (betResult == null) {
+            return null
         } else {
-            return getBetFullDataByEventId(betResult.eventId)
+            val eventId = betResult.eventId
+            val betEvents = getBetEventsById(eventId)
+            val betActions = getBetActionsByEventId(eventId)
+            val betReward = getBetRewardByRewardTransaction(transaction)
+            return BetData.BetFullData(betEvents, betActions,
+                    betResult, betReward)
         }
     }
 
     fun getBetActionDataByActionTransaction(transaction: Transaction): BetData.BetActionData? {
         val betAction = transaction.toBetAction() ?: return null
-        val betEvent = getBetEventsById(betAction.eventId)?.last { betEvent ->
-            betAction.transaction.updateTime > betEvent.transaction.updateTime
-        }
+        val betEvent = getBetEventByBetAction(betAction)
+        val betResult = getBetResultByEventId(betAction.eventId)
+        val betReward = getBetRewardByBetActionAndEventAndResult(betAction, betEvent!!, betResult)
         return BetData.BetActionData(betEvent, betAction,
-                getBetResultByEventId(betAction.eventId), getBetRewardByBetActionAndEvent(betAction, betEvent!!))
+                betResult, betReward)
     }
 }
