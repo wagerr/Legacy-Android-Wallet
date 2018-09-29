@@ -4,6 +4,7 @@ import global.WagerrCoreContext
 import org.wagerrj.core.Transaction
 import org.wagerrj.core.TransactionConfidence
 import wallet.WalletManager
+import kotlin.math.roundToLong
 
 class BetManager(val walletManager: WalletManager) {
 
@@ -126,7 +127,7 @@ class BetManager(val walletManager: WalletManager) {
             odds = betEvent.drawOdds
         }
 
-        val expectReward = betAmount.multiply((odds*10000).toLong()).div(10000).multiply(94).div(100)
+        val expectReward = betAmount.multiply((odds*10000).roundToLong()).div(10000).multiply(94).div(100)
                 .plus(betAmount.multiply(6).div(100))
 
         for (output in rewardTransaction.outputs) {
