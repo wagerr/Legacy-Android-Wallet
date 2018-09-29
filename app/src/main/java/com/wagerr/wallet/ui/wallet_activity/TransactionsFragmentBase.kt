@@ -13,7 +13,6 @@ import com.wagerr.wallet.ui.base.tools.adapter.BaseRecyclerAdapter
 import com.wagerr.wallet.ui.base.tools.adapter.BaseRecyclerViewHolder
 import com.wagerr.wallet.ui.base.tools.adapter.ListItemListeners
 import com.wagerr.wallet.ui.bet.result.BetEventDetailActivity
-import com.wagerr.wallet.ui.bet_action_detail.BetActionDetailActivity
 import com.wagerr.wallet.ui.transaction_detail_activity.FragmentTxDetail.IS_DETAIL
 import com.wagerr.wallet.ui.transaction_detail_activity.FragmentTxDetail.TX_WRAPPER
 import com.wagerr.wallet.ui.transaction_detail_activity.TransactionDetailActivity
@@ -27,8 +26,7 @@ import wagerr.bet.BetData
 import wagerr.bet.DRAW_SYMBOL
 import wagerr.bet.isRefund
 import java.math.BigDecimal
-import java.util.Collections
-import java.util.Comparator
+import java.util.*
 
 /**
  * Created by furszy on 6/29/17.
@@ -106,11 +104,11 @@ class TransactionsFragmentBase : BaseRecyclerFragment<TransactionWrapper>() {
                     val betEvent =  betFullData.betEvents!![0]
                     val betResult =  betFullData.betResult!!
                     if (betResult.isRefund()) {
-                        holder.description.text = "REFUND"
+                        holder.description.text = getString(R.string.bet_refund)
                     } else if (betResult.betResult == "DRW") {
-                        holder.description.text = "PAYOUT(${betEvent.homeTeam} VS ${betEvent.awayTeam}): DRAW"
+                        holder.description.text = "${getString(R.string.bet_payout)}(${betEvent.homeTeam} VS ${betEvent.awayTeam}): ${getString(R.string.bet_draw)}"
                     } else {
-                        holder.description.text = "PAYOUT(${betEvent.homeTeam} VS ${betEvent.awayTeam}): ${betResult.betResult} WIN"
+                        holder.description.text = "${getString(R.string.bet_payout)}(${betEvent.homeTeam} VS ${betEvent.awayTeam}): ${betResult.betResult} ${getString(R.string.bet_win)}"
                     }
 
                     holder.imageView.setImageResource(R.drawable.ic_bet_reward)
@@ -122,15 +120,15 @@ class TransactionsFragmentBase : BaseRecyclerFragment<TransactionWrapper>() {
                     val betResult = betActionData.betResult
                     betResult?.let {
                         if (betAction.betChoose == DRAW_SYMBOL) {
-                            holder.description.text = "BET(${betEvent!!.homeTeam} VS ${betEvent!!.awayTeam}): DRAW"
+                            holder.description.text = "${getString(R.string.bet_bet)}(${betEvent!!.homeTeam} VS ${betEvent!!.awayTeam}): ${getString(R.string.bet_draw)}"
                         } else {
-                            holder.description.text = "BET(${betEvent!!.homeTeam} VS ${betEvent!!.awayTeam}): ${betAction.betChoose} WIN"
+                            holder.description.text = "${getString(R.string.bet_bet)}(${betEvent!!.homeTeam} VS ${betEvent!!.awayTeam}): ${betAction.betChoose} ${getString(R.string.bet_win)}"
                         }
                     }?:run {
                         if (betAction.betChoose == DRAW_SYMBOL) {
-                            holder.description.text = "BET(${betEvent!!.homeTeam} VS ${betEvent!!.awayTeam}): DRAW"
+                            holder.description.text = "${getString(R.string.bet_bet)}(${betEvent!!.homeTeam} VS ${betEvent!!.awayTeam}): ${getString(R.string.bet_draw)}"
                         } else {
-                            holder.description.text = "BET(${betEvent!!.homeTeam} VS ${betEvent!!.awayTeam}): ${betAction.betChoose} WIN"
+                            holder.description.text = "${getString(R.string.bet_bet)}(${betEvent!!.homeTeam} VS ${betEvent!!.awayTeam}): ${betAction.betChoose} ${getString(R.string.bet_win)}"
                         }
                     }
                     holder.amount.setTextColor(ContextCompat.getColor(context, R.color.red))

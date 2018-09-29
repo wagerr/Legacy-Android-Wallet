@@ -3,9 +3,9 @@ package com.wagerr.wallet.ui.bet.event
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.BaseViewHolder
 import com.wagerr.wallet.R
-import wagerr.bet.BetEvent
 import com.wagerr.wallet.data.bet.toEventSymbol
 import com.wagerr.wallet.utils.formatToViewDateTimeDefaults
+import wagerr.bet.BetEvent
 import java.util.*
 
 class OngoingBetEventAdapter : BaseQuickAdapter<BetEvent, BaseViewHolder>(R.layout.item_bet_event) {
@@ -19,9 +19,9 @@ class OngoingBetEventAdapter : BaseQuickAdapter<BetEvent, BaseViewHolder>(R.layo
         helper.setText(R.id.text_home_team, eventSymbol.getFullTeam(item.homeTeam))
         helper.setText(R.id.text_away_team, eventSymbol.getFullTeam(item.awayTeam))
 
-        helper.setText(R.id.button_home_odds, "${item.homeTeam} WIN\n${item.homeOdds}")
-        helper.setText(R.id.button_draw_odds, "DRAW\n${item.drawOdds}")
-        helper.setText(R.id.button_away_odds, "${item.awayTeam} WIN\n${item.awayOdds}")
+        helper.setText(R.id.button_home_odds, "${item.homeTeam} ${mContext.getString(R.string.bet_win)}\n${item.homeOdds}")
+        helper.setText(R.id.button_draw_odds, "${mContext.getString(R.string.bet_draw)}\n${item.drawOdds}")
+        helper.setText(R.id.button_away_odds, "${item.awayTeam} ${mContext.getString(R.string.bet_win)}\n${item.awayOdds}")
         helper.addOnClickListener(R.id.button_home_odds)
                 .addOnClickListener(R.id.button_draw_odds)
                 .addOnClickListener(R.id.button_away_odds)

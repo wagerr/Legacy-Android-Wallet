@@ -23,12 +23,8 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.rxkotlin.plusAssign
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_finished_bet_event_detail.*
-import wagerr.bet.BetData
-import wagerr.bet.BetEvent
-import wagerr.bet.DRAW_SYMBOL
-import wagerr.bet.isRefund
-import wagerr.bet.toBetActions
-import java.util.Date
+import wagerr.bet.*
+import java.util.*
 
 
 /**
@@ -47,7 +43,7 @@ class BetEventDetailActivity : BaseActivity() {
 
     override fun onCreateView(savedInstanceState: Bundle?, container: ViewGroup) {
         layoutInflater.inflate(R.layout.activity_finished_bet_event_detail, container)
-        title = "Bet Event Detail"
+        title = getString(R.string.bet_event_detail_title)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.setDisplayShowHomeEnabled(true)
         swipe_refresh_layout.setColorSchemeColors(ContextCompat.getColor(this, R.color.colorPrimary))
@@ -164,19 +160,19 @@ class BetEventDetailActivity : BaseActivity() {
                 .subscribe({
                     it.second?.let {
                         if (it.isRefund()) {
-                            button_status.text = "REFUND"
+                            button_status.text = getString(R.string.bet_refund)
                         } else if (it.betResult == DRAW_SYMBOL) {
-                            button_status.text = "DRAW"
+                            button_status.text = getString(R.string.bet_draw)
                         } else {
-                            button_status.text = "${it.betResult} WIN"
+                            button_status.text = "${it.betResult} ${getString(R.string.bet_win)}"
                         }
                         button_status.setTextAppearance(this, R.style.WgrButtonWithBorder)
                     } ?: run {
                         if (it.first?.get(0)?.timeStamp!! > System.currentTimeMillis()) {
-                            button_status.text = "Game Not Started"
+                            button_status.text = getString(R.string.bet_game_not_started)
                             button_status.setTextAppearance(this, R.style.WgrHintButtonWithBorder)
                         } else {
-                            button_status.text = "Waiting For Oracle Result"
+                            button_status.text = getString(R.string.bet_waiting_for_oracle)
                             button_status.setTextAppearance(this, R.style.WgrHintButtonWithBorder)
                         }
                     }

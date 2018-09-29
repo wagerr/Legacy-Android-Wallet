@@ -395,8 +395,34 @@
     <string name="bet_event_sync_in_progress">The wallet is out of sync, some bet event may be missing.\nPlease wait until the sync process finishes to see what you can bet.</string>
     <string name="bet_event_stop">Betting closes 20 minutes before event start time. Any bets placed after this time will be invalid and will not be paid out! And android wallet is 25min to ensure your bet is valid</string>
     <string name="bet_event_not_sync">Please wait until sync to place bet!</string>
+    <string name="bet_event_not_sync_blocks_behind">Please wait until sync to place bet! %s blocks behind.</string>
     <string name="bet_event_not_connect_peer">Please wait until connect to peer to place bet!</string>
     <string name="bet_event_odds_change">Bet event odds change, please refresh the bet list!</string>
+    <string name="bet_ongoing">Ongoing</string>
+    <string name="bet_finished">Finished</string>
+    <string name="bet_amount_not_valid">Amount not valid</string>
+    <string name="bet_amount_zero">Amount zero, please correct it</string>
+    <string name="bet_min_dust">Amount must be greater than the minimum amount accepted from miners, %s</string>
+    <string name="bet_dusty">Dusty send output, please increase the value of your outputs</string>
+    <string name="bet_amount_range">"Incorrect bet amount. Please ensure your bet is between %s - %s WGR inclusive."</string>
+    <string name="bet_insuficient_balance">Insuficient balance</string>
+    <string name="bet_insuficient_balance_missing_coins">Insuficient balance \n Missing coins %s</string>
+    <string name="bet_win">WIN</string>
+    <string name="bet_draw">DRAW</string>
+    <string name="bet_bet">BET</string>
+    <string name="bet_waiting">WAITING</string>
+    <string name="bet_payout">PAYOUT</string>
+    <string name="bet_not_paid">NOT PAID</string>
+    <string name="bet_lose">LOSE</string>
+    <string name="bet_refund">REFUND</string>
+    <string name="bet_waiting_for_oracle">Waiting For Oracle</string>
+    <string name="bet_game_not_started">Game Not Started</string>
+    <string name="bet_return">return</string>
+    <string name="bet_event_detail_title">Bet Event Detail</string>
+    <string name="bet_action_detail_title">Bet Action Detail</string>
+    <string name="bet_see_reward_tx">SEE REWARD TRANSACTION</string>
+    <string name="bet_see_bet_tx">SEE BET TRANSACTION</string>
+
     <string name="warning_title">WARNING!!!</string>
 
     <string name="update_dialog_title">Update</string>

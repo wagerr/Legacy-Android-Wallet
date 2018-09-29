@@ -61,7 +61,7 @@ class BetEventActivity : BaseDrawerActivity() {
     private val errorDialog: SimpleTextDialog by lazy {
         DialogsUtil.buildSimpleErrorTextDialog(this, resources.getString(R.string.invalid_inputs), "")
     }
-    val pagerTitleList = listOf("Ongoing", "Finished")
+    val pagerTitleList by lazy {listOf(resources.getString(R.string.bet_ongoing), resources.getString(R.string.bet_finished))}
     private var transaction: Transaction? = null
     private var lastBetEventTime = 0L
 
@@ -147,19 +147,19 @@ class BetEventActivity : BaseDrawerActivity() {
 
             var amountStr = amountString
             // first check amount
-            if (amountStr.length < 1) throw IllegalArgumentException("Amount not valid")
-            if (amountStr.length == 1 && amountStr == ".") throw IllegalArgumentException("Amount not valid")
+            if (amountStr.length < 1) throw IllegalArgumentException(getString(R.string.bet_amount_not_valid))
+            if (amountStr.length == 1 && amountStr == ".") throw IllegalArgumentException(getString(R.string.bet_amount_not_valid))
             if (amountStr.get(0) == '.') {
                 amountStr = "0$amountStr"
             }
 
             val amount = Coin.parseCoin(amountStr)
-            if (amount.isZero) throw IllegalArgumentException("Amount zero, please correct it")
-            if (amount.isLessThan(Transaction.MIN_NONDUST_OUTPUT)) throw IllegalArgumentException("Amount must be greater than the minimum amount accepted from miners, " + Transaction.MIN_NONDUST_OUTPUT.toFriendlyString())
+            if (amount.isZero) throw IllegalArgumentException(getString(R.string.bet_amount_zero))
+            if (amount.isLessThan(Transaction.MIN_NONDUST_OUTPUT)) throw IllegalArgumentException(getString(R.string.bet_min_dust, Transaction.MIN_NONDUST_OUTPUT.toFriendlyString()))
             if (amount.isLessThan(MIN_BET_AMOUNT) || amount.isGreaterThan(MAX_BET_AMOUNT))
-                throw IllegalArgumentException("Incorrect bet amount. Please ensure your bet is between ${WagerrCoreContext.MIN_BET_AMOUNT.toFriendlyString()} - ${WagerrCoreContext.MAX_BET_AMOUNT.toFriendlyString()} WGR inclusive.")
+                throw IllegalArgumentException(getString(R.string.bet_amount_range, WagerrCoreContext.MIN_BET_AMOUNT.toFriendlyString(), WagerrCoreContext.MAX_BET_AMOUNT.toFriendlyString()))
             if (amount.isGreaterThan(Coin.valueOf(wagerrModule.availableBalance)))
-                throw IllegalArgumentException("Insuficient balance")
+                throw IllegalArgumentException(getString(R.string.bet_insuficient_balance))
             val params = WagerrCoreContext.NETWORK_PARAMETERS
 
             transaction = Transaction(params)
@@ -184,13 +184,13 @@ class BetEventActivity : BaseDrawerActivity() {
 
         } catch (e: InsufficientMoneyException) {
             e.printStackTrace()
-            throw IllegalArgumentException("Insuficient balance\nMissing coins " + e.missing!!.toFriendlyString())
+            throw IllegalArgumentException(getString(R.string.bet_insuficient_balance_missing_coins, e.missing!!.toFriendlyString()))
         } catch (e: InsufficientInputsException) {
             e.printStackTrace()
-            throw IllegalArgumentException("Insuficient balance\nMissing coins " + e.missing.toFriendlyString())
+            throw IllegalArgumentException(getString(R.string.bet_insuficient_balance_missing_coins, e.missing!!.toFriendlyString()))
         } catch (e: Wallet.DustySendRequested) {
             e.printStackTrace()
-            throw IllegalArgumentException("Dusty send output, please increase the value of your outputs")
+            throw IllegalArgumentException(getString(R.string.bet_dusty))
         }
 
     }
@@ -281,7 +281,7 @@ class BetEventActivity : BaseDrawerActivity() {
         if (WagerrApplication.getInstance().module.chainHeight.toLong() != WagerrApplication.getInstance().module.connectedPeerHeight) {
             val behindBlocks = WagerrApplication.getInstance().module.connectedPeerHeight - WagerrApplication.getInstance().module.chainHeight.toLong()
             showErrorDialog(getString(R.string.warning_title),
-                    "${getString(R.string.bet_event_not_sync)} ${behindBlocks.toInt()} blocks behind. ")
+                    getString(R.string.bet_event_not_sync_blocks_behind, behindBlocks.toInt().toString()))
             return
         }
         val betAction = transaction!!.toBetAction()

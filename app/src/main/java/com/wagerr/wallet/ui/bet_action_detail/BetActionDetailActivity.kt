@@ -41,7 +41,7 @@ class BetActionDetailActivity : BaseActivity() {
 
     override fun onCreateView(savedInstanceState: Bundle?, container: ViewGroup) {
         layoutInflater.inflate(R.layout.activity_bet_action_detail, container)
-        title = "Bet Action Detail"
+        title = getString(R.string.bet_action_detail_title)
         supportActionBar!!.setDisplayHomeAsUpEnabled(true)
         supportActionBar!!.setDisplayShowHomeEnabled(true)
         button_see_transaction_detail.setOnClickListener {
@@ -82,13 +82,13 @@ class BetActionDetailActivity : BaseActivity() {
                             text_away_team.text = eventSymbol.getFullTeam(it.awayTeam)
                             when (betAction?.betChoose) {
                                 it.homeTeam -> {
-                                    text_choice.text = "${it.homeTeam} WIN (${it.homeOdds})"
+                                    text_choice.text = "${it.homeTeam} ${getString(R.string.bet_win)} (${it.homeOdds})"
                                 }
                                 it.awayTeam -> {
-                                    text_choice.text = "${it.awayTeam} WIN (${it.awayOdds})"
+                                    text_choice.text = "${it.awayTeam} ${getString(R.string.bet_win)} (${it.awayOdds})"
                                 }
                                 DRAW_SYMBOL -> {
-                                    text_choice.text = "Draw (${it.drawOdds})"
+                                    text_choice.text = "${getString(R.string.bet_draw)} (${it.drawOdds})"
                                 }
                             }
                             text_amount.text = transactionWrapper.transaction.toBetActionAmount()?.toFriendlyString()

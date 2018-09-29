@@ -4,9 +4,9 @@ import android.widget.TextView
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.BaseViewHolder
 import com.wagerr.wallet.R
-import wagerr.bet.DRAW_SYMBOL
 import com.wagerr.wallet.data.bet.toEventSymbol
 import com.wagerr.wallet.utils.formatToViewDateTimeDefaults
+import wagerr.bet.DRAW_SYMBOL
 import wagerr.bet.isRefund
 import java.util.*
 
@@ -35,19 +35,19 @@ class FinishedBetEventAdapter : BaseQuickAdapter<FinishedBetData, BaseViewHolder
 
         item.betResult?.let {
             if (item.betResult.isRefund()) {
-                helper.setText(R.id.button_status, "REFUND")
+                helper.setText(R.id.button_status, mContext.getString(R.string.bet_refund))
             } else if (item.betResult.betResult == DRAW_SYMBOL) {
-                helper.setText(R.id.button_status, "DRAW")
+                helper.setText(R.id.button_status,  mContext.getString(R.string.bet_draw))
             } else {
-                helper.setText(R.id.button_status, "${item.betResult.betResult} WIN")
+                helper.setText(R.id.button_status, "${item.betResult.betResult} ${ mContext.getString(R.string.bet_win)}")
             }
             helper.getView<TextView>(R.id.button_status).setTextAppearance(mContext, R.style.WgrButtonWithBorder)
         } ?: run {
             if (item.betEvent.timeStamp > System.currentTimeMillis()) {
-                helper.setText(R.id.button_status, "Game Not Started")
+                helper.setText(R.id.button_status,  mContext.getString(R.string.bet_game_not_started))
                 helper.getView<TextView>(R.id.button_status).setTextAppearance(mContext, R.style.WgrHintButtonWithBorder)
             } else {
-                helper.setText(R.id.button_status, "Waiting For Oracle Result")
+                helper.setText(R.id.button_status, mContext.getString(R.string.bet_waiting_for_oracle))
                 helper.getView<TextView>(R.id.button_status).setTextAppearance(mContext, R.style.WgrHintButtonWithBorder)
             }
         }

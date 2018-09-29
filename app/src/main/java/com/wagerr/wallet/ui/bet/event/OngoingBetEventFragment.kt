@@ -96,16 +96,16 @@ class OngoingBetEventFragment : BaseFragment() {
         textEvent.text = "${event.homeTeam} vs ${event.awayTeam}"
         when (betType) {
             BetType.BetTypeHomeWin -> {
-                textChoose.text = "${event.homeTeam} WIN"
-                textOdds.text = "${event.homeOdds} (return ${DecimalFormat("0.0000").format((event.homeOdds-1)*0.94+1)})"
+                textChoose.text = "${event.homeTeam} ${activity!!.getString(R.string.bet_win)}"
+                textOdds.text = "${event.homeOdds} (${activity!!.getString(R.string.bet_return)} ${DecimalFormat("0.0000").format((event.homeOdds-1)*0.94+1)})"
             }
             BetType.BetTypeDraw -> {
-                textChoose.text = "DRAW"
-                textOdds.text = "${event.drawOdds} (return ${DecimalFormat("0.0000").format((event.drawOdds-1)*0.94+1)})"
+                textChoose.text = "${activity!!.getString(R.string.bet_draw)}"
+                textOdds.text = "${event.drawOdds} (${activity!!.getString(R.string.bet_return)} ${DecimalFormat("0.0000").format((event.drawOdds-1)*0.94+1)})"
             }
             BetType.BetTypeAwayWin -> {
-                textChoose.text = "${event.awayTeam} WIN"
-                textOdds.text = "${event.awayOdds} (return ${DecimalFormat("0.0000").format((event.awayOdds-1)*0.94+1)})"
+                textChoose.text = "${event.awayTeam} ${activity!!.getString(R.string.bet_win)}"
+                textOdds.text = "${event.awayOdds} (${activity!!.getString(R.string.bet_return)} ${DecimalFormat("0.0000").format((event.awayOdds-1)*0.94+1)})"
             }
         }
         betGo.setOnClickListener {
@@ -118,7 +118,7 @@ class OngoingBetEventFragment : BaseFragment() {
             if (WagerrApplication.getInstance().module.chainHeight.toLong() != WagerrApplication.getInstance().module.connectedPeerHeight) {
                 val behindBlocks = WagerrApplication.getInstance().module.connectedPeerHeight - WagerrApplication.getInstance().module.chainHeight.toLong()
                 (activity as BetEventActivity).showErrorDialog(getString(R.string.warning_title),
-                            "${getString(R.string.bet_event_not_sync)} ${behindBlocks.toInt()} blocks behind. ")
+                        getString(R.string.bet_event_not_sync_blocks_behind, behindBlocks.toInt().toString()))
                 dialog.dismiss()
                 return@setOnClickListener
             }
