@@ -9,8 +9,7 @@ import java.util.List;
 
 public class PeerGlobalData {
 
-    public static final String[] TRUSTED_TEST_NODES = new String[]{"35.237.41.190", "35.227.30.42",
-            "35.237.175.155", "35.196.21.183"};
+    public static final String[] TRUSTED_TEST_NODES = new String[]{"cntest.wagerr.com"};
 
     public static final String[] TRUSTED_NODES = new String[]{"sg.wagerr.com", "jp.wagerr.com", "nl.wagerr.com", "au.wagerr.com", "ny.wagerr.com", "la.wagerr.com", "la.wagerr.com"};
 
