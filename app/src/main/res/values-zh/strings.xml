@@ -1,0 +1,432 @@
+<resources>
+
+    <string-array name="planets_array">
+        <item>Mercury</item>
+        <item>Venus</item>
+        <item>Earth</item>
+        <item>Mars</item>
+        <item>Jupiter</item>
+        <item>Saturn</item>
+        <item>Uranus</item>
+        <item>Neptune</item>
+    </string-array>
+    <string name="app_name">Wagerr 钱包</string>
+    <string name="test_app_name">Wagerr 测试钱包</string>
+    <string name="btn_create_wallet">创建钱包</string>
+    <string name="btn_restore_wallet">恢复钱包</string>
+    <string name="restore_wallet_message">从手机存储中\n选择一个钱包备份</string>
+    <string name="pincode_message">为了您的安全 \n请输入访问密码</string>
+    <string name="select_file">选择文件</string>
+    <string name="action_qr">二维码</string>
+    <string name="action_add">添加联系人</string>
+    <string name="string_password">密码</string>
+    <string name="appbar_scrolling_view_behavior">appbar_scrolling_view_behavior</string>
+    <string name="navigation_drawer_open">打开导航栏</string>
+    <string name="navigation_drawer_close">关闭导航栏</string>
+    <string name="set_amount">填写要发送的数额</string>
+    <string name="set_amount_wgr">WGR</string>
+    <string name="set_amount_usd">填写数额</string>
+    <string name="add_all">发送全部余额</string>
+    <string name="title_amount">数额</string>
+    <string name="title_address">地址</string>
+    <string name="title_name">名称</string>
+    <string name="title_description">描述</string>
+    <string name="title_receiver_name">接收人姓名</string>
+    <string name="title_date">日期</string>
+    <string name="set_address">填写地址或地址标签名</string>
+    <string name="add_address">填写地址或地址标签名</string>
+    <string name="set_name">添加名称</string>
+    <string name="set_description">添加描述</string>
+    <string name="btn_send">发送</string>
+    <string name="btn_request">请求</string>
+    <string name="payment_request">收币请求</string>
+    <string name="settings_subtitle_security">安全</string>
+    <string name="backup_wallet_message">您的备份由您设定的\n密码进行加密并且储存于\n外部存储器中</string>
+    <string name="settings_subtitle_preference">偏好设定</string>
+    <string name="settings_subtitle_about">关于</string>
+    <string name="restore_wallet">恢复钱包</string>
+    <string name="backup_wallet">备份钱包</string>
+    <string name="change_pincode">修改访问密码</string>
+    <string name="local_currency">货币单位</string>
+    <string name="local_currency_usd">美元</string>
+    <string name="repeat_password">重复密码</string>
+    <string name="add_name">增加名称</string>
+
+    <string name="scan_camera_problem_dialog_title">抱歉</string>
+    <string name="scan_camera_problem_dialog_message">摄像头出现故障。您可能需要重启设备。</string>
+    <string name="scan_camera_permission_dialog_title">摄像头权限</string>
+    <string name="scan_camera_permission_dialog_message">为了扫描二维码，请开启摄像头权限</string>
+    <string name="scan_result_title">扫描结果</string>
+    <string name="scan_result_address_title">检测到地址</string>
+    <string name="node_selection_message">您可以从中选择一个节点或者自己添加节点 </string>
+    <string name="select_node">选择节点</string>
+
+    <string name="select">选择一个节点</string>
+    <string name="text_version">版本</string>
+    <string name="network_monitor">网络监视器</string>
+    <string name="block_explorer">区块浏览器</string>
+    <string name="settings_report">报告问题</string>
+    <string name="send_message">转账细节：</string>
+    <string name="save_message">您想保存这个地址吗？</string>
+    <string name="confirm">确定</string>
+    <string name="action_scan">扫描</string>
+    <string name="btn_select_node">增加节点</string>
+    <string name="node_default">默认设置</string>
+    <string name="title_no_trusted_peer_connection">点对点出现问题</string>
+    <string name="message_no_trusted_peer_connection">信任的点对点连接失效了</string>
+    <string name="share_address_text">分享地址</string>
+    <string name="error_sending_coins">发送Wagerr失败</string>
+
+    <string name="ssl_port">SSL端口</string>
+    <string name="hint_ssl_port">默认SSL端口</string>
+    <string name="host">主机</string>
+    <string name="hint_host">添加主机</string>
+    <string name="tcp_port">TCP 端口</string>
+    <string name="hint_tcp_port">默认TCP端口</string>
+    <string name="add_memo">月度支付</string>
+    <string name="backup_create">创建备份</string>
+    <string name="transaction_hash">交易号</string>
+    <string name="explorer">浏览器</string>
+    <string name="backup_passwords_doesnt_match">密码错误\请重新输入密码</string>
+    <string name="backup_completed">备份完成</string>
+    <string name="backup_completed_text">恭喜！您的钱包已经成功备份。\n备份储存于\n%s </string>
+    <string name="import_keys_dialog_message">请选择钱包备份%s</string>
+    <string name="backup_restore">恢复</string>
+    <string name="import_export_keys_dialog_failure_title">恢复失败</string>
+    <string name="import_keys_dialog_failure">导入备份文件失败\n%s</string>
+    <string name="button_dismiss">放弃</string>
+    <string name="button_retry">重试</string>
+    <string name="restore_wallet_dialog_success">钱包恢复成功</string>
+    <string name="restore_wallet_dialog_success_replay">您的钱包已成功恢复。钱包余额将随后显示。显示正确余额可能需要一段时间。</string>
+    <string name="unavailable">锁定金额:</string>
+    <string name="sending_tx">发送交易</string>
+    <string name="currency_message">选择您的当地货币单位</string>
+    <string name="title_fee">转账费</string>
+    <string name="title_currency">当地货币</string>
+    <string name="title_wagerr_send">发送金额</string>
+    <string name="empty_message_address">您还没有保存过的地址。</string>
+    <string name="error_message">您的转账似乎\n出现了错误</string>
+    <string name="settings_change_trusted_node">更改信任节点</string>
+    <string name="settings_reset_blockchain">重置区块</string>
+    <string name="save">保存</string>
+    <string name="tutorial_message"> 专注于隐私、去中心化且开源的加密货币实现了\n隐秘、快速、安全的转账。该加密货币由创造者，发明家和技术爱好者组成的全球性社区予以支持。</string>
+    <!-- Tutorial -->
+    <string name="next_words">以下的8个单词</string>
+    <string name="next">继续</string>
+    <string name="skip">跳过</string>
+    <string name="back">返回</string>
+    <string name="restore">恢复</string>
+    <string name="start">开始</string>
+    <string name="title_slide1">Wagerr是安全的</string>
+    <string name="desc_slide1">经由BIP38高强度加密保护的私钥</string>
+    <string name="title_slide2">区块时间60秒</string>
+    <string name="desc_slide2">尽管已经非常快了，Wagerr仍然可以通过Swiftx功能实现零确认转账，实现更快的速度。</string>
+    <string name="title_slide3">极高强度的安全和隐私保护</string>
+    <string name="desc_slide3">Wagerr正在建立一个真正的完全匿名的加密货币。</string>
+    <string name="title_slide4">信任节点联盟</string>
+    <string name="desc_slide4">信任节点联盟使得轻钱包也可以进行PoS挖矿，您可以选择现有的信任节点或创建您自己的信任节点!</string>
+    <string name="option_add_node">添加节点</string>
+    <string name="report_issue_dialog_description">问题描述</string>
+    <string name="report_issue_dialog_collect_device_info">附加设备信息</string>
+    <string name="report_issue_dialog_collect_application_log">附加应用程序日志</string>
+    <string name="report_issue_dialog_collect_wallet_dump">附加地址信息</string>
+    <string name="report_issue_dialog_collect_installed_packages">附加安装列表</string>
+    <string name="report_issue_dialog_collect_db_data">附加数据库数据</string>
+    <string name="report_issue_dialog_report">报告</string>
+    <string name="button_cancel">取消</string>
+    <string name="report_issue_dialog_mail_intent_chooser">正在发送报告……</string>
+    <string name="report_issue_dialog_mail_intent_failed">报告发送失败。</string>
+    <string name="report_issue_dialog_message_issue">请精确描述您所遇到的问题，以便技术人员重现问题。</string>
+    <string name="report_issuea_dialog_title">报告问题</string>
+    <string name="invalid_inputs">输入无效</string>
+    <string name="send_error_dialog_tag">发送错误对话框send error dialog tag</string>
+    <string name="restore_dialog_tag">恢复对话框</string>
+    <string name="restore_dialog_error">恢复对话框错误</string>
+    <string name="settings_support">支持</string>
+    <string name="support_subject">Wagerr钱包支持</string>
+    <string name="tutorial">新手指南</string>
+    <string name="copy">复制</string>
+    <string name="share">分享</string>
+    <string name="copy_message">钱包地址已被复制到剪贴板</string>
+    <string name="security_message">请按水平顺序将单词抄写在安全的地方，\用于日后恢复钱包。\n\n不要将这些单词告诉任何人。注意！得到这些单词的人即可以拥有钱包里的Wagerr币 ！</string>
+    <string name="security_message_confirmation">请您在下一个页面进行确认</string>
+    <string name="confirmation_message">确认您的助记词</string>
+    <string name="order_message_confirmation">按正确顺序选择单词</string>
+    <string name="backup_words">助记代码</string>
+    <string name="btn_secure">已经注意到</string>
+    <string name="lorem_ipsum">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. </string>
+    <string name="number_zero">0</string>
+    <string name="number_one">1</string>
+    <string name="number_two">2</string>
+    <string name="number_three">3</string>
+    <string name="number_four">4</string>
+    <string name="number_five">5</string>
+    <string name="number_six">6</string>
+    <string name="number_seven">7</string>
+    <string name="number_eight">8</string>
+    <string name="number_nine">9</string>
+    <string name="btn_clear">清除</string>
+    <string name="btn_backspace">返回</string>
+    <string name="pincode_saved">新的访问密码已保存</string>
+    <string name="insert_old_pin">输入现在的访问密码</string>
+    <string name="insert_new_pin">输入新的访问密码</string>
+    <string name="invalid_pincode">访问密码无效</string>
+    <string name="contact_already_exist">联系人地址已存在</string>
+    <string name="invalid_input_address">地址无效</string>
+    <string name="reminder_backup">备份提醒</string>
+    <string name="reminder_backup_body">最重要的事情之一就是备份钱包，现在备份吗？</string>
+    <string name="button_ok">好</string>
+    <string name="backup_succed_dialog">backup_succed_dialog</string>
+    <string name="error_no_connectivity_title">无网络连接</string>
+    <string name="error_no_connectivity_body">钱包将会保存您的转账并在网络连接恢复时发送。\n您要继续吗？</string>
+    <string name="cannot_restore_wallet">错误，无法恢复钱包\n请确认密码</string>
+    <string name="dialog_reset_blockchain_title">重置区块数据</string>
+    <string name="dialog_reset_blockchain_body">您的区块数据将被重置。\n重新同步需要时间。\n\n您确定吗？</string>
+    <string name="reseting_blockchain">重置区块中……</string>
+    <string name="donations">Donations</string>
+    <string name="donation_message">Donations help with the maintenance and development of the app.\nThanks in advance.</string>
+    <string name="donation_title">I’m going to donate</string>
+    <string name="btn_donate">Donate</string>
+    <string name="donation_thanks">Sending donation.. Thanks for your support!</string>
+    <string name="bad_pin_code">访问密码错误</string>
+    <string name="restore_words_1">恢复钱包需要24个助记词，请按照正确顺序输入第1到第8个助记词。</string>
+    <string name="restore_from_words">根据助记词恢复</string>
+    <string name="restore_words_2">现在输入第9到第16个</string>
+    <string name="restore_words_3">现在输入第17到第24个</string>
+    <string name="fee_recommended">推荐</string>
+    <string name="fee_custom">自选</string>
+    <string name="confirmation_time">确认时间</string>
+    <string name="fee_normal">正常</string>
+    <string name="fee_fast">快</string>
+    <string name="per_kilobyte">每千字节</string>
+    <string name="total_at_least">最低总额</string>
+    <string name="fee">转账费</string>
+    <string name="minimum_fee">只支付最小转账费0.00010000 WGR/kB</string>
+    <string name="several_outputs_add_address">添加地址</string>
+    <string name="address_num">地址 %d </string>
+    <string name="invalid_last_amount">钱包地址存币不足</string>
+    <string name="inputs_explanation">选择在交易中消费的币</string>
+    <string name="bad_address">错误地址</string>
+    <string name="invalid_amount_value">无效的数额比率</string>
+    <string name="select_all">选择全部</string>
+    <string name="total_amount">总额：</string>
+    <string name="send_amount_input_error">要添加自选输入，您必须设定一个数额。</string>
+    <string name="tx_detail_amount">总额</string>
+    <string name="tx_detail_inputs_title">币来源</string>
+    <string name="tx_detail_inputs">%d 输入</string>
+    <string name="txt_detail_confirmations">确认数</string>
+    <string name="tx_detail_no_memo">无描述</string>
+    <string name="tx_detail_addresses">输出</string>
+    <string name="custom_fee">自选转账费</string>
+    <string name="coin_selection">选择币</string>
+    <string name="set_default">设置默认值</string>
+    <string name="delete_addresses">删除地址</string>
+    <string name="sync">已同步</string>
+    <string name="syncing">同步中</string>
+    <string name="not_connection">无连接</string>
+    <string name="confimations">确认</string>
+    <string name="multiple_address_send">发送至 %d 地址</string>
+    <string name="fee_per_kb">%s WGR/kB</string>
+    <string name="fee_explanation">如果自选转账费低于最低转账费要求(0.0001 WGR/kB)实际转账费将为最低转账费，而非自选转账费.\n 转账费以千字节为单位计算。</string>
+    <string name="invalid_fee_amount">无效的转账费数额</string>
+    <string name="load_inputs_fail">Coin control 功能失败</string>
+    <string name="title_tx_weight">重量</string>
+    <string name="no_data_available">数据不可用</string>
+    <string name="delete">删除</string>
+    <string name="no_coin_selected">没有选中币</string>
+    <string name="multi_send_activity_title">多重发送</string>
+    <string name="address_book_screen_title">地址簿</string>
+    <string name="bet_screen_title">投注</string>
+    <string name="my_wallet">我的钱包</string>
+    <string name="settings_screen_title">设置</string>
+    <string name="options_menu">选项菜单</string>
+    <string name="delete_address_label_text">地址标签\n%s\n将被删除。\n\n您确定吗?</string>
+    <string name="address_label_deleted">地址标签已删除。</string>
+    <string name="no_available_inputs">您没有可用的编码</string>
+    <string name="restore_mnemonic_screen_title">恢复助记词</string>
+    <string name="invalid_mnemonic_code">无效的助记词编码，请重新检查每一个单词。</string>
+    <string name="restore_mnemonic">通过助记词中恢复钱包……</string>
+    <string name="restore_mnemonic_title">恢复助记词</string>
+    <string name="restore_mnemonic_dialog_body">恢复即将完成！\n区块数据同步即将开始，至完全同步需要一定的时间。</string>
+    <string name="invalid_host">无效的主机名称</string>
+    <string name="validate_multi_send_enabled">被阻挡的行为，多重发送可用</string>
+    <string name="detail_no_available_inputs">没有可用的输入信息</string>
+    <string name="report_crash_title">报告崩溃错误</string>
+    <string name="crash_toast_text">Wagerr钱包崩溃</string>
+    <string name="backup_fail">备份失败</string>
+    <string name="no_peer_connection">与节点之间无连接</string>
+    <string name="wallet_is_not_sync">钱包未同步，要确定您的最新余额，请等待，直至同步完成</string>
+    <string name="warn_sharing_pub_key">分享您的公钥，可以让任何人查阅您的钱包余额和交易记录。</string>
+    <string name="public_key">公钥</string>
+    <string name="derivation_path">派生路径 (BIP32)</string>
+    <string name="unknown_error_message">发送公钥失败，请发送错误报告</string>
+    <string name="settings_export_pub_key">导出账户</string>
+    <string name="copy_key_message">公钥已复制</string>
+    <string name="hint_paste_xpub">将公钥粘贴到此处</string>
+    <string name="explanation_import_xpub">将您的钱包设置为察看模式，并导入另一个钱包的公钥。\n\n别人可以使用您的设备查看余额，但是不能使用支付功能。</string>
+    <string name="import_xpub">导入</string>
+    <string name="settings_import_xpub">察看模式</string>
+    <string name="screen_title_watch_only">仅用于查看</string>
+    <string name="watch_only_mode_activated">查看模式已激活</string>
+    <string name="watch_only_mode_activated_text">请耐心等待，直到同步完成。</string>
+    <string name="error_importing_xpub">请检查公钥或发送错误报告。</string>
+    <string name="error_importing_xpub_title">导入公钥失败</string>
+    <string name="error_watch_only_mode">查看模式下该功能不可用</string>
+    <string name="export_wallet">导出账户</string>
+    <string name="commit_tx_fail">转账失败，请发送错误报告</string>
+
+
+    <!-- Sweep wallet -->
+    <!-- Sweep paper wallet means to redeem coins from a code usually printed on a paper -->
+    <string name="title_activity_sweep_wallet">纸钱包</string>
+    <string name="sweep_wallet_info">您将从纸钱包中导入资产到Wagerr钱包。\n为安全计，当转移完成后，请勿再次使用这个纸钱包。\n\n支持的格式: WIF, BIP38, Mini private key.</string>
+    <string name="sweep_wallet_key_title">私钥</string>
+    <string name="sweep_wallet_key_password">私钥保护密码</string>
+    <string name="sweep_wallet_key_hint">输入或扫描私钥</string>
+    <string name="sweep_wallet_bad_format">无法始别这个私钥的格式。</string>
+    <string name="sweep_wallet_bad_coin_type">私钥格式与目标账户不符。</string>
+    <string name="sweep_wallet_bad_password">密码错误。</string>
+    <string name="sweep_wallet_zero_coins">该私钥中没有任何资产。</string>
+    <string name="sweep_wallet_key_wait">正在导入纸钱包，请等待</string>
+    <!-- &#8230; is the ... character -->
+    <string name="sweep_wallet_key_decoding">解码私钥&#8230;</string>
+    <!-- &#8230; is the ... character -->
+    <string name="sweep_wallet_key_loading">载入余额&#8230;</string>
+    <!-- &#8230; is the ... character -->
+    <string name="sweep_wallet_key_signing">创建交易&#8230;</string>
+    <!-- Fees settings -->
+    <string name="title_activity_transaction_fees">交易费用</string>
+    <!-- Example: Bitcoin transaction fees-->
+    <string name="tx_fees_title">%1$s 交易费用</string>
+    <!-- Example: The ratealue is per kilobyte.-->
+    <string name="tx_fees_description">费用比率为 %1$s.</string>
+    <string name="tx_fees_per_kilobyte">每千字节交易数据</string>
+    <string name="tx_fees_per_byte">每字节交易数据</string>
+    <string name="tx_fees_per_transaction">每笔交易</string>
+
+    <!-- Terms -->
+    <string name="terms_of_service_title">服务条款</string>
+    <!-- TODO translate to other languages -->
+    <string name="terms_of_service" translatable="false">免责声明\n
+    \n
+    \n
+    1. 使用Wagerr钱包可能导致的风险\n
+    \n
+    LooorTor和Wagerr团队不会对以下5种情况所导致的损失或损害负责:\n
+    \n
+    (1) 因用户导致的钱包软件或设备问题。例如，遗忘密码，转账到错误地址，误删除钱包。\n
+    \n
+    (2) 钱包程序错误或其他与软件或设备有关的问题。例如，钱包文件损坏，未能正确建立的转账，不安全的密码保存方式，恶意软件对钱包程序或相关软件设备的破坏。\n
+    \n
+    (3) 因硬件故障导致的钱包软件或设备问题。例如，因存储器损坏导致的数据丢失。\n
+    \n
+    (4) 用户的钱包软件或设备的安全问题。例如，对用户钱包或账户未经授权的访问。\n
+    \n
+    (5) 因第三方行为或不作为导致的问题。例如，服务供应商破产，对服务提供商的信息安全攻击，以及第三方欺诈。\n
+    \n
+    \n
+    2. 交易及投资风险\n
+    \n
+    加密货币交易具有相当的风险。任何对加密货币的交易都会产生风险，包括且不限于，潜在的经济环境变化可能会持续影响币种的价格和流动性；投机于加密货币时可能会经历价格的暴涨暴跌。鉴于此，在类似市场中进行投机行为，建议只使用具有风险承受能力的资金。\n
+    \n
+    \n
+    3. 电子交易风险\n
+    \n
+    在使用电子系统参与交易之前，请仔细阅读交易所的条款、相关规定和使用说明。在线交易具有固有的风险，例如由市场热度、系统性能或其他原因引起的系统延迟或访问受限。交易之前，您应当认识并理解此类附加风险。\n
+    \n
+    \n
+    4. 税务遵守\n
+    \n
+    钱包的使用者为加密货币是否应纳税负有全部的决定责任。钱包开发者、贡献者和钱包本身不对使用过程中的交易是否应当纳税负责。\n
+    \n
+    \n
+    5. 无保修条款\n
+    \n
+    本钱包对钱包的使用及其包含的内容、数据、材料或其他服务均不承担保修责任。\n
+    \n
+    \n
+    6. 责任限制\n
+    \n
+    除非法律要求，在任何情况下，钱包开发者、贡献者和钱包不对任何使用过程中引起的损失负有责任。包括且不限于：无法使用之损失，利润损失，数据丢失。对于您或他人针对该钱包做出的举动、决定或其他行为，钱包开发者、贡献者和钱包不负有任何责任。\n
+    \n
+    \n
+    7. 仲裁\n
+    \n
+    钱包使用者同意，因钱包或本声明引起的争议，均已仲裁方式解决。因版权、标志、商标、商业机密和专利引起的争议除外。\n
+    \n
+    \n
+    8. 最终修订\n
+    \n
+    此免责声明最终修订时间为2016年1月1日。</string>
+    <string name="settings_sweep_wallet">导入钱包私钥</string>
+    <string name="disconnected_label">无网络连接</string>
+    <string name="error_generic">执行出错</string>
+    <string name="old_wallet_version">旧钱包版本</string>
+    <string name="advance_restore">进阶恢复</string>
+    <string name="restore_bip32_warning">假如您的助记词由低于%s版本的钱包创建，请查看下一个方框，以便正确恢复钱包。 </string>
+    <string name="fee_included">交易费用没有包含在总额里</string>
+    <string name="title_blockstore_error">错误</string>
+    <string name="message_blockstore_error">区块数据损坏\n\n请发送错误报告，并尝试使用助记词或备份恢复钱包。</string>
+    <string name="upgrade_wallet">升级钱包</string>
+    <string name="upgrade_succesfull">升级成功！请等待钱包重新同步</string>
+    <string name="write_external_denied">写入设备存储器的权限被拒绝</string>
+    <string name="message_connection_is_needed">此操作需要点对点连接，请检查您的网络是否正常，或您设定的新人节点是否在线。</string>
+    <string name="no_rate">无比率</string>
+    <string name="change_address_explain">您可以定制此交易指定的找零地址，或勾选下方地址，发送回原始地址（如果有多个原始地址，钱包会选择比率最高的地址）。</string>
+    <string name="change_address_origin">发送回原始地址。</string>
+    <string name="clean">清除</string>
+    <string name="origin_address">原始地址</string>
+    <string name="option_change_address">找零地址</string>
+    <string name="option_custom_fee">定制转账费</string>
+    <string name="option_multi_outputs">多重发送</string>
+    <string name="option_coin_selection">选择币</string>
+    <string name="change_address_remember">记住选择</string>
+    <string name="my_address">我的地址</string>
+    <string name="settings_rates">货币汇率</string>
+    <string name="rate_selected">比率选择</string>
+    <string name="fab_send">发送</string>
+    <string name="fab_request">请求</string>
+    <string name="scan_request">扫描请求</string>
+    <string name="payment_request_received">请求已接收</string>
+    <string name="description">描述</string>
+    <string name="amount">金额</string>
+    <string name="restoring_wallet">恢复钱包中……</string>
+    <string name="no_transactions">您没有任何转账记录。</string>
+    <string name="sync_in_progress">钱包未完全同步，一些转账可能未显示。\n请等待钱包完成同步，再检查钱包余额。</string>
+    <string name="bet_event_sync_in_progress">钱包未完全同步，某些投注事件可能未显示。\n请等待钱包完成同步，再查看可用的投注事件。</string>
+    <string name="bet_event_stop">投注会在赛事开始前20分钟关闭，之后发生的投注都是无效的，并且不会返奖！安卓钱包的投注会在赛事开始25分钟前关闭，请在关闭之前投注，以保证投注的有效性</string>
+    <string name="bet_event_not_sync">投注前请先等待同步完成！</string>
+    <string name="bet_event_not_sync_blocks_behind">投注前请先等待同步完成！落后 %s 区块。</string>
+    <string name="bet_event_not_connect_peer">投注前请先等待点对点连接完成！</string>
+    <string name="bet_event_odds_change">投注赔率发生了变动，请刷新投注列表！</string>
+    <string name="bet_ongoing">正在进行</string>
+    <string name="bet_finished">已结束</string>
+    <string name="bet_amount_not_valid">金额无效</string>
+    <string name="bet_amount_zero">金额为0，请修正</string>
+    <string name="bet_min_dust">金额必须高于能被网络接受的最小限额， %s</string>
+    <string name="bet_dusty">发送量过低，请提高发送量的价值</string>
+    <string name="bet_amount_range">"错误的投注金额。请确保您的投注金额在 %s - %s WGR之间。"</string>
+    <string name="bet_insuficient_balance">余额不足</string>
+    <string name="bet_insuficient_balance_missing_coins">余额不足 \n 缺少币 %s</string>
+    <string name="bet_win">胜</string>
+    <string name="bet_draw">平</string>
+    <string name="bet_bet">投注</string>
+    <string name="bet_waiting">等待</string>
+    <string name="bet_payout">返奖</string>
+    <string name="bet_not_paid">未付</string>
+    <string name="bet_lose">负</string>
+    <string name="bet_refund">退款</string>
+    <string name="bet_waiting_for_oracle">等待预言机共识</string>
+    <string name="bet_game_not_started">比赛尚未开始</string>
+    <string name="bet_return">返回</string>
+    <string name="bet_event_detail_title">赛事细节</string>
+    <string name="bet_action_detail_title">投注细节</string>
+    <string name="bet_see_reward_tx">查看返奖转账记录</string>
+    <string name="bet_see_bet_tx">查看投注转账记录</string>
+
+    <string name="warning_title">警告！！！</string>
+
+    <string name="update_dialog_title">更新</string>
+    <string name="update_dialog_content">新版本%s可用，请访问 <a href="https://github.com/LooorTor/wagerr-android/releases">https://github.com/LooorTor/wagerr-android/releases</a> 进行更新</string>
+
+</resources>

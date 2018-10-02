@@ -3,6 +3,7 @@ apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-kapt'
+
 def isCi = "true".equals(System.getenv("CI"))
 
 android {
@@ -39,8 +40,16 @@ android {
     }
     flavorDimensions "env"
     productFlavors {
-        wgrprod {dimension "env" }
-        wgrtest {dimension "env" }
+        wgrprod {
+            dimension "env"
+            addManifestPlaceholders([APP_NAME: "@string/app_name"])
+            versionNameSuffix "-wgrprod"
+        }
+        wgrtest {
+            dimension "env"
+            addManifestPlaceholders([APP_NAME: "@string/test_app_name"])
+            versionNameSuffix "-wgrtest"
+        }
     }
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8

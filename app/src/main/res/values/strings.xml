@@ -11,6 +11,7 @@
         <item>Neptune</item>
     </string-array>
     <string name="app_name">Wagerr Wallet</string>
+    <string name="test_app_name">Wagerr Test Wallet</string>
     <string name="btn_create_wallet">Create Wallet</string>
     <string name="btn_restore_wallet">Restore Wallet</string>
     <string name="restore_wallet_message">Select a backup of the wallet\nfrom a storage unit</string>
