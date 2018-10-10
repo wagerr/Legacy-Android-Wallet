@@ -49,6 +49,7 @@ android {
             dimension "env"
             addManifestPlaceholders([APP_NAME: "@string/test_app_name"])
             versionNameSuffix "-wgrtest"
+            applicationIdSuffix ".wgrtest"
         }
     }
     compileOptions {
