@@ -3,14 +3,14 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/bgRed"
+    android:background="@color/colorPrimary"
     android:padding="32dp">
 
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/bgRed"
+        android:background="@color/colorPrimary"
         android:orientation="vertical">
 
         <LinearLayout
@@ -60,7 +60,7 @@
             android:gravity="center"
             android:text="@string/copy"
             android:textAlignment="center"
-            android:textColor="@color/bgRed"
+            android:textColor="@color/colorPrimary"
             android:textSize="20sp" />
 
         <Button
@@ -73,7 +73,7 @@
             android:gravity="center"
             android:text="@string/share"
             android:textAlignment="center"
-            android:textColor="@color/bgRed"
+            android:textColor="@color/colorPrimary"
             android:textSize="20sp" />
 
     </LinearLayout>

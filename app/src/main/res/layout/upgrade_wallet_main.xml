@@ -2,7 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/bgRed">
+    android:background="@color/colorPrimary">
 
 
     <ImageView
@@ -75,7 +75,7 @@
             android:gravity="center"
             android:layout_gravity="bottom"
             android:text="@string/button_ok"
-            android:textColor="@color/textColorRed"
+            android:textColor="@color/colorPrimary"
             android:textSize="14sp" />
 
     </LinearLayout>

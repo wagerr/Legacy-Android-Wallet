@@ -3,7 +3,7 @@
     <!-- ListView item pressed state -->
     <item
         android:state_pressed="true"
-        android:drawable="@color/colorRed"
+        android:drawable="@color/colorPrimary"
         />
     <!-- ListView item selected state -->
     <item

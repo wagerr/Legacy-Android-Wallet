@@ -1,18 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="transparent">#00000000</color>
-    <color name="colorPrimary">#dd0000</color>
-    <color name="colorPrimaryLight">#ea3232</color>
-    <color name="colorPrimaryVeryLight">#71dd0000</color>
-    <color name="colorPrimaryDark">#8c0000</color>
+    <color name="colorPrimaryVeryLight">#00DD70</color>
     <color name="colorAccent">#448AFF</color>
-    <color name="bgRed">#dd0000</color>
     <color name="green">#009688</color>
     <color name="lightGreen1">#36c6a5</color>
     <color name="mainGreen">#63ece0</color>
     <color name="sync_green">#B7FFF9</color>
     <color name="lightGreen">#50e3c2</color>
-    <color name="colorRed">#dd0000</color>
     <color name="bgWhite">#ffffff</color>
     <color name="bgWhite30">#4Dffffff</color>
     <color name="bgBlack30">#4D000000</color>
@@ -21,10 +16,6 @@
     <color name="bgBlackX">#DD000000</color>
     <color name="bgBlack10">#1A000000</color>
     <color name="bgBlack05">#0D000000</color>
-    <color name="textColorRed">#dd0000</color>
-    <color name="textColorWhite">#ffffff</color>
-    <color name="textColorLightPurple">#ffffff</color>
-    <color name="transation_title">#dd0000</color>
     <color name="mainText">#4F4F4F</color>
     <color name="subtitle">#757575</color>
     <color name="bgInput">#F5F6F7</color>
@@ -36,16 +27,9 @@
 
     <!-- scanner -->
     <color name="scan_mask">#60000000</color>
-    <color name="scan_laser">#cc0000</color>
     <color name="scan_dot">#ff6600</color>
     <color name="scan_result_view">#b0000000</color>
     <color name="scan_result_dots">#c099cc00</color>
-
-    <!-- Tutorial -->
-
-    <color name="bg_screen1">#dd0000</color>
-    <color name="bg_screen2">#73bdc5</color>
-    <color name="bg_screen3">#ed8557</color>
 
 
     <!-- dots active colors -->
@@ -55,10 +39,6 @@
     <!-- dots inactive colors -->
     <color name="dot_inactive">#cccccc</color>
     <color name="white">#ffffff</color>
-
-
-    <!--Wagerr-->
-    <color name="wagerr_red">#d91b1b</color>
 
 
 </resources>

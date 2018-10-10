@@ -4,7 +4,7 @@
     android:layout_height="match_parent"
     android:paddingTop="100dp"
     android:paddingBottom="60dp"
-    android:background="@color/bg_screen1">
+    android:background="@color/colorPrimary">
 
 
     <ImageView

@@ -31,7 +31,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/bet_event_sync_in_progress"
-            android:textColor="@color/bgRed"
+            android:textColor="@color/colorPrimary"
             android:textStyle="bold"
             android:textSize="14sp" />
 

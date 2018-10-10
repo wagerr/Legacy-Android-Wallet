@@ -68,13 +68,13 @@ public class ScannerView extends View
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
 			maskColor = res.getColor(R.color.scan_mask,null);
 			maskResultColor = res.getColor(R.color.scan_result_view,null);
-			laserColor = res.getColor(R.color.scan_laser,null);
+			laserColor = res.getColor(R.color.colorPrimary,null);
 			dotColor = res.getColor(R.color.scan_dot,null);
 			dotResultColor = res.getColor(R.color.scan_result_dots,null);
 		}else {
 			maskColor = ContextCompat.getColor(context,R.color.scan_mask);
 			maskResultColor = ContextCompat.getColor(context,R.color.scan_result_view);
-			laserColor = ContextCompat.getColor(context,R.color.scan_laser);
+			laserColor = ContextCompat.getColor(context,R.color.colorPrimary);
 			dotColor = ContextCompat.getColor(context,R.color.scan_dot);
 			dotResultColor = ContextCompat.getColor(context,R.color.scan_result_dots);
 		}
@@ -84,7 +84,7 @@ public class ScannerView extends View
 		maskPaint.setStyle(Style.FILL);
 
 		laserPaint = new Paint();
-		laserPaint.setStrokeWidth(res.getDimensionPixelSize(R.dimen.scan_laser_width));
+		laserPaint.setStrokeWidth(res.getDimensionPixelSize(R.dimen.colorPrimary_width));
 		laserPaint.setStyle(Style.STROKE);
 
 		dotPaint = new Paint();

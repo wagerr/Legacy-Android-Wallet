@@ -74,7 +74,7 @@
             android:gravity="center"
             android:layout_gravity="bottom"
             android:text="@string/import_xpub"
-            android:textColor="@color/textColorRed"
+            android:textColor="@color/colorPrimary"
             android:textSize="14sp" />
 
     </LinearLayout>

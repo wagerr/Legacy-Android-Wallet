@@ -6,7 +6,7 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    android:background="@color/bgRed">
+    android:background="@color/colorPrimary">
 
     <TextView
         android:id="@+id/restoreMessage"
@@ -17,7 +17,7 @@
         android:layout_marginTop="60dp"
         android:gravity="center_vertical|center_horizontal"
         android:text="@string/restore_wallet_message"
-        android:textColor="@color/textColorWhite"
+        android:textColor="@color/white"
         android:textSize="18sp" />
 
     <Button
@@ -35,7 +35,7 @@
         android:paddingLeft="10dip"
         android:paddingRight="10dip"
         android:text="@string/select_file"
-        android:textColor="@color/textColorWhite"
+        android:textColor="@color/white"
         android:textSize="14sp" />
 
     <EditText
@@ -50,8 +50,8 @@
         android:inputType="textPassword"
         android:paddingLeft="10dip"
         android:paddingRight="10dip"
-        android:textColor="@color/textColorWhite"
-        android:textColorHint="@color/textColorWhite"
+        android:textColor="@color/white"
+        android:textColorHint="@color/white"
         android:textSize="14sp" />
 
     <android.support.design.widget.TextInputLayout

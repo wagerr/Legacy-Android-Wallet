@@ -50,7 +50,7 @@
     <style name="MessageTextStart">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
-        <item name="android:textColor">@color/textColorWhite</item>
+        <item name="android:textColor">@color/white</item>
         <item name="android:textSize">18sp</item>
         <item name="android:gravity">center</item>
     </style>
@@ -86,7 +86,7 @@
         <item name="android:padding">6dp</item>
         <item name="android:elevation">2dp</item>
         <item name="android:textSize">14sp</item>
-        <item name="android:textColor">@color/textColorRed</item>
+        <item name="android:textColor">@color/colorPrimary</item>
         <item name="android:background">@drawable/button_selector</item>
         <item name="android:gravity">center</item>
         <item name="android:stateListAnimator">@null</item>
@@ -122,13 +122,13 @@
     <!--Wagerr-->
     <style name="WgrButton" parent="android:Widget.Material.Button">
         <item name="android:textColor">@color/white</item>
-        <item name="colorButtonNormal">@color/wagerr_red</item>
+        <item name="colorButtonNormal">@color/colorPrimary</item>
         <item name="android:textAllCaps">true</item>
         <item name="android:background">@drawable/bg_button_red</item>
     </style>
     <style name="WgrButtonWithBorder" parent="android:Widget.Material.Button">
-        <item name="android:textColor">@color/wagerr_red</item>
-        <item name="colorButtonNormal">@color/wagerr_red</item>
+        <item name="android:textColor">@color/colorPrimary</item>
+        <item name="colorButtonNormal">@color/colorPrimary</item>
         <item name="android:textAllCaps">true</item>
         <item name="android:background">@drawable/bg_button_border_red</item>
     </style>

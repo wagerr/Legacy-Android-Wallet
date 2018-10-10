@@ -44,12 +44,18 @@ android {
             dimension "env"
             addManifestPlaceholders([APP_NAME: "@string/app_name"])
             versionNameSuffix "-wgrprod"
+            resValue 'color', "colorPrimary", "#d91b1b"
+            resValue 'color', "colorPrimaryLight", "#ea3232"
+            resValue 'color', "colorPrimaryDark", "#8c0000"
         }
         wgrtest {
             dimension "env"
             addManifestPlaceholders([APP_NAME: "@string/test_app_name"])
             versionNameSuffix "-wgrtest"
             applicationIdSuffix ".wgrtest"
+            resValue 'color', "colorPrimary", "#00DD70"
+            resValue 'color', "colorPrimaryLight", "#FF05FF84"
+            resValue 'color', "colorPrimaryDark", "#00783c"
         }
     }
     compileOptions {
