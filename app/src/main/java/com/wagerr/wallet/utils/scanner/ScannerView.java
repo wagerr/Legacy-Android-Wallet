@@ -32,12 +32,11 @@ import android.util.AttributeSet;
 import android.view.View;
 
 import com.google.zxing.ResultPoint;
+import com.wagerr.wallet.R;
 
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
-
-import com.wagerr.wallet.R;
 
 
 /**
@@ -84,7 +83,7 @@ public class ScannerView extends View
 		maskPaint.setStyle(Style.FILL);
 
 		laserPaint = new Paint();
-		laserPaint.setStrokeWidth(res.getDimensionPixelSize(R.dimen.colorPrimary_width));
+		laserPaint.setStrokeWidth(res.getDimensionPixelSize(R.dimen.scan_laser_width));
 		laserPaint.setStyle(Style.STROKE);
 
 		dotPaint = new Paint();
