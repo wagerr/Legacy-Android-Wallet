@@ -100,13 +100,14 @@
 
         <provider
             android:name="android.support.v4.content.FileProvider"
-            android:authorities="com.wagerr.wallet.myfileprovider"
+            android:authorities="${applicationId}.myfileprovider"
             android:exported="false"
             android:grantUriPermissions="true">
             <meta-data
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/file_provider_paths" />
         </provider>
+
         <activity android:name=".ui.bet_action_detail.BetActionDetailActivity"/>
         <activity android:name=".ui.bet.result.BetEventDetailActivity"/>
         <activity android:name=".ui.transaction_detail_activity.TransactionIdDetailActivity" />
