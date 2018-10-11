@@ -41,7 +41,7 @@ public class CrashPopupActivity extends AppCompatActivity implements View.OnClic
 
     private Logger log = LoggerFactory.getLogger(CrashPopupActivity.class);
 
-    private String authorities = "com.wagerr.wallet.myfileprovider";
+    private String authorities = getApplication().getPackageName()+".myfileprovider";
 
     private EditText viewDescription;
     private CheckBox viewCollectDeviceInfo;

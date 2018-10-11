@@ -215,7 +215,7 @@ public class SettingsActivity extends BaseDrawerActivity implements View.OnClick
     private void launchReportDialog() {
         ReportIssueDialogBuilder dialog = new ReportIssueDialogBuilder(
                 this,
-                "com.wagerr.wallet.myfileprovider",
+                getApplication().getPackageName()+".myfileprovider",
                 R.string.report_issuea_dialog_title,
                 R.string.report_issue_dialog_message_issue)
         {

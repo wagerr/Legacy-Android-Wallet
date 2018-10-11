@@ -86,7 +86,7 @@ public class WagerrApplication extends Application implements ContextWrapper {
         public void onCrashOcurred(Thread thread, Throwable throwable) {
             log.error("crash occured..");
             throwable.printStackTrace();
-            String authorities = "com.wagerr.wallet.myfileprovider";
+            String authorities = getPackageName()+".myfileprovider";
             final File cacheDir = getCacheDir();
             // show error report dialog to send the crash
             final ArrayList<Uri> attachments = new ArrayList<Uri>();
