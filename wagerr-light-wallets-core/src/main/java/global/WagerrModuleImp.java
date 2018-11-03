@@ -132,6 +132,11 @@ public class WagerrModuleImp implements WagerrModule {
     }
 
     @Override
+    public void cleanupWallet() {
+        walletManager.cleanupWallet();
+    }
+
+    @Override
     public boolean isWalletCreated() {
         return false;
     }

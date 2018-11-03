@@ -51,6 +51,7 @@ public class SettingsActivity extends BaseDrawerActivity implements View.OnClick
     private Button buttonChange;
     private Button btn_change_node;
     private Button btn_reset_blockchain;
+    private Button btn_repair_wallet;
     private Button btn_blockexplorer;
     private Button btn_report;
     private Button btn_support;
@@ -94,6 +95,9 @@ public class SettingsActivity extends BaseDrawerActivity implements View.OnClick
 
         btn_reset_blockchain = (Button) findViewById(R.id.btn_reset_blockchain);
         btn_reset_blockchain.setOnClickListener(this);
+
+        btn_repair_wallet = (Button) findViewById(R.id.btn_repair_wallet);
+        btn_repair_wallet.setOnClickListener(this);
 
         // rates
         findViewById(R.id.btn_rates).setOnClickListener(this);
@@ -172,6 +176,8 @@ public class SettingsActivity extends BaseDrawerActivity implements View.OnClick
             launchResetBlockchainDialog();
         }else if (id == R.id.btn_report){
             launchReportDialog();
+        }else if (id == R.id.btn_repair_wallet){
+            launchRepairWalletDialog();
         }else if(id == R.id.btn_support){
             IntentsUtils.startSend(
                     this,
@@ -198,6 +204,30 @@ public class SettingsActivity extends BaseDrawerActivity implements View.OnClick
                     public void onRightBtnClicked(SimpleTwoButtonsDialog dialog) {
                         wagerrApplication.stopBlockchain();
                         Toast.makeText(SettingsActivity.this,R.string.reseting_blockchain,Toast.LENGTH_LONG).show();
+                        dialog.dismiss();
+                    }
+
+                    @Override
+                    public void onLeftBtnClicked(SimpleTwoButtonsDialog dialog) {
+                        dialog.dismiss();
+                    }
+                }
+        );
+        dialog.setLeftBtnText(R.string.button_cancel)
+                .setRightBtnText(R.string.button_ok);
+        dialog.show();
+    }
+
+    private void launchRepairWalletDialog() {
+        SimpleTwoButtonsDialog dialog = DialogsUtil.buildSimpleTwoBtnsDialog(
+                this,
+                getString(R.string.dialog_repair_wallet_title),
+                getString(R.string.dialog_repair_wallet_body),
+                new SimpleTwoButtonsDialog.SimpleTwoBtnsDialogListener() {
+                    @Override
+                    public void onRightBtnClicked(SimpleTwoButtonsDialog dialog) {
+                        wagerrApplication.getModule().cleanupWallet();
+                        Toast.makeText(SettingsActivity.this,R.string.repairing_wallet,Toast.LENGTH_LONG).show();
                         dialog.dismiss();
                     }
 

@@ -108,6 +108,8 @@
     <string name="error_message">您的转账似乎\n出现了错误</string>
     <string name="settings_change_trusted_node">更改信任节点</string>
     <string name="settings_reset_blockchain">重置区块</string>
+    <string name="settings_repair_walllet">修复钱包</string>
+
     <string name="save">保存</string>
     <string name="tutorial_message"> 专注于隐私、去中心化且开源的加密货币实现了\n隐秘、快速、安全的转账。该加密货币由创造者，发明家和技术爱好者组成的全球性社区予以支持。</string>
     <!-- Tutorial -->
@@ -183,6 +185,10 @@
     <string name="dialog_reset_blockchain_title">重置区块数据</string>
     <string name="dialog_reset_blockchain_body">您的区块数据将被重置。\n重新同步需要时间。\n\n您确定吗？</string>
     <string name="reseting_blockchain">重置区块中……</string>
+    <string name="dialog_repair_wallet_title">修复钱包</string>
+    <string name="dialog_repair_wallet_body">你的钱包将会被修复.\n所有阻塞的交易将被重置.\n\n你确定吗?</string>
+    <string name="repairing_wallet">正在修复钱包..</string>
+
     <string name="donations">Donations</string>
     <string name="donation_message">Donations help with the maintenance and development of the app.\nThanks in advance.</string>
     <string name="donation_title">I’m going to donate</string>

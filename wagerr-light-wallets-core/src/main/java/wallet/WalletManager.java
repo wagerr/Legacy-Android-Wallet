@@ -202,6 +202,14 @@ public class WalletManager {
         return mnemonic;
     }
 
+    public void cleanupWallet() {
+        try {
+            // clean up spam
+            wallet.cleanup();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 
     private void afterLoadWallet() throws IOException {
         //add oracle watcg address after restore wallet

@@ -60,6 +60,7 @@ public interface WagerrModule {
 
     void restoreWallet(List<String> mnemonic, long timestamp,boolean bip44) throws IOException, MnemonicException;
 
+    void cleanupWallet();
     /**
      * If the wallet already exist
      * @return
