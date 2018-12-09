@@ -54,10 +54,17 @@ public abstract class AbstractSqliteDb<T> extends SQLiteOpenHelper implements Ab
 
     public T get(String whereColumn,Object whereObjValue) {
         Cursor cursor = getData(whereColumn,whereObjValue);
-        if (cursor.moveToFirst()){
-            return buildFrom(cursor);
+        try {
+            if (cursor.moveToFirst()){
+                return buildFrom(cursor);
+            }
+            return null;
+        }finally {
+            if(cursor != null){
+                cursor.close();
+            }
         }
-        return null;
+
     }
 
     public void updateFieldByKey(String whereColumn,String whereValue, String updateColumn, boolean updateValue) {
