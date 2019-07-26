@@ -1,9 +1,10 @@
-# Wagerr-Wallet
+# Legacy Wagerr Android Wallet
 
-Welcome to the Wagerr mobile wallet for android!
+The Wagerr Android Wallet based on Bitcoinj is now being deprecated. It will soon be replaced by a new wallet based on Bread SPV. 
 
+This final release is only meant for existing users and contains fixes that allow the Wallet to completely sync past block 703521. Users are then required to withdraw any balance to their QT or the upcoming electron or SPV mobile wallet.
 
-This project contains several sub-projects:
+### This project contains several sub-projects:
 
 app: The Android app itself. This is probably what you're searching for.
 
@@ -14,16 +15,3 @@ wagerr-core-0.14.4: wagerrj.
 You can build all sub-projects at once using Gradle:
 
 gradle clean build
-
-
-### Cloning repository.
-
-Use git clone --recurse-submodules https://github.com/LooorTor/wagerr-android.git
-  
-#### or
-
-Use git clone https://github.com/LooorTor/wagerr-android.git
-  
-git submodule init
-
-git submodule update
