@@ -1,6 +1,6 @@
 # Legacy Wagerr Android Wallet
 
-The Wagerr Android Wallet based on Bitcoinj is now being deprecated. It will soon be replaced by a new wallet based on Bread SPV. 
+The Wagerr Android Wallet based on Bitcoinj made by a Wagerr community member is no longer supported and is being deprecated. It will soon be replaced by a new wallet based on Bread SPV. 
 
 This final release is only meant for existing users and contains fixes that allow the Wallet to completely sync past block 703521. Users are then required to withdraw any balance to their QT or the upcoming electron or SPV mobile wallet.
 
