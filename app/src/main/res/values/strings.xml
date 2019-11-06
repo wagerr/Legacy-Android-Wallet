@@ -10,7 +10,7 @@
         <item>Uranus</item>
         <item>Neptune</item>
     </string-array>
-    <string name="app_name">Wagerr Wallet</string>
+    <string name="app_name">Wagerr Legacy Wallet</string>
     <string name="test_app_name">Wagerr Test Wallet</string>
     <string name="btn_create_wallet">Create Wallet</string>
     <string name="btn_restore_wallet">Restore Wallet</string>
@@ -145,7 +145,7 @@
     <string name="restore_dialog_tag">restore dialog tag</string>
     <string name="restore_dialog_error">restore dialog error</string>
     <string name="settings_support">Support</string>
-    <string name="support_subject">Wagerr wallet support</string>
+    <string name="support_subject">Wagerr legacy wallet support</string>
     <string name="tutorial">Tutorial</string>
     <string name="copy">Copy</string>
     <string name="share">Share</string>
@@ -258,7 +258,7 @@
     <string name="validate_multi_send_enabled">Blocked action, multi send enabled</string>
     <string name="detail_no_available_inputs">No available inputs information</string>
     <string name="report_crash_title">Report crash</string>
-    <string name="crash_toast_text">Wagerr wallet crash</string>
+    <string name="crash_toast_text">Wagerr legacy wallet crash</string>
     <string name="backup_fail">Backup fail</string>
     <string name="no_peer_connection">No connection to the node</string>
     <string name="wallet_is_not_sync">Wallet is not sync, to be sure about your real balance please wait until the synchronization finish</string>
