@@ -11,7 +11,7 @@
     <fragment
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:name="com.wagerr.wallet.ui.settings_rates.RatesFragment"
+        android:name="com.wagerr.legacywallet.ui.settings_rates.RatesFragment"
         android:id="@+id/rates_fragment"
         />
 

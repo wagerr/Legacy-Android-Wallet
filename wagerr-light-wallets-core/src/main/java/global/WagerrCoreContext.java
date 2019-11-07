@@ -3,7 +3,7 @@ package global;
 import android.os.Environment;
 import android.text.format.DateUtils;
 
-import com.wagerr.wallet.core.BuildConfig;
+import com.wagerr.legacywallet.core.BuildConfig;
 
 import org.wagerrj.core.Coin;
 import org.wagerrj.core.Context;

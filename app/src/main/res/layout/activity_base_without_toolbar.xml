@@ -4,7 +4,7 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.wagerr.wallet.ui.base.BaseDrawerActivity">
+    tools:context="com.wagerr.legacywallet.ui.base.BaseDrawerActivity">
 
     <FrameLayout android:id="@+id/content"
         android:layout_width="match_parent"

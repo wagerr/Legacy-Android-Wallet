@@ -6,7 +6,7 @@
     android:paddingTop="40dp"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.wagerr.wallet.ui.base.BaseDrawerActivity">
+    tools:context="com.wagerr.legacywallet.ui.base.BaseDrawerActivity">
 
     <LinearLayout
         android:orientation="vertical"

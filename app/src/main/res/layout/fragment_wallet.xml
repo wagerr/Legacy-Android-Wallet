@@ -7,7 +7,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:background="@color/bgWhite"
-    tools:context="com.wagerr.wallet.ui.base.BaseDrawerActivity">
+    tools:context="com.wagerr.legacywallet.ui.base.BaseDrawerActivity">
 
 
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
@@ -33,7 +33,7 @@
             <fragment
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:name="com.wagerr.wallet.ui.wallet_activity.TransactionsFragmentBase"
+                android:name="com.wagerr.legacywallet.ui.wallet_activity.TransactionsFragmentBase"
                 android:id="@+id/transactions_fragment"
                 android:paddingBottom="66dp"
                 />

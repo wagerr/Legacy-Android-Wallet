@@ -11,7 +11,7 @@
 
         <fragment
             android:id="@+id/fragment_tx_detail"
-            android:name="com.wagerr.wallet.ui.transaction_detail_activity.FragmentTxDetail"
+            android:name="com.wagerr.legacywallet.ui.transaction_detail_activity.FragmentTxDetail"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
 
