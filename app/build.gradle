@@ -14,8 +14,8 @@ android {
         applicationId "com.wagerr.legacywallet"
         minSdkVersion 21
         targetSdkVersion 25
-        versionCode 7
-        versionName "1.0.1-beta.6"
+        versionCode 8
+        versionName "1.0.1-beta.7"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         archivesBaseName = "WagerrWallet_v-$versionName-${releaseTime()}"
         multiDexEnabled true
